@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="notice">
+
+	<insert id="insert" parameterType="kr.co.itwill.notice.NoticeDTO">
+		INSERT INTO notice(subject, edit, regdate)
+		VALUES (#{subject}, #{edit}, (current_date))
+	</insert>
+	
+	<select id="list" resultType="kr.co.itwill.notice.NoticeDTO" parameterType="int">
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+		    SELECT @RNO := @RNO + 1 as r, CC.*
+		    FROM (
+		        SELECT n_no, subject, edit, regdate
+		        FROM notice, (SELECT @RNO := 0) BB
+		        ORDER BY n_no DESC
+		    ) CC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select>
+	
+	<select id="total" resultType="int">
+		SELECT COUNT(*) FROM notice
+	</select>
+	
+	<select id="detail" resultType="kr.co.itwill.notice.NoticeDTO" parameterType="int">
+		SELECT n_no, subject, edit, regdate
+		FROM notice
+		WHERE n_no=#{n_no}
+	</select>
+	
+	<update id="update" parameterType="kr.co.itwill.notice.NoticeDTO">
+		UPDATE notice
+		SET subject=#{subject}, edit=#{edit}
+		WHERE n_no=#{n_no}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM notice
+		WHERE n_no=#{n_no}
+	</delete>
+	 
+</mapper>

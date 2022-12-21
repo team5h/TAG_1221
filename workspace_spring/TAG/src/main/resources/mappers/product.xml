@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  product  -->
+
+<mapper namespace="product">
+
+
+<!-- [ 상품목록 - 최신순 ] -->
+	<select id="list" resultType="java.util.Map" parameterType="java.util.Map">
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no
+					WHERE  status = 'Y'
+					ORDER BY regdate DESC
+			) CC , (SELECT @RNO := 0) BB 
+		ORDER BY pro_no DESC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+
+
+<!-- [ 상품목록 - 페이징 글개수 전체] -->
+	<select id="total" resultType="int">
+		SELECT COUNT(*) FROM product
+	</select> 
+	
+	
+<!-- [ 상품목록 - 페이징 글개수 카테고리별] -->
+	<select id="categoryTotal" resultType="int" parameterType="String">
+		<![CDATA[
+		SELECT COUNT(*) 
+		FROM product 
+		WHERE status = 'Y' && category = #{category}
+		]]>
+	</select> 
+	
+	
+<!-- [ 상품목록 - 페이징 ] -->	
+	<select id="list2" resultType="java.util.Map" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+				SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no && category = #{category}
+				ORDER BY regdate DESC
+			) CC, (SELECT @RNO := 0) BB 
+		ORDER BY pro_no DESC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
+<!-- [ 공연목록 (굿즈페이지의 Concert 카테고리 select에 넣을 목록) ] -->	
+	<select id="concert" resultType="kr.co.itwill.concert.ConcertDTO" >
+		SELECT c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						
+			   com_name, dlv_date, likecnt, postername, watch_age, price, edit
+		FROM   concert
+	</select> 
+	
+	
+<!-- [ 상품목록 - 콘서트별 ] -->
+	<select id="concertTotal" resultType="int" parameterType="String">
+		<![CDATA[
+		SELECT COUNT(*) 
+		FROM product 
+		WHERE status = 'Y' && c_no = #{c_no}
+		]]>
+	</select> 
+	
+	
+<!-- [ 상품목록 - 콘서트별 리스트 + 페이징 ] -->	
+	<select id="concertList" resultType="java.util.Map" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+				SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no
+				WHERE  status = 'Y' && product.c_no = #{c_no}
+				ORDER BY regdate DESC
+			) CC, (SELECT @RNO := 0) BB 
+		ORDER BY pro_no DESC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+
+	
+<!-- [ 상품검색 ] -->	
+	<select id="search" resultType="kr.co.itwill.product.ProductDTO" parameterType="String">
+		SELECT category, c_no, p_id, pro_name, stock, color, size, price, postername, status, regdate
+		FROM product
+		WHERE upper(pro_name) LIKE #{pro_name}
+		ORDER BY pro_name
+	</select> 
+	
+	
+<!-- 상품목록 - 카테고리 나누기 -->
+	<select id="categoryAll" resultType="kr.co.itwill.product.ProductDTO">
+		SELECT category
+		from product
+		GROUP BY category DESC
+	</select>
+	
+<!-- 티켓 결제시 관련 상품 보여주기 (다슬언니)-->
+	<select id="viewProduct" resultType="kr.co.itwill.product.ProductDTO" parameterType="Int">	
+		SELECT *
+		FROM (
+			SELECT @ROWNUM := @ROWNUM + 1 as rnum, pro_no, category, c_no, p_id, pro_name, stock, color, size, price, postername, status, regdate
+			FROM   product, (SELECT @ROWNUM :=0) A
+			WHERE  status = 'Y' AND c_no = #{c_no}
+			ORDER BY regdate DESC
+			) RESULT
+		WHERE rnum between 1 and 3;
+	</select> 	
+
+<!-- 디테일 -->
+	<select id="proDetail" resultType="java.util.Map" parameterType="int">
+		SELECT pro_no, p.c_no, pro_name, stock, color, size, p.price, p.edit, p.postername, title
+		FROM product p JOIN concert c ON p.c_no = c.c_no
+		WHERE pro_no = #{pro_no}
+	</select>
+	
+	<select id="pro_qnacnt" resultType="int" parameterType="int">
+		SELECT count(q_no)
+		FROM qna
+		WHERE pro_no = #{pro_no}
+	</select>
+	
+	<insert id="qnainsert" parameterType="kr.co.itwill.QnA.QnADTO">
+		INSERT INTO qna (qname, subject, pro_no, edit, passwd, regdate, a_stus)
+		VALUES (#{qname},#{subject},#{pro_no},#{edit},#{passwd}, (current_timestamp), 'N')
+	</insert>
+	
+	<select id="qnalist" resultType="kr.co.itwill.QnA.QnADTO" parameterType="int">
+		SELECT *
+		FROM qna
+		WHERE pro_no = #{pro_no}
+	</select>
+	
+	<select id="qnadetail" parameterType="java.util.Map" resultType="kr.co.itwill.QnA.QnADTO">
+		SELECT q.q_no as q_no, subject, edit, passwd, content, a.regdate as regdate 
+		FROM qna q left outer join answer a on q.q_no = a.q_no
+		WHERE q.q_no = #{q_no} and passwd = #{passwd}
+	</select>
+	
+	<insert id="addcart" parameterType="java.util.Map">
+		INSERT INTO product_cart  (m_id, pro_no, cnt)
+		VALUES (#{m_id}, #{pro_no}, #{cnt})
+	</insert>
+	
+	<insert id="like" parameterType="java.util.Map">
+		INSERT INTO member_like(m_id, like_cd,like_li)
+		VALUES (#{m_id},'P',#{pro_no})
+	</insert>
+
+	<delete id="unlike" parameterType="java.util.Map">
+		DELETE FROM member_like
+		WHERE m_id = #{m_id} AND like_li = #{pro_no}
+	</delete>
+	
+	<select id="likechk" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(lno) 
+		FROM member_like
+		WHERE m_id = #{m_id} AND like_li = #{pro_no} AND like_cd = 'P'
+	</select>
+	
+<!-- order -->
+	<select id="order_proinfo" resultType="kr.co.itwill.product.ProductDTO">
+		SELECT  pro_name, color, size, price, postername, pro_no
+		FROM product
+		WHERE pro_no = #{pro_no}
+	</select>
+	
+	<select id="order_Minfo" resultType="kr.co.itwill.memberGeneral.MemberGeneralDTO">
+		SELECT m_name, m_zipcode, m_addr1, m_addr2, m_tel, point
+		FROM member
+		WHERE m_id = #{m_id}
+	</select>
+
+	<select id="mem_coupon" parameterType="java.util.Map" resultType="kr.co.itwill.coupon.CouponDTO">
+		SELECT DISTINCT(cp_no), coupon
+		FROM coupon_detail cd inner join product p on cd.c_no = p.c_no 
+		WHERE     m_id    = #{m_id} 
+		      AND pro_no  = #{pro_no} 
+		      AND cp_stus = 'N' 
+		      AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+	</select>
+	
+	<select id="mem_couponCNT" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(cp_no)
+		FROM (
+		    SELECT DISTINCT(cp_no) as cp_no
+		    FROM coupon_detail cd inner join product p on cd.c_no = p.c_no 
+		    WHERE     m_id    = #{m_id} 
+		    	  AND pro_no  = #{pro_no} 
+		    	  AND cp_stus = 'N' 
+		    	  AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+		)aa 
+	</select>
+	
+	
+	<select id="mem_couponTOTALCNT" resultType="int">
+		SELECT count(cp_no)
+		FROM coupon_detail
+		WHERE m_id = #{m_id} AND cp_stus = 'N'
+	</select>
+	
+	
+	<insert id="productorderIns" parameterType="java.util.Map">
+		INSERT INTO product_order(order_num, m_id, order_price, cp_dis, cp_no, total_price, pt_plus
+								  , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg)
+		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}
+				, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg})
+	</insert>
+	
+	<insert id="orderdetailIns" parameterType="kr.co.itwill.orderDetail.OrderDetailDTO">
+		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum ,stus)
+		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, #{discount}, #{pricesum}, '상품준비중' )
+	</insert>
+	
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  cart  -->
+
+<mapper namespace="cart">
+
+
+	<!-- 나의 장바구니 리스트 -->
+	<select id="mycartList" resultType="java.util.Map" parameterType="java.util.Map" >
+		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, P.postername, p_id
+		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+							 JOIN concert C ON P.c_no = C.c_no
+		WHERE m_id = #{m_id} 
+		ORDER BY p_id, cart_no DESC
+	</select>
+
+
+	<!-- 나의 장바구니 같은업체 배송비 무료 -->
+	<select id="sameCompany" resultType="java.util.Map" parameterType="String" >
+		SELECT sum(P.price) AS ptotal
+		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+							 JOIN concert C ON P.c_no = C.c_no
+		WHERE m_id = #{m_id} 
+		GROUP BY p_id
+	</select>
+	
+	
+	<!-- 나의 장바구니 수량 증가 -->
+	<update id="countUp" parameterType="kr.co.itwill.cart.CartDTO">
+		UPDATE product_cart 
+		SET cnt = cnt + 1
+		WHERE cart_no = #{cart_no}
+	</update>
+	
+	
+	<!-- 나의 장바구니 수량 감소 -->
+	<update id="countDown" parameterType="kr.co.itwill.cart.CartDTO">
+		UPDATE product_cart 
+		SET cnt = cnt - 1
+		WHERE cart_no = #{cart_no}
+	</update>
+	
+	<!-- 장바구니 삭제 -->
+	<delete id="deleteMycart" parameterType="java.util.Map" >
+		DELETE FROM product_cart
+		WHERE cart_no = #{cart_no}
+	</delete>
+	
+	
+	<!-- 장바구니 선택 삭제 -->
+	<delete id="selectDelete" parameterType="kr.co.itwill.cart.CartDTO" >
+		DELETE FROM product_cart
+		WHERE cart_no IN (
+							<foreach collection="chkList" item="value" separator=",">
+								#{value}
+							</foreach>
+						   )
+	</delete>
+	
+	
+	<!-- 장바구니 정보  -->
+	
+
+
+ 
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="myproduct">
+
+	<select id="list" resultType="java.util.Map" parameterType="hashmap">
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+		    SELECT @RNO := @RNO + 1 as r, CC.*
+		    FROM (
+		        SELECT order_num, m_id, order_price, cp_dis, cp_no, pt_minus, d_fee, total_price, pt_plus, rec_name, rec_addr, rec_tel, msg
+				FROM product_order, (SELECT @RNO := 0) BB
+				WHERE m_id=#{s_m_id}
+				ORDER BY order_num DESC
+		    ) CC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select>
+	
+	<select id="orderCount" resultType="int" parameterType="String">
+		SELECT count(*)
+		FROM product_order
+		WHERE m_id=#{s_m_id}
+	</select>
+	
+	<select id="detail" resultType="java.util.Map" parameterType="hashmap">
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+		    SELECT @RNO := @RNO + 1 as r, CC.*
+		    FROM (
+		        SELECT substring_index(DT.order_num,'-',1) AS orderDate, DT.order_num, PP.pro_name, PP.color, PP.size, DT.detail_cnt, DT.org_price, DT.discount, DT.total_price, DT.stus
+				FROM  DT JOIN product PP
+				ON DT.pro_no=PP.pro_no, (SELECT @RNO := 0) BB
+				WHERE order_num=#{order_num}
+		    ) CC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select>
+	
+	<select id="total" resultType="int" parameterType="String">
+		SELECT count(*) FROM order_detail
+		WHERE order_num=#{order_num}
+	</select>
+	
+</mapper>

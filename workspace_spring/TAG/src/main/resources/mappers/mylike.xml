@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mylike">
+
+	<select id="list" resultType="kr.co.itwill.mylike.MylikeDTO" parameterType="String">
+		SELECT lno, m_id, like_cd, like_li
+		FROM member_like
+		WHERE m_id=#{s_m_id}
+		ORDER BY like_cd DESC
+	</select>
+	
+	
+	<select id="like_c" resultType="java.util.Map" parameterType="String">
+		SELECT lno, m_id, like_cd, like_li, CC.postername, CC.title
+		FROM member_like MM join concert CC
+		ON MM.like_li=CC.c_no
+		WHERE m_id=#{s_m_id} AND like_cd='C'
+		ORDER BY lno DESC
+		LIMIT 0, 3
+	</select>
+	
+	
+	<select id="like_p" resultType="java.util.Map" parameterType="String">
+		SELECT lno, m_id, like_cd, like_li, PP.postername, PP.pro_name
+		FROM member_like MM join product PP
+		ON MM.like_li=PP.pro_no
+		WHERE m_id=#{s_m_id} AND like_cd='P'
+		ORDER BY lno DESC
+		LIMIT 0, 3
+	</select>
+
+	
+	<select id="conCnt" resultType="int" parameterType="String">
+		SELECT count(*)
+		FROM member_like
+		WHERE m_id=#{s_m_id} AND like_cd='C'
+	</select>
+
+	
+	<select id="proCnt" resultType="int" parameterType="String">
+		SELECT count(*)
+		FROM member_like
+		WHERE m_id=#{s_m_id} AND like_cd='P'
+	</select>
+	
+	<select id="list_c" resultType="java.util.Map" parameterType="hashmap">
+		SELECT lno, m_id, like_cd, like_li, CC.postername, CC.title
+		FROM member_like MM join concert CC
+		ON MM.like_li=CC.c_no
+		WHERE m_id=#{s_m_id} AND like_cd='C'
+		ORDER BY lno DESC
+	</select>
+	
+	
+	<select id="list_p" resultType="java.util.Map" parameterType="hashmap">
+		SELECT lno, m_id, like_cd, like_li, PP.postername, PP.pro_name
+		FROM member_like MM join product PP
+		ON MM.like_li=PP.pro_no
+		WHERE m_id=#{s_m_id} AND like_cd='P'
+		ORDER BY lno DESC
+	</select>
+	
+</mapper>

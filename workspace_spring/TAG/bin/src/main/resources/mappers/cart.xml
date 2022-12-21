@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  cart  -->
+
+<mapper namespace="cart">
+
+
+	<!-- 나의 장바구니 리스트 -->
+	<select id="mycartList" resultType="java.util.Map" parameterType="java.util.Map" >
+		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, P.postername, p_id
+		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+							 JOIN concert C ON P.c_no = C.c_no
+		WHERE m_id = #{m_id} 
+		ORDER BY p_id, cart_no DESC
+	</select>
+
+
+	<!-- 나의 장바구니 같은업체 배송비 무료 -->
+	<select id="deliveryFee" resultType="java.util.Map" parameterType="String" >
+		SELECT COUNT(p_id) AS countpid, sum(P.price) AS ptotal
+		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+							 JOIN concert C ON P.c_no = C.c_no
+		WHERE m_id = #{m_id} 
+		GROUP BY p_id
+	</select>
+
+
+
+
+ 
+</mapper>
