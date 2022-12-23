@@ -21,12 +21,12 @@
 		FROM(
 		    SELECT @RNO := @RNO + 1 as r, CC.*
 		    FROM (
-		        SELECT p.pro_no,pro_name, p.p_id, stock, color, size, price, regdate, edit, category, status, postername, likecnt, count(o.pro_no) AS sales, (stock-(count(o.pro_no))) AS afstock
+		        SELECT P.pro_no, pro_name, P.p_id, stock, color, size, price, regdate, edit, category, status, postername, likecnt, count(O.pro_no) AS sales, (stock-(count(O.pro_no))) AS afstock
 		        FROM product P LEFT JOIN order_detail O
 		                       ON P.pro_no = O.pro_no
-		        GROUP BY p.pro_no
-		        HAVING p.p_id = #{p_id}
-		        ORDER BY p.pro_no DESC
+		        GROUP BY P.pro_no
+		        HAVING P.p_id = #{p_id}
+		        ORDER BY P.pro_no DESC
 		    ) CC, (SELECT @RNO := 0) BB 
 		) AA 
 		WHERE r >= #{start} AND r <= #{end}

@@ -303,7 +303,7 @@
 					<td style="display:none;"></td>
 					<td style="display:none;"></td>
 			</tr>
-		</c:forEach>		
+		</c:forEach>
 	</table>
 	
 	<div id="paging" style="text-align: center; margin-top: 20px;">
