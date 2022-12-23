@@ -9,7 +9,7 @@
 
 <!-- 티켓결제 티켓 주문서 insert -->
 <insert id="add" parameterType="kr.co.itwill.tickets.TicketOrderDTO">
-	INSERT INTO ticket_order(tck_num, m_id, c_no, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_addr, rec_tel, msg, stus, dis_descrip)
+	INSERT INTO ticket_order(tck_num, m_id, c_no, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg, stus, dis_descrip)
 	VALUES (
 			 #{tck_num}
 			 ,#{m_id}
@@ -20,7 +20,9 @@
 			 ,#{d_fee}
 			 ,#{total_price}
 			 ,#{rec_name}
-			 ,#{rec_addr}
+			 ,#{rec_zipcode}
+			 ,#{rec_addr1}
+			 ,#{rec_addr2}
 			 ,#{rec_tel}
 			 ,#{msg}
 			 ,#{stus}

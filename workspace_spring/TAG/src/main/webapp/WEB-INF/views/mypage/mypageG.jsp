@@ -1,165 +1,178 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ include file="../header.jsp" %>
+<%@ include file="ssi.jsp" %>
 
 <style>
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+
+	* {
+		font-family: 'Noto Sans KR', sans-serif; !important;
+	}
+
 	.leftcontent {
 		float: left;
-		width: 15%;
+		width: 10%;
+		/*border: 1px solid black;*/
 		margin-right: 5%;
-		height: 100%;
 	}
 	
 	.rightcontent {
 		float: right;
-		width: 80%;
-		height: 100%;		
+		width: 85%;
+		/*border: 1px solid black;*/
 	}
 	
-	.leftcontent, .rightcontent, .box { border-top: 1px solid black; }
-	
-	.leftcontent, .rightcontent { border-bottom: 1px solid black; }
-	
-	.leftcontent div, .rightcontent { padding: 10px; }
-	
-	.box { margin-top: 10%; }
-
-	.mycpAndpt {
-		/*border: solid 1px blue;*/
-		height: 10%;
-	}
-	
-	.mytickets {
-		/*border: solid 1px blue;*/
-		margin-top: 5%;
-		height: 30%;
-	}
-	
-	.mytickets .subject {
-		border-bottom: solid 3px black;
-		text-align: center;
-	}
-	
-	.myproducts {
-		/*border: solid 1px blue;*/
-		margin-top: 10%;
-		height: 30%;
-	}
-	
-	.myproducts .subject {
-		border-bottom: solid 3px black;
-		text-align: center;
-	}
+	/*.container{border: 1px solid green}*/
 </style>
 
 <!-- 본문 시작 -->
 
-<div class="title">
-	<h3 style="text-align: center;">마이페이지</h3>
-</div>
+<br>
+	<h1 class="saem_title fontJ"><a href="/mypage/mypageG" style="color: black;" class="saem_title fontJ"> My Page </a></h1>
+<br>
 
-<div class="leftcontent">
-	<div><b>${s_m_id}</b> 님</div>
-	<div><a href="/mypage/memberupdateG">회원 정보 수정</a></div>
-	<div class="box">
-		<div><b>MY티켓</b>
-			<div><a href="/mypage/myticket">- 예매 확인 / 취소</a></div>	
-		</div>
-		<div><b>MY상품</b>
-			<div><a href="/mypage/myproduct">- 상품 구매내역</a></div>	
-			<div><a href="/mypage/myqna">- 나의 문의내역</a></div>
-		</div>
-		<div><b>좋아요</b>
-			<div><a href="/mypage/mylike">- 관심 공연 / 관심 상품</a></div>
-		</div>
-		<div><b>MY쿠폰 / MY포인트</b>
-			<div><a href="/couponDetail/detail">- 보유 쿠폰</a></div>
-			<div><a href="/pointDetail/detail">- 보유 포인트</a></div>
-		</div>
-	</div>
-</div><!-- leftcontent end -->
-
-
-<div class="rightcontent">
-	<div class="mycpAndpt">
-		<div class="mycp">
-			<div><b>보유 쿠폰</b>
-				<span>- 할인 쿠폰 : <a href="/couponDetail/detail">${couponCnt}장</a></span>
-				<!-- <td style="color: red;"><b>- 만료 예정 쿠폰 : ${cnt}장</b></td> -->
-			</div>
-		</div>
-		<div class="mypt">
-			<div><b>보유 포인트</b>
-				<span>- 보유 포인트 : <a href="/pointDetail/detail">${ptTotal}P</a></span>
-			</div>
-		</div>
-	</div>
-	<div class="mytickets">
-		<p class="subject"><b>최근 티켓 예매내역</b></p>
-		<c:if test="${tckCount == 0}">
-			<p>최근 티켓 예매내역이 없습니다.</p>
-		</c:if>
-		
-		<c:if test="${tckCount != 0}">
-		<table class="table table-hover">
-			<tr>
-				<th>예매일</th>
-				<th>예매번호</th>
-				<th>공연명</th>
-				<th>관람일시</th>
-				<th>매수</th>
-				<th>예매상태</th>
+<div class="container" style="width: 100%; flex: 1 1 1px; ">
+	<div class="leftcontent">
+		<div class="stickyP" style="height: 5%">
+			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
+				${s_m_id}&nbsp;님 <!-- 세션 아이디 -->
+			</p>
+		<br>
+		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">
+			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
+				<li class="side_liT">My ticket
+					<li>&nbsp;<a href="/mypage/myticket" style="color:black; font-size: 12px;">- 예매 확인 / 취소</a></li>
+				</li>
+				<br>
+				<li class="side_liT">My product
+					<li>&nbsp;<a href="/mypage/myproduct" style="color:black; font-size: 12px;">- 상품 구매내역</a></li>
+					<li>&nbsp;<a href="/mypage/myqna" style="color:black; font-size: 12px;">- 나의 문의내역</a></li>
+				</li>
+				<br>
+				<li class="side_liT">My like
+					<li>&nbsp;<a href="/mypage/mylike" style="color:black; font-size: 12px;">- 관심 공연 / 관심 상품</a></li>
+				</li>
+				<br>
+				<li class="side_liT">My coupon
+					<li>&nbsp;<a href="/couponDetail/detail" style="color:black; font-size: 12px;">- 보유 쿠폰</a></li>
+				</li>
+				<br>
+				<li class="side_liT">My point
+					<li>&nbsp;<a href="/pointDetail/detail" style="color:black; font-size: 12px;">- 보유 포인트</a></li>
+				</li>
+				<br>
+				<li style="font-size: 12px; font-weight: 400;"><a href="/mypage/memberupdateG" style="color: #bcbcbc;">회원 정보 수정</a></li>
+			</ul>
+		</div><!-- stickyC end -->
+		</div><!-- stickyP end -->
+	</div><!-- leftcontent end -->
+	
+	
+	<div class="rightcontent" id="rightcontent">
+		<div style="background-color:black; width: 100%; height: 150px; padding: 20px 20px 20px 20px; margin-top: 10px;">
+			
+			<div style="border-right:1px solid #d5d5d5; width: 49.5%; height: 100%; display: inline-block;">
+				<p style="margin-top: 0; font-size:13px; font-weight: 300; color:#d5d5d5;">보유 쿠폰</p>
+				<br>
+				<p style="font-size:30px; text-align: right; padding-right: 20px; font-weight: 600; margin-top: 15px; color:white;">
+					<a href="/couponDetail/detail">${couponCnt}장</a>
+				</p>
+			</div><!-- 보유 쿠폰 박스 end -->
+			
+			<div style="width: 49.5%; height: 100%; display: inline-block; padding-left: 10px;" >
+				<p style="margin-top: 0; font-size:13px; font-weight: 300; color:#d5d5d5; ">보유 포인트</p>
+				<br> 
+				<p style="font-size:30px; text-align: right; padding-right: 20px; font-weight: 600; margin-top: 15px; color:white;">
+					<a href="/pointDetail/detail">${ptTotal}P</a>	
+				</p>
+			</div><!-- 보유 포인트 박스 end -->
+			
+		</div><!-- 쿠폰/포인트 상태 박스 end -->
+		<br>
+		<br>
+	
+		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;">			
+			<tr style="border-bottom:3px solid black; font-size: 16px;">
+				<td colspan='3' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 티켓 예매내역</td>
 			</tr>
-			<c:forEach var="row" items="${list_t}" varStatus="vs">
-			<tr>
-				<td>
-					<fmt:parseDate value="${row.orderDate}" var="datefmt" pattern="yyyyMMdd"/>
-					<fmt:formatDate value="${datefmt}" pattern="yyyy.MM.dd"/>
-				</td>
-				<td><a href="/mypage/myticket/${row.tck_num}">${row.tck_num}</a></td>
-				<td>${row.title}</td>
-				<td>${row.date}</td>
-				<td>${row.cnt}</td>
-				<td>${row.stus}</td>
+			
+			<c:if test="${tckCount == 0}">
+				<tr>
+					<td colspan="9" style="padding-top: 20px;">
+						최근 티켓 예매내역이 없습니다.
+					</td>
+				</tr>
+			</c:if>
+			
+			<c:if test="${tckCount != 0}">
+				<tr style=" border-bottom:0.1px solid black; font-size: 12px;">
+					<td style="padding:10px 10px 10px 10px;">예매일</td>
+					<td style="padding:10px 10px 10px 10px;">예매번호</td>
+					<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;">공연명</td>
+					<td style="padding:10px 10px 10px 10px;">관람일시</td>
+					<td style="padding:10px 10px 10px 10px;">매수</td>
+					<td style="padding:10px 10px 10px 10px;">예매상태</td>
+				</tr>
+				
+				<c:forEach var="row" items="${list_t}" varStatus="vs">
+				<tr>
+					<td style="border-bottom:1px solid #ededed;">
+						<fmt:parseDate value="${row.orderDate}" var="datefmt" pattern="yyyyMMdd"/>
+						<fmt:formatDate value="${datefmt}" pattern="yyyy.MM.dd"/>
+					</td>
+					<td style="border-bottom:1px solid #ededed;">
+						<a href="/mypage/myticket/${row.tck_num}">${row.tck_num}</a>
+					</td>
+					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all;">${row.title}</td>
+					<td style="border-bottom:1px solid #ededed;">${row.date}</td>
+					<td style="border-bottom:1px solid #ededed;">${row.cnt}</td>
+					<td style="border-bottom:1px solid #ededed;">${row.stus}</td>
+				</tr>
+				</c:forEach>
+			</c:if>
+		</table><!-- 최근 티켓 테이블 end -->
+		<br>
+		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;">
+			<tr style=" border-bottom:3px solid black; font-size: 16px;">
+			 	<td colspan='1' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 상품 구매내역</td>
 			</tr>
-			</c:forEach>
-		</table>
-		</c:if>
-	</div>
-	<div class="myproducts">
-		<c:if test="${orderCount == 0}">
-			<p class="subject"><b>최근 상품 구매내역</b></p>
-			<p>최근 상품 구매내역이 없습니다.</p>
-		</c:if>
-		
-		<c:if test="${orderCount != 0}">
-		<p class="subject"><b>최근 상품 구매내역</b></p>
-		<table class="table table-hover">
-			<tr>
-				<th>구매일</th>
-				<th>주문번호</th>
-				<th>상품명</th>
-				<th>수량</th>
-				<th>배송상태</th>
-			</tr>
-			<c:forEach var="row" items="${list_p}" varStatus="vs">
-			<tr>
-				<td>
-					<fmt:parseDate value="${row.orderDate}" var="datefmt" pattern="yyyyMMdd"/>
-					<fmt:formatDate value="${datefmt}" pattern="yyyy.MM.dd"/>
-				</td>
-				<td>
-					<a href="pDetail/${row.order_num}">${row.order_num}</a>
-				</td>
-				<td>${row.pro_name}</td>
-				<td>${row.detail_cnt}</td>
-				<td>${row.stus}</td>
-			</tr>
-			</c:forEach>
-		</table>
-		</c:if>
-	</div>
-</div><!-- rightcontent end -->
+			
+			<c:if test="${orderCount == 0}">
+				<tr>
+					<td>최근 상품 구매내역이 없습니다.</td>
+				</tr>
+			</c:if>
+			
+			<c:if test="${orderCount != 0}">
+			<table class="table table-hover">
+				<tr style=" border-bottom:0.1px solid black; font-size: 12px;">
+					<td style="padding:10px 10px 10px 10px;">구매일</td>
+					<td style="padding:10px 10px 10px 10px;">주문번호</td>
+					<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;">상품명</td>
+					<td style="padding:10px 10px 10px 10px;">수량</td>
+					<td style="padding:10px 10px 10px 10px;">배송상태</td>
+				</tr>
+				
+				<c:forEach var="row" items="${list_p}" varStatus="vs">
+				<tr>
+					<td style="border-bottom:1px solid #ededed;">
+						<fmt:parseDate value="${row.orderDate}" var="datefmt" pattern="yyyyMMdd"/>
+						<fmt:formatDate value="${datefmt}" pattern="yyyy.MM.dd"/>
+					</td>
+					<td style="border-bottom:1px solid #ededed;">
+						<a href="pDetail/${row.order_num}">${row.order_num}</a>
+					</td>
+					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all; ">${row.pro_name}</td>
+					<td style="border-bottom:1px solid #ededed;">${row.detail_cnt}</td>
+					<td style="border-bottom:1px solid #ededed;">${row.stus}</td>
+				</tr>
+				</c:forEach>
+			</table>
+			</c:if>
+		</table><!-- 최근 상품 테이블 end -->
+	</div><!-- rightcontent end -->
+</div><!-- container end -->
 
 <!-- 본문 끝 -->
 

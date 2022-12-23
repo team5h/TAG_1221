@@ -104,6 +104,11 @@
 	  color: black;
 	  border: 2px solid #555555;
 	}
+	
+	table {
+		margin-left:auto; 
+    	margin-right:auto;
+	}
 </style>
 
 <!-- 본문 시작 -->
@@ -145,7 +150,7 @@
 		<c:if test="${conCnt != 0}">
 			<table border="1">
 			<tr>
-			<c:forEach var="row" items="${list_c}" varStatus="vs">
+			<c:forEach var="row" items="${like_c}" varStatus="vs">
 				<td>
 					<c:choose>
 						<c:when test="${row.postername != null}">
@@ -156,20 +161,18 @@
 						</c:otherwise>
 					</c:choose>
 					<div id="concert_name">
-
 						<a href="/concert/${row.like_li}">${row.title}</a>
-
 					</div>
 				</td>
-				<!-- 테이블 한줄에 3칸씩 -->
+				<!-- 테이블 한줄에 3칸씩
 				<c:if test="${vs.count mod 3==0 }">
 					<tr></tr>
-				</c:if>
+				</c:if> -->
 			</c:forEach>
 			</tr>
 			</table>
+			<button class="button button5" onclick="location.href='/mypage/mylike/all_c'">전체보기</button>
 		</c:if>
-		<button class="button button5" onclick="location.href='/mypage/mylike/all'">전체보기</button>
 	</div>
 	
 	<div class=mylike_product>
@@ -182,32 +185,29 @@
 		<c:if test="${proCnt != 0}">
 			<table border="1">
 			<tr>
-			<c:forEach var="row" items="${list_p}" varStatus="vs">
+			<c:forEach var="row" items="${like_p}" varStatus="vs">
 				<td>
 					<c:choose>
 						<c:when test="${row.postername != null}">
-							<img src="/storage/${row.postername}" width="100px">
+							<a href="/product/${row.like_li}"><img src="/storage/${row.postername}" width="100px"></a>
 						</c:when>
 						<c:otherwise>
 							등록된 사진 없음!!<br>
 						</c:otherwise>
 					</c:choose>
-					<div id="concert_name">
-						<a href="/concert/${row.like_li}">${row.title}</a>
-					</div>
 					<div id="product_name">
 						<a href="/product/${row.like_li}">${row.pro_name}</a>
 					</div>
 				</td>
-				<!-- 테이블 한줄에 3칸씩 -->
+				<!-- 테이블 한줄에 3칸씩
 				<c:if test="${vs.count mod 3==0 }">
 					<tr></tr>
-				</c:if>
+				</c:if> -->
 			</c:forEach>
 			</tr>
 			</table>
+			<button class="button button5" onclick="location.href='/mypage/mylike/all_p'">전체보기</button>
 		</c:if>
-		<button class="button button5" onclick="location.href='/mypage/mylike/all'">전체보기</button>
 	</div>
 </div><!-- rightcontent end -->
 

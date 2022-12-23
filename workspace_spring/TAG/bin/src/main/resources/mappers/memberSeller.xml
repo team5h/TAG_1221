@@ -13,6 +13,7 @@
 		WHERE p_id = #{p_id} AND p_pw = #{p_pw} AND mem_grade IN ('B', 'S')
 	</select>
 	
+	
 	<!-- [로그인] 아이디 중복 체크 -->
 	<select id="idCheckS" parameterType="String" resultType="int">
 		SELECT COUNT(p_id) 
@@ -86,25 +87,26 @@
 	</update>
 	
 	<select id="answerlist" resultType="kr.co.itwill.QnA.QnADTO" parameterType="java.util.Map"> 
-		<![CDATA[
-		SELECT AA.*
-			FROM(
-			    SELECT @RNO := @RNO + 1 as r, CC.*
-			    FROM (
-			        SELECT q.q_no, qname, nickname, subject, q.pro_no, postername, pro_name, q.edit, q.regdate, a_no , p.p_id, a_stus,a.regdate as answerdate
-	                FROM qna q JOIN product p ON q.pro_no = p.pro_no
-	                           JOIN member m ON q.qname = m.m_id
-	                           left outer JOIN answer a ON a.q_no = q.q_no
-	                           JOIN seller s ON p.p_id = s.p_id
-	                WHERE a_stus = 'Y' AND p.p_id = #{p_id}
-	                ORDER BY q_no ASC 
-			    ) CC, (SELECT @RNO := 0) BB 
-			 ORDER BY q_no DESC 
-			) AA 
-			WHERE r >= #{start} AND r <= #{end}
-		]]>
-		
-	</select>
+   <![CDATA[
+   SELECT AA.*
+      FROM(
+          SELECT @RNO := @RNO + 1 as r, CC.*
+          FROM (
+              SELECT q.q_no, qname, nickname, content, subject, q.pro_no, postername, pro_name, q.edit, q.regdate, a_no , p.p_id, a_stus,a.regdate as answerdate
+                FROM qna q JOIN product p ON q.pro_no = p.pro_no
+                           JOIN member m ON q.qname = m.m_id
+                           left outer JOIN answer a ON a.q_no = q.q_no
+                           JOIN seller s ON p.p_id = s.p_id
+                WHERE a_stus = 'Y' AND p.p_id = #{p_id}
+                ORDER BY q_no ASC 
+          ) CC, (SELECT @RNO := 0) BB 
+       ORDER BY q_no DESC 
+      ) AA 
+      WHERE r >= #{start} AND r <= #{end}
+   ]]>
+   
+</select>
+
 
 	<select id="memberupdateS" resultType="kr.co.itwill.memberSeller.MemberSellerDTO" parameterType="String">
 		SELECT p_id, p_pw, company, director, licence, com_zipcode, com_addr1, com_addr2, com_tel, com_email, bank, bank_num
@@ -168,20 +170,20 @@
 </select>
 
 <select id="recently_order" resultType="java.util.Map" parameterType="String">
-	SELECT *
-	FROM (
-	    SELECT @ROWNUM := @ROWNUM + 1 as rnum,  order_num, m_id, rec_addr, rec_tel, total_price, p_id, total_cnt, order_date
-	    FROM (
-	            select po.order_num as order_num, m_id, rec_addr, rec_tel, po.total_price as total_price, p.p_id as p_id, sum(detail_cnt) as total_cnt, substr(po.order_num,1,8) as order_date
-	            from product_order po join order_detail od on po.order_num = od.order_num
-	                                  join product p on od.pro_no = p.pro_no
-	                                  join seller s on p.p_id = s.p_id
-	            where p.p_id = #{p_id}
-	            group by order_num
-	            order by order_num DESC
-	    )AA, (SELECT @ROWNUM :=0) A
-	    ) RESULT
-	WHERE rnum between 1 and 2
+   SELECT *
+   FROM (
+       SELECT @ROWNUM := @ROWNUM + 1 as rnum,  order_num, m_id, rec_addr1, rec_addr2, rec_zipcode, rec_tel, total_price, p_id, total_cnt, order_date
+       FROM (
+               select po.order_num as order_num, m_id, rec_addr1, rec_addr2, rec_zipcode, rec_tel, po.total_price as total_price, p.p_id as p_id, sum(detail_cnt) as total_cnt, substr(po.order_num,1,8) as order_date
+               from product_order po join order_detail od on po.order_num = od.order_num
+                                     join product p on od.pro_no = p.pro_no
+                                     join seller s on p.p_id = s.p_id
+               where p.p_id = #{p_id}
+               group by order_num
+               order by order_num DESC
+       )AA, (SELECT @ROWNUM :=0) A
+       ) RESULT
+   WHERE rnum between 1 and 2
 </select>
 
 <select id="recently_qna" resultType="java.util.Map" parameterType="String">

@@ -297,6 +297,7 @@ line-height : 10px;
 								<div class="heart-icon"> 
 										<img id="heart" src="/images/heart-192x192_1.svg"/>
 									<span id="likecntUpdate">${concert.likecnt}</span>
+								</div>
 						</td>	
 						
 						
@@ -489,7 +490,7 @@ line-height : 10px;
 	    </div><!-- header end -->
 	    
 	    <div class="bmodal-body clearfix">
-	    	<form name="tckfrm" method="post" action="/insert.do">
+	    	<form name="tckfrm" method="post" action="/insert.do" onsubmit="return bookCheck()">
 				<!-- 선예매 hidden 값 -->
 				<input type="hidden" name="earlybird" value="${earlybird}" />
 				<!-- c_no hidden 값 -->
@@ -500,7 +501,15 @@ line-height : 10px;
 				<input type="hidden" name="price" value="${concert.price}" />
 		    	<div id="mainContainer">
 					<!-- include 영역 시작 -->
-					<%@ include file="../tickets/mainContents.jsp" %>
+					<c:choose>
+		     			<c:when test="${concert.j_id == 'yes24'}">
+		     				<%@ include file="../tickets/hallYes24Live.jsp" %>
+		     			</c:when>
+		     			<c:when test="${concert.j_id == 'bluesquare'}"> 
+		     				<%@ include file="../tickets/hallBlueSquare.jsp" %>
+		     			</c:when>
+		     		</c:choose>
+		     		<%@ include file="../tickets/mainContents.jsp" %>
 					<!-- include 영역 끝 -->
 				</div><!-- mainContainer end -->
 				
@@ -595,7 +604,6 @@ $(document).ready(function(){
 	var heartFilled = likechk; //좋아요:1 안좋아요:0
 
 	$("#heart").click(function(){
-		alert("g");
 		// [로그인 확인] if start
 		if(${s_m_id == null}){ // 로그인 X
 			alert("로그인 후 이용가능합니다.");
@@ -655,11 +663,6 @@ $(document).ready(function(){
 				//alert("데이터 들어오기 성공!" + data);
 				if(data==1){
 					$("#heart").prop("src", "/images/heart-192x192_2.svg");
-					
-					// 문제점
-					// 1. 새로고침하면 컬러가 다시 바뀜.
-					// 2. 숫자가 실시간으로 안바뀜. (새로고침 해야 바뀜)
-					
 				}else {
 					$("#heart").prop("src", "/images/heart-192x192_1.svg");
 				}//(data==1) end
@@ -749,10 +752,10 @@ var closeBmodal = document.getElementsByClassName("closeBmodal")[0];
 
 //When the user clicks the button, open the modal 
 openBmodal.onclick = function() {
-	
 	//로그인 확인
 	if(${s_m_id == null}){
-		alert("로그인 화면으로 이동해주세요");
+		alert("로그인 후 이용가능합니다.");
+		location.href="/loginForm";
 	}else{
 		modal.style.display = "block";
 	}//if end
@@ -806,18 +809,25 @@ $(document).ready(function(){
 
 //좌석선택완료버튼 2.가격할인으로
 $("body").on('click', '#goTaddForm', function(){
-	//MainContainer에서
-	$("#map1Fjsp").css("display", "none");
-	$("#map2Fjsp").css("display", "none");
-	$("#ticketSalejsp").css("display", "block");
+	let cntSeats=$("#panel").children().length;
 	
-	//SideContainer에서
-	$("#seatAddFormjsp").css("display", "none");
-	$("#ticketAddFormjsp").css("display", "block");
-	
-	ticketCal(); //가격 계산
-	saleDefault(); //할인 정보 설정
-
+	//좌석을 선택하지 않았다면
+	if(cntSeats==0){
+		alert("좌석을 1석 이상 선택해주세요.");
+	}else{
+		//좌석을 선택했다면
+		//MainContainer에서
+		$("#map1Fjsp").css("display", "none");
+		$("#map2Fjsp").css("display", "none");
+		$("#ticketSalejsp").css("display", "block");
+		
+		//SideContainer에서
+		$("#seatAddFormjsp").css("display", "none");
+		$("#ticketAddFormjsp").css("display", "block");
+		
+		ticketCal(); //가격 계산
+		saleDefault(); //할인 정보 설정
+	}//if end
 });//click() end
 
 //다음버튼 3.배송현장수령으로
@@ -876,7 +886,7 @@ $("body").on('click', '#goSale', function(){
 
 /* ---------------------------------------------------------- */
 
-
+/*
 //전역변수 선언
 var flagsA = new Array(826); //좌석tb의 좌석개수+1 (배열[0]번째는 쓰지않는다)
 var flagsB = new Array(826);
@@ -973,7 +983,7 @@ for(let i = 1; i < flagsZ.length; i++){ //Z구역 R등급, S등급, A등급
 		$("#btnZ"+i).addClass("on");
 	}//if end
 }//for end
-
+*/
 
 
 
@@ -1000,7 +1010,7 @@ $("body").on('click', '#map2F', function(){ //map2F버튼 id받아오기
 
 
 
-
+/*
 //스탠딩 좌석 추가와 삭제
 function standAdd(SeatNum, section, flagNum){ //좌석번호, 구역이름, 버튼고유번호
 	var snum=$(SeatNum).val(); //number 좌석번호
@@ -1154,7 +1164,7 @@ function reSelectFN(){
 	//좌석수 계산 초기화
 	countSeats();
 }//reSelectFN()
-
+*/
 
 
 //선택한 좌석 수 계산하기
@@ -1444,7 +1454,10 @@ $("select[name='disCntA']").on("change", function(){
 
 //배송 페이지 디폴트 설정
 function deliverDefault(){
-	$("#rec_addr").attr("disabled", true); //주소창 비활성화
+	$("#m_zipcode").attr("disabled", true); //주소창 비활성화
+	$("#m_addr1").attr("disabled", true); //주소창 비활성화
+	$("#m_addr2").attr("disabled", true); //주소창 비활성화
+	$("#m_zipcodeBtn").attr("disabled", true); //주소찾기 버튼 비활성화
 	$("#msg").attr("disabled", true); //배송메세지 비활성화
 	$("#dlvBtn").removeAttr("checked"); //배송 비활성화
 	$("#pUpBtn").prop("checked", true); //현장수령 활성화
@@ -1455,14 +1468,20 @@ function deliverDefault(){
 
 //배송을 선택하면
 function dlvSelected(){
-	$("#rec_addr").attr("disabled", false);
+	$("#m_zipcode").attr("disabled", false);
+	$("#m_addr1").attr("disabled", false);
+	$("#m_addr2").attr("disabled", false);
+	$("#m_zipcodeBtn").attr("disabled", false);
 	$("#msg").attr("disabled", false);
 	ticketCal();
 }//selectDelivery() end
 
 //현장수령을 선택하면
 function pUpSelected(){
-	$("#rec_addr").attr("disabled", true);
+	$("#m_zipcode").attr("disabled", true);
+	$("#m_addr1").attr("disabled", true);
+	$("#m_addr2").attr("disabled", true);
+	$("#m_zipcodeBtn").attr("disabled", true);
 	$("#msg").attr("disabled", true);
 	ticketCal();
 }//selectDelivery() end
@@ -1472,7 +1491,62 @@ function pUpSelected(){
 
 /* ------------------------ 가격계산 end ---------------------------------- */
 
-
+//결제완료 버튼 클릭시 수령방법 폼에 대한 유효성검사
+function bookCheck() {
+	
+    // 1. 이름 입력
+    // 이름 입력안했을 때
+    let name 	  = $("#rec_name").val().trim();
+    if (name == "") {
+        $('.name_input').css("display","inline-block");   
+        $("#rec_name").focus();
+        return false;
+    }//if end
+	
+	// 2. 휴대전화
+	let m_tel = $("#rec_tel").val().trim();
+	if(m_tel == "") {
+		$('.tel_input').css("display","inline-block");
+		$('.tel_check').css("display", "none");
+		$("#rec_tel").focus();
+  		return false;
+	}//if end
+	
+	// 2-1. 휴대전화 규칙성
+	 var tel_rule   = /^\d{2,3}-\d{3,4}-\d{4}$/;
+	 if(!tel_rule.test(m_tel)) {
+		 $('.tel_check').css("display","inline-block");
+		 $('.tel_input').css("display", "none");
+		 $("#m_tel").focus();
+	  	 return false;
+	 }else {
+	 	$('.tel_input').css("display", "none");
+	 	$('.tel_check').css("display", "none");
+	 }//if end
+	
+	// 3. 주소 
+	// 배송일 때
+	if($("#dlvBtn").is(":checked")){ //checked면 true값 반환
+		let m_zipcode = $("#m_zipcode").val().trim();
+		let m_addr2 = $("#m_addr2").val().trim();
+		if(m_zipcode == ""){
+			$('.addr_input').css("display","inline-block");
+			$("#m_zipcode").focus();
+	  		return false;
+		}else if(m_addr2 == ""){
+			$('.addr_input').css("display","inline-block");
+			$("#m_addr2").focus();
+	  		return false;
+		}//if end
+		
+	// 현장수령일 때
+	}else if($("#pUpBtn").is(":checked")){ //통과
+		
+	}//if end
+	
+	return true;
+	
+}//bookCheck() end
 
 
 /* 모달창 끝 ------------------------------------------------------------------------------------------------ */

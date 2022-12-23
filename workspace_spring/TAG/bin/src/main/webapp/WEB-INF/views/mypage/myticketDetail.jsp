@@ -14,17 +14,22 @@
 	
 	.rightcontent {
 		float: right;
-		width: 80%;
-		height: 100%;		
+		width: 75%;
+		--height: 100%;	
+		--position: relative;	
 	}
 
-	.leftcontent, .box {
-		border:1px solid black;
-	}
+	.leftcontent, .box { border-top: 1px solid black; }
+
+
+	.leftcontent { border-bottom: 1px solid black; }
+	
 	
 	.leftcontent div, .rightcontent {
 		padding:10px;
 	}
+	
+	.box { margin-top: 10%; }
 	
 	.clickInfo {
 		text-align: center;
@@ -39,15 +44,6 @@
 		50% {opacity: 0;}
 	}
 	
-	.clearfix::after {
-	  content: "";
-	  display: block;
-	  clear: both;
-	}
-	
-	.myticketDetail{
-	
-	}
 	
 	.myticketDetail ol{
 		text-align:right; 
@@ -141,7 +137,7 @@
 
 
 
-<div class="clearfix">
+
 <div class="title">
 	<h3 style="text-align: center;">티켓 예매 상세</h3>
 </div>
@@ -166,6 +162,7 @@
 		</div>
 	</div>
 </div><!-- leftcontent end -->
+
 
 
 <div class="rightcontent">
@@ -250,8 +247,16 @@
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<th>받는주소</th>
-						<td>${detail.rec_addr}</td>
+						<th>우편번호</th>
+						<td>${detail.rec_zipcode}</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>${detail.rec_addr1}</td>
+					</tr>
+					<tr>
+						<th>상세주소</th>
+						<td>${detail.rec_addr2}</td>
 					</tr>
 					<tr>
 						<th class="paddingBottom">배송메세지</th>
@@ -279,7 +284,7 @@
 	</div><!-- myticketDetail end -->
 </div><!-- rightcontent end -->
 
-</div><!-- clearfix end -->
+
 
 <!-- 본문 끝 -->
 
