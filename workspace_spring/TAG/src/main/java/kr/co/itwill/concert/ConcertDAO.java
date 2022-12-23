@@ -21,6 +21,11 @@ public class ConcertDAO {
 	@Autowired
 	SqlSession sqlSession;
 	
+//  ---------------------------------------------------- [콘서트 목록 최신순 - 개수]
+	public int concertTotal() {
+		return sqlSession.selectOne("concert.concertTotal");
+	}//concertTotal() end
+	
 	
 //  ---------------------------------------------------- [콘서트 목록 최신순 - 전체]
 	public List<ConcertDTO> concertListLatest(int start, int end){
@@ -31,12 +36,30 @@ public class ConcertDAO {
 		return sqlSession.selectList("concert.concertListLatest", map);
 	}//concertListLatest() end
 	
+//  ---------------------------------------------------- [콘서트 목록 최신순 - 전체]
+	public List<ConcertDTO> popularAll(int start, int end){
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectList("concert.popularAll", map);
+	}//concertListLatest() end
 	
-//  ---------------------------------------------------- [콘서트 목록 최신순 - 개수]
-	public int concertTotal() {
-		return sqlSession.selectOne("concert.concertTotal");
+//  ---------------------------------------------------- [콘서트 목록 최신순 - 전체]
+	public List<ConcertDTO> likeAll(int start, int end){
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectList("concert.likeAll", map);
+	}//concertListLatest() end
+	
+	
+	
+//  ---------------------------------------------------- [종료된 콘서트 목록 - 개수]
+	public int pastConcertTotal() {
+		return sqlSession.selectOne("concert.pastConcertTotal");
 	}//concertTotal() end
-	
 	
 //  ---------------------------------------------------- [종료된 콘서트 목록 - 전체]	
 	public List<ConcertDTO> pastConcertList(int start, int end) {
@@ -47,11 +70,7 @@ public class ConcertDAO {
 		return sqlSession.selectList("concert.pastConcertList", map);
 	}//pastConcertList end
 	
-	
-//  ---------------------------------------------------- [종료된 콘서트 목록 - 개수]
-	public int pastConcertTotal() {
-		return sqlSession.selectOne("concert.pastConcertTotal");
-	}//concertTotal() end
+
 	
 	
 //  ---------------------------------------------------- [예정된 콘서트 목록 - 전체]	

@@ -66,7 +66,7 @@ h2{
 #product_search {float: right;}
 
 /* 최신순 카테고리 오른쪽으로 */
-#catergory {float: right;}
+#category {float: right;}
 
 /* aside 네비바 큰 카테고리 (All, Concert) */
 h3{
@@ -220,7 +220,117 @@ function topFunction() {
 	$('html, body').animate({scrollTop:0}, '200');
 }//scrollFunction() end
 
+$( document ).ready(function() {
+	var likelist = [];
+	
+	<c:forEach items="${like}" var="row" varStatus="vs"> 
+		likelist = ${like};
+	</c:forEach>
+	
+	//alert(likelist);
+	
+	var pronum = 0;
+	
+	for(var i=0; i<likelist.length; i++) {
+		//alert(likelist[i]);
+		pronum = likelist[i];
+		//alert(pronum);
+		$("#hearticon"+pronum).prop("src", "/images/heart-192x192_2.svg");
+		$("#heart-icon"+pronum).css("display", "inline-block");
+	}//for end
+});
 
+
+
+//하트 이모티콘 클릭시
+var flag = false;
+
+function hearticon(this1) {
+	var pro_no = this1.value;
+	let m_id   = "${s_m_id}";
+
+	
+	if(${s_m_id == null}) {
+		alert("로그인 후 이용가능합니다.");
+		let url = '/loginForm';
+		location.replace(url);
+	}else {
+		// 로그인 했을 때 클릭하면
+		if( !flag ) {
+			
+			//product에 +1
+			$.ajax({
+		 		 url   	 : "/product/likecntInc"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no}
+				,success : function(data){
+					//alert("+1 성공");
+				}//success end
+			}); //ajax end
+			
+			// member_like 에 insert
+			$.ajax({
+		 		 url   	 : "/product/likeInsert"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no, "m_id":m_id}
+				,success : function(data){
+				}//success end
+			}); //ajax end
+			
+			flag = true;
+			
+			$("#hearticon"+pro_no).prop("src", "/images/heart-192x192_2.svg");//채워진하트
+			$("#heart-icon"+pro_no).css("display", "inline-block");//display 보이게
+		
+		} else {
+			
+			//product에 -1
+			$.ajax({
+		 		 url   	 : "/product/likecntDec"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no}
+				,success : function(data){
+					//alert("-1 성공");
+				}//success end
+			}); //ajax end
+			
+			// member_like 에 insert
+			$.ajax({
+		 		 url   	 : "/product/likeDec"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no, "m_id":m_id}
+				,success : function(data){
+				}
+			}); //ajax end
+			
+			
+			flag = false;
+			
+			
+			$("#hearticon"+pro_no).prop("src", "/images/heart-192x192_1.svg"); // 빈 하트
+			//$("#heart-icon"+pro_no).css("display", "none"); //
+			
+		}//if( !flag ) end
+	}//if(${s_m_id == null}) end
+		
+	
+	$("#product_box"+pro_no).hover(function(){
+		//alert(pro_no);
+		//요소에 마우스를 올렸을 때 기능
+			$("#hearticon"+pro_no).css("display", "inline-block");
+			//alert("마우스 올림");
+			},function(){
+		//요소에 마우스를 올린뒤 떨어졌을때 기능
+		
+			if( flag == true ) {
+				$("#hearticon"+pro_no).css("display", "inline-block");
+			}else {
+				$("#hearticon"+pro_no).css("display", "none"); //마우스 떼면 안보이게
+			    //alert("마우스 떨어짐");
+			}//if end
+	});//$("#product_box"+pro_no).hover end
+		
+}//hearticon(this1) end
 
 </script>
 
@@ -236,9 +346,11 @@ function topFunction() {
 		<div id="intro_wrap">
 
 			<select name="c_no" id="c_no" onchange="if(this.value) location.href=(this.value);" style="width:250px;">
-		         <option selected value="/listConcert">공연을 선택해주세요.</option>
+		         <option value="/listConcert">공연을 선택해주세요.</option>
 		         <c:forEach var="row" items="${concertlist}" varStatus="vs"> 
-		         <option id="c_no" name="c_no" value="/listConcert?c_no=${row.c_no}">[${row.date}] &nbsp; ${row.title} </option>
+		         	 <option value="/listConcert?c_no=${row.c_no}"
+		         	 <%-- <c:if test="${row[vs.index == '1' ]}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option> --%>
+		         	 <c:if test="${(c_no) == (row.c_no)}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option>
 		         </c:forEach>
 		      </select>
 
@@ -280,24 +392,13 @@ function topFunction() {
 			        <a href="/listConcert"><h3>Concert</h3></a>
 		        </div><!-- h3_title 끝 -->
 		        
-		        
-				<!-- 		        
-				<form name="categoryList">
-		        <div class="li_title">
-			        <ul>  
-			          <a href="#" onclick="location.href='/clothes'"><li>Clothes</li></a>
-			          <a href="#" onclick="location.href='/poster'"><li>Poster</li></a>
-			          <a href="#" onclick="musicCategory()" id="category" name="category" value="M"><li>Album</li></a>
-			          <a href="#" onclick="location.href='/acc'"><li>Acc</li></a>
-			        </ul>
-				</form> 
-				-->
+
 				
 				
 			 <div class="li_title">
 				<c:forEach items="${categoryAll}" var="row" varStatus="vs">
 					<ul>  
-			          <li><a href="list.do?category=${row.category}">
+			          <li><a href="/list.do?category=${row.category}">
 			          		<c:choose>
 			          			<c:when test="${row.category == 'C'}"> Clothes </c:when>
 			          			<c:when test="${row.category == 'P'}"> Poster </c:when>
@@ -319,19 +420,18 @@ function topFunction() {
 			
 			<div class="count-category" style="paading-bottom: 30px;">
 			<sapn id= "product_count">
-			All (${total})
+			Total (${total})
 			</span>
 			
 			<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
-			<span class="catergory">
-		    	<select id="catergory" name="catergory">
-		         	<option value="new">최신순</option>
-		         	<a href="#" onclick=""><option value="popular">인기순</option></a>
-		         	<option value="like">좋아요순</option>
+			<span class="category">
+		    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+		         	<option value="/listConcert?c_no=${c_no}">최신순</option>
+		         	<option value="/listConcert/popularCon?c_no=${c_no}">인기순</option>
+		         	<option value="/listConcert/likeCon?c_no=${c_no}">좋아요순</option>
 		  	 	</select>
 		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
 			</div>
-		
 			
 				<table>
 					<br>
@@ -350,32 +450,10 @@ function topFunction() {
 									<div class="product-imageandicon">
 									
 										<!-- 하트 아이콘 -->
-										<span class="heart-icon">
-											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<g clip-path="url(#clip0_429_9297)">
-											<path d="M19.0711 13.1421L13.4142 18.799C12.6332 19.58 11.3668 19.58 10.5858 18.799L4.92894 13.1421C2.97632 11.1895 2.97632 8.02369 4.92894 6.07106C6.88157 4.11844 10.0474 4.11844 12 6.07106C13.9526 4.11844 17.1185 4.11844 19.0711 6.07106C21.0237 8.02369 21.0237 11.1895 19.0711 13.1421Z" stroke="#292929" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-											</g>
-											<defs>
-											<clipPath id="clip0_429_9297">
-											<rect width="24" height="24" fill="white"/>
-											</clipPath>
-											</defs>
-											</svg>
-										</span>
-			
-										<!-- 장바구니 아이콘 -->
-										<span class="cart-icon">
-											<svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<g clip-path="url(#clip0_429_9132)">
-											<path d="M4 9H20L19.1654 18.1811C19.0717 19.2112 18.208 20 17.1736 20H6.82643C5.79202 20 4.92829 19.2112 4.83464 18.1811L4 9Z" stroke="#292929" stroke-width="1.5" stroke-linejoin="round"/>
-											<path d="M8 11V8C8 5.79086 9.79086 4 12 4C14.2091 4 16 5.79086 16 8V11" stroke="#292929" stroke-width="1.5" stroke-linecap="round"/>
-											</g>
-											<defs>
-											<clipPath id="clip0_429_9132">
-											<rect width="24" height="24" fill="white"/>
-											</clipPath>
-											</defs>
-											</svg>	
+										<span class="heart-icon" id="heart-icon${row.pro_no}">
+										<button value="${row.pro_no}" onclick="hearticon(this)" style="border: none; background-color:transparent; outline:none;"> 
+											<img id="hearticon${row.pro_no}" src="/images/heart-192x192_1.svg"/>
+										</button>
 										</span>
 										
 										<div class="product-image">
@@ -448,7 +526,7 @@ function topFunction() {
 								<c:set var="endPage" value="${pageCount}" />
 							</c:if>
 				
-				
+							<c:if test="${orderby == 'r'}"><!-- 최신순 recent -->
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
 									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
@@ -470,8 +548,64 @@ function topFunction() {
 								<c:if test="${endPage < pageCount}">
 									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
 								</c:if>
-							
 							</c:if>
+							
+							<!-- 인기순 popular -->
+							<c:if test="${orderby == 'p'}">
+								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+								<c:if test="${startPage > 1}">
+									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
+								</c:if>
+					
+								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+								<c:forEach var="i" begin="${startPage}" end="${endPage}">
+									<c:choose>
+										<c:when test="${pageNum == i}">
+											<span style="font-weight: bold">${i}</span>
+										</c:when>
+										<c:when test="${pageNum != i}">
+											<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${i}">${i}</a>
+										</c:when>
+									</c:choose>
+								</c:forEach>
+					
+								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+								<c:if test="${endPage < pageCount}">
+									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
+								</c:if>
+							</c:if>
+							
+							<!-- 좋아요수 like -->
+							<c:if test="${orderby == 'l'}">
+								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+								<c:if test="${startPage > 1}">
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
+								</c:if>
+					
+								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+								<c:forEach var="i" begin="${startPage}" end="${endPage}">
+									<c:choose>
+										<c:when test="${pageNum == i}">
+											<span style="font-weight: bold">${i}</span>
+										</c:when>
+										<c:when test="${pageNum != i}">
+											<a href="/listConcert?c_no=${c_no}&pageNum=${i}">${i}</a>
+										</c:when>
+									</c:choose>
+								</c:forEach>
+					
+								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+								<c:if test="${endPage < pageCount}">
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
+								</c:if>
+							</c:if>
+						
+						
+						
+						
+						
+						
+						</c:if>
 							
 				</div>	
 						
