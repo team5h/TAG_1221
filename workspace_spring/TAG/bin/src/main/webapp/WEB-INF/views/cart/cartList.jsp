@@ -126,7 +126,7 @@ img{object-fit: contain;}
 .list_aside {
   background-color: #F2F3F4;
   position: sticky;
-  top: 60px;
+  top: 100px;
   width: 30%;
   --padding-top: 20px;
   --margin-bottom: 20px;
@@ -344,6 +344,12 @@ input[type="checkbox"]:checked + label:before {
 .product-name{padding-bottom: 12px; font-size: 18px;}
 .product-option{font-size: 14px;}
 
+
+
+
+
+
+
 </style>
 
 
@@ -383,6 +389,7 @@ function topFunction() {
 
 <button onclick="topFunction()" id="myBtn" title="Go to top" style="font-size: 26px;">Go to top ↑</button>
 
+
 <div class="wrapAll">
 	
 		<!-- intro_wrap 시작 -->
@@ -406,17 +413,21 @@ function topFunction() {
 						<div class="summaryList">총 주문금액</div>
 						<div class="summaryList">총 배송비</div>
 						<div class="summaryList">할인금액</div>
-						<div class="summaryList" style="padding-top: 120px;">총 결제금액</div>
+						<div class="summaryList" style="padding-top: 70px; padding-bottom: 30px;">총 결제금액</div>
+						<div class="summaryList">적립 포인트</div>
 					</div>    
 					<div class="summary data" style="float: right; text-align: right;">
-						<div class="summaryDataList">총 주문금액</div>
-						<div class="summaryDataList">총 배송비</div>
-						<div class="summaryDataList">할인금액</div>
-						<div class="summaryDataList"  style="padding-top: 120px;">총 결제금액</div>
+						<div class="summaryDataList" id="summaryOrder">총 주문금액</div>
+						<div class="summaryDataList" id="summaryDelivery">총 배송비</div>
+						<div class="summaryDataList" id="summarySale">0</div>						
+						<div class="summaryDataList" id="summaryTotal" style="padding-top: 70px; font-size: 26px; font-weight: bold;">총 결제금액</div>
+						<div class="summaryDataList" id="summarPoint">적립 포인트</div>
 					</div>   
 				
 					<div>
-						<button class="checkoutBtn">Checkout</button>
+						<form method="post" action="/cart/cartOrder" >
+							<button class="checkoutBtn">Checkout</button>
+						</form>
 					</div>
 				
 				</div><!-- li_title 끝 -->
@@ -435,31 +446,46 @@ function topFunction() {
 					  <tr>
 					  	<th style="width: 40px; padding-left: 0;"><!-- 선택박스 -->
 							<div class="agreeAll">
-							<input type="checkbox" id="check_all" >
+							<input type="checkbox" id="check_all" value="${mycart}">
 							<label for="check_all"></label>
 							</div>
 					  	</th>
 					    <th>상품정보</th>
 					    <th>가격</th>
 					    <th>수량</th>
-					    <th>배송비</th>
+					    <!-- <th>배송비</th> -->
 					    <th></th>
 					  </tr>
 					</thead>
 					
+					<c:if test="${empty mycart}"> 
+						<tr>
+							<td colspan="9" style="padding-top: 20px; font-size: 16px;">
+								장바구니가 비었습니다.
+							</td>
+						</tr>
+					</c:if>
+					
  					<c:forEach var="row" items="${mycart}" varStatus="vs">
+ 					
+ 					<div class="cart-info">
+	 					<input type="hidden" class="cartPrice" value="${row.price}">
+	 					<input type="hidden" class="cartCnt" value="${row.cnt}">
+ 					</div>
+ 					
+ 					
  					<tbody>
-				      <tr>
+				      <tr id="mycartTable${row.cart_no}" >
 				       	
 				       	<td style="width: 30px; padding-left: 0;">
 				       	
-							<input type="checkbox" id="check${row.cart_no}" name="check" class="normal" >
+							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)">
 							<label for="check${row.cart_no}"></label>
-				       		
+			       		
 						</td>
 				   
 				      	<!-- 상품정보 -->
-				        <td style="width: 450px; padding-bottom: 30px;">
+				        <td style="width: 500px; padding-bottom: 30px;">
 					        <table id="inform-table"> 
 							    <tr>
 								    <td style="padding:0;">
@@ -473,8 +499,7 @@ function topFunction() {
 								    	<div class="concert-name">${row.title}</div>
 								    	<div class="product-name">${row.pro_name}</div>
 								    	<div class="product-option">
-								    	색상:${row.color}
-								    	사이즈: ${row.size}
+								    	색상:${row.color} / 사이즈: ${row.size}
 								    	</div>
 								    </td>
 							    </tr>
@@ -486,40 +511,27 @@ function topFunction() {
 				        <!-- 가격 -->
 				        <td style="width: 130px;">
 				        <input type="hidden" id="product_price${row.cart_no}" name="product_price" value="${row.price}">
-				        ￦ <fmt:formatNumber id="" value="" pattern="#,###" />
+					        ￦
+					        <span id="totalAmount${row.cart_no}">
+					        <fmt:formatNumber value="${row.price * row.cnt}" pattern="#,###" />
+					        </span>
 				        </td>
+				        
+				        <!-- 수량 증가 감소 버튼 -->
 				        <td style="width: 130px; padding-left: 0px;">
 				        <div class="count-wrap _count">
-						    <button id="count-minus${row.cart_no}" type="button" class="minus" value="${row.cart_no}"><img src="/images/minus.svg"></button>
-						    <input id="count-plus${row.cart_no}" type="text" class="inp" value="${row.cnt}" />
-						    <button id="count-plus${row.cart_no}" type="button" class="plus" value="${row.cart_no}"><img src="/images/plus.svg"></button>
+				        	<c:set var="cart_no" value="${row.cart_no}" />
+						    <button onclick="countminus(this)" type="button" id="count-minus${row.cart_no}" class="minus" value="${row.cart_no}"><img src="/images/minus.svg"></button>
+						    <input  type="text"   id="product-qty${row.cart_no}" class="inp"   value="${row.cnt}" readonly="readonly"/>
+						    <button onclick="countplus(this)" type="button" id="count-plus${row.cart_no}"  class="plus"  value="${row.cart_no}"><img src="/images/plus.svg"></button>
 						</div>
 				        </td>
 				        
-				        <!-- 배송비 -->
-						    <c:choose>
-					         <c:when test = "${row.price <= 50000}">
-						        <td style="width: 125px;">
-					        		<fmt:formatNumber value="3000" pattern="#,###" />
-					        	</td>
-					         </c:when>
-					
-					         <c:when test = "${row.price >= 50000}">
-					           	<td style="width: 125px;">
-					        		<div style="font-size: 14px;">50,000원 이상 무료배송</div>
-					        	</td>
-					         </c:when>
-					      </c:choose>
-					      	 <input type="hidden" class="inp" value="${total[vs.index]}" />
-							<td>${total[vs.index]} ${row.countpid}</td>
-							<td>${row.countpid}</td>
-
-
-
-				        
-				        <td style="width: 78px;">
+				        <!-- 삭제버튼 -->
+				        <td style="width: 80px; text-align: center;">
 				        	<button onclick="cartdelete(this)" value="${row.cart_no}" type="button" id="cartdeleteBtn${row.cart_no}" class="cart-delete-btn"><img src="/images/xbutton.svg"></button>
 				        </td>
+				        <!-- 삭제버튼 끝! -->
 				      </tr>
 				    </tbody>
 					</c:forEach>
@@ -528,7 +540,7 @@ function topFunction() {
 				
 				<div class="tablepadding" style="padding-bottom: 40px;"></div>
 				
-				<button class="selectDeleteBtn">선택삭제</button>
+				<button onclick="delbtn()" class="selectDeleteBtn">선택삭제</button>
 					
 			</div><!-- list_content -->
 		</div><!-- list_container -->
@@ -538,9 +550,22 @@ function topFunction() {
 
 
 <script>
+
+// 체크박스 전체선택 시 담아줄 변수
+let cartnoList = [];
+//alert(cartnoList);
+
+//----------------------------------------------------------- 체크박스 선택
 // 체크박스 전체 선택
 $(".checkbox_group").on("click", "#check_all", function () {
     $(this).parents(".checkbox_group").find('input').prop("checked", $(this).is(":checked"));
+    
+    // jstl에 있는 ${row.cart_no} 변수를 모두 담는다.
+    <c:forEach var="row" items="${mycart}" varStatus="status">
+		cartnoList.push("${row.cart_no}");
+	</c:forEach>
+	
+	//alert(cartnoList);	
 });
 
 // 체크박스 개별 선택
@@ -554,22 +579,16 @@ $(".checkbox_group").on("click", ".normal", function() {
     $("#check_all").prop("checked", is_checked);
 });
 
-
-/* <input type="hidden" id="product_price${row.price}" name="product_price" value="${row.price}"> */
-
-
-//수량 옵션
+// ----------------------------------------------------------- 수량옵션
 $('._count :button').on({
     'click' : function(e){
-        e.preventDefault();
+        e.preventDefault(); // a태그나 submit 태그를 눌렀을 때 페이지를 이동하거나 새로고침되는 동작을 막아준다.
         var $count = $(this).parent('._count').find('.inp');
         var now = parseInt($count.val());
         var min = 1;
         var max = 999;
         var num = now;
-		var price = $("#product_price${row.cart_no}").val();
-		alert(price);
-		
+   
         
         if($(this).hasClass('minus')){
             var type = 'm';
@@ -577,6 +596,7 @@ $('._count :button').on({
             var type = 'p';
         }
         if(type=='m'){
+        	var idx = $('count-minus').index();
             if(now>min){
                 num = now - 1;
                 //가격가져오고
@@ -596,30 +616,301 @@ $('._count :button').on({
 });
 
 
+// 기본 총 상품가격(가격 * 수량)
+var cart_price = 0; //계산용 금액 30000
+var cart_price_text = ""; //표시용 금액 (콤마 찍어주기위함) 30,000
+var cart_point = 0;
 
 
+// foreach문으로 mycart 테이블에 있는 가격과 수량을 곱한다. 
+<c:forEach var="row" items="${mycart}" varStatus="status">
+	cart_price += ${row.price} * ${row.cnt};
+</c:forEach>
 
-// 장바구니 삭제
-var m_id = "${s_m_id}";
-//alert(m_id);
 
-function cartdelete(this1, m_id){
-	var cart_no = this1.value;
-    //alert(cart_no);
-    
-	$.ajax({
-			url: '/cart/deleteMycart'
-			,type:'post'
-			,data : {'cart_no':cart_no, 'm_id':m_id}
-			,success : function(data) {
-				alert("성공!");
-			}//success end
+cart_point = cart_price * 0.01;
+cart_price_text  = setRegexp(cart_price); // 표시용 금액에 배송비 더하고 뺀 값 넣어준다.
+$('#summaryOrder').text(cart_price_text); //id="summaryOrder"(총 주문금액)의 텍스트에 표시용 변수를 넣어준다.
+$('#summaryTotal').text(cart_price_text); //id="summaryTotal"(총 결제금액)의 텍스트에 표시용 변수를 넣어준다.
+$('#summarPoint').text(cart_point);
+//alert(cart_price);
+
+// 함수 사용 (기본 총 상품가격 cart_price) 넣는다. 밑에 함수를 사용
+deliveryPrice(cart_price);
+
+//----------------------------------------------------------- 배송비 추가, 감소 함수
+function deliveryPrice (cart_price) {
+	
+	var total_price = 0;
+	var total_price_text = "";
+	
+	if(cart_price < 50000) {
+		$('#summaryDelivery').text("+ 3,000");
+		total_price = cart_price + 3000;
+		console.log('cartprice: ' + cart_price + 'totalprice : ' + total_price);
+		total_price_text = setRegexp(total_price);
+		$('#summaryTotal').text(total_price_text);
+	} else if (cart_price >= 50000) {
+		$('#summaryDelivery').text("무료배송");
+		total_price = cart_price;
+		total_price_text = setRegexp(total_price);
+		$('#summaryTotal').text(total_price_text);
+	}//if end
+}//deliveryPrice() end
+
+//----------------------------------------------------------- 수량 + 가격 증가
+function countplus(this1) {  
+	
+	var maxnum = 99;
+	
+	var cart_no = this1.value; //장바구니 pk
+	//alert(plus);
+	var price = $('#product_price'+cart_no).val(); //가격
+	//alert(price);
+	var count = $('#product-qty'+cart_no).val()*1; // 장바구니에 담겨있는 수량
+	//alert(count);	
+	
+	if (count>maxnum) {
+		alert("재고가 부족합니다.");
+		count -= 1;
 		
-	});//$.ajax({}) end
+		$('#product-qty'+cart_no).val(count);
+	}else{
+		count += 1;
+		
+		cart_price += price*1; // 총 상품금액 더해줌
+		//alert(cart_price);
+		cart_point = cart_price * 0.01; //적립 포인트
+		//alert(cart_point);
+		
+		
+		var total_price = price * count;
+		//alert(total_price);
+		
+		/* if (total_price < 50000) {
+			total_price += 3000;
+		} */
+		
+		total_price = setRegexp(total_price);
+		cart_price_text  = setRegexp(cart_price);
+		total_price_text = setRegexp(total_price);
+		
+		
+		$('#summaryOrder').text(cart_price_text);
+		//$('#summaryTotal').text(total_price_text);
+		$('#summarPoint').text(cart_point); //적립포인트
+		
+		deliveryPrice(cart_price);
+		$('#totalAmount'+cart_no).text(total_price);
+	}//if else
+		
+	
+	// 데이터에 증가 값 저장
+	cartCountUpdate(cart_no);
+}//countplus(this1)
 
+
+//----------------------------------------------------------- 데이터에 증가 값 저장
+	function cartCountUpdate(cart_no){
+		
+	$.ajax({
+			 url   : '/cart/countUp'
+			 ,type : 'post'
+			 ,data : {'cart_no' : cart_no}
+			,success : function(data) {
+				//alert("수량 들어옴");
+			}//success end	
+	});//$.ajax end
 	
 	
-} //cartdelete(this) end
+	}//cartCountUpdate(cart_no) end
+
+
+
+//----------------------------------------------------------- 수량 + 가격 감소
+function countminus(this1) {
+	
+	var cart_no = this1.value;//장바구니 pk
+	//alert(cart_no);
+	var price = $('#product_price'+cart_no).val();//가격
+	//alert(price);
+	var count = $('#product-qty'+cart_no).val()*1;//장바구니에 담겨있는 수량
+	//alert(count);	
+	
+	
+	if(count<=1){
+		alert("최소수량입니다.");
+		count = 1; // 수량 1로 고정 
+	    return;
+	}else if(count>1){
+		count -= 1;
+		
+	    var pre_cartprice = cart_price; // 계산 전 총 상품 금액 
+		if(cart_price > 0) {
+			cart_price -= price*1; // 총 상품금액 빼
+			//alert(cart_price);
+		}
+	
+		var total_price = price * count;
+		
+		cart_point = cart_price * 0.01; //적립 포인트
+		
+		total_price = setRegexp(total_price);
+		cart_price_text  = setRegexp(cart_price);
+		total_price_text = setRegexp(total_price);
+		
+		//배송비 판단
+		if(pre_cartprice >= 50000 && cart_price < 50000) {
+			//3000원을 더한다 
+		} else {
+			//배송비 계산 없음 
+		}
+		
+		deliveryPrice(cart_price);
+		
+		$('#summaryOrder').text(cart_price_text);
+		//$('#summaryTotal').text(total_price_text);
+		$('#totalAmount'+cart_no).text(total_price);
+		$('#summarPoint').text(cart_point); //적립 포인트 
+	}
+	//console.log(count);
+	cartCountDown(cart_no);
+	
+}//countminus(this) end
+
+
+function setRegexp(price) {
+	
+	var reg_price = String(price).replace(/,/g , '');
+	console.log('setRegexp price : ' + reg_price);
+	var regexp = /\B(?=(\d{3})+(?!\d))/g;
+	reg_price = reg_price.toString().replace(regexp, ',');
+	
+	return reg_price;
+}
+
+//----------------------------------------------------------- 데이터에 증가 값 저장
+	function cartCountDown(cart_no){
+		
+	$.ajax({
+			 url   : '/cart/countDown'
+			 ,type : 'post'
+			 ,data : {'cart_no' : cart_no}
+			,success : function(data) {
+			}//success end	
+	});//$.ajax end
+	
+	
+	}//cartCountUpdate(cart_no) end
+
+
+//----------------------------------------------------------- 장바구니 삭제
+	function cartdelete(this1){
+		var cart_no = this1.value;
+	    //alert(cart_no);
+	    
+		$.ajax({
+				url: '/cart/deleteMycart'
+				,type:'post'
+				,data : {'cart_no':cart_no}
+				,success : function(data) {
+					//alert("성공!");
+					if(data == 1){
+						location.reload();
+						// 이부분 reload말고 테이블 제거하는 방법 ??
+					}
+				}//success end
+			
+		});//$.ajax({}) end
+	} //cartdelete(this) end
+	
+	
+	
+	
+	
+//----------------------------------------------------------- 장바구니 선택 삭제 값 가져오기
+	var chkArray = new Array();
+	
+	function chkbox(this1) {
+		// 체크박스의 value값을 가져온다. 
+		var cart_no = this1.value;
+		//alert(cart_no);
+		
+		// 한 행의 체크박스가 체크되면
+		if (this1.checked) {
+			//chkArray 배열에 cart_no을 넣어준다
+			chkArray.push(cart_no);
+			alert(chkArray);
+		}else {
+			// 체크되지 않는다면 
+			// index 변수에 chkArray변수의 특정값 (cart_no)를 넣어주고
+			var index = chkArray.indexOf(cart_no);
+			// 만약 index 에 -1보다 크면
+			if (index > -1) {
+				//chkArray 배열의 index, 1을 잘라준다.
+				chkArray.splice(index, 1);
+			}
+		}//if end
+			//alert(chkArray);
+	}//chkbox(this1) end
+	
+	
+	
+//----------------------------------------------------------- 장바구니 선택 삭제 버튼 누를 때
+	function delbtn() {
+		
+		chkArray += cartnoList;
+		//alert(chkArray); 
+		
+		if(chkArray.length < 1 && cartnoList.length < 1) {
+			alert("삭제할 상품을 선택해주세요.");
+			return;
+		}//if end
+		
+		//alert(chkArray);
+		
+		//배열 객체를 JSON 포맷으로 변환
+		var chkList = {
+			"chkList" : JSON.stringify(chkArray) //선택박스
+		} //chkList 
+		
+		var checkAll = { 
+			"checkAll" : JSON.stringify(cartnoList) //전체선택박스
+		}
+		
+		
+		if(confirm('선택된 상품을 삭제하시겠습니까?')){
+ 			$.ajax({
+					 url     : "/cart/selectDelete"
+					,type    : "post"
+					,data    : chkList
+					,success : function(data) {
+						//alert("성공!");
+						alert('삭제되었습니다.');
+						location.reload();
+					} //success end
+			});//ajax end 
+			
+		}//if end
+		
+	}//delbtn() end
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

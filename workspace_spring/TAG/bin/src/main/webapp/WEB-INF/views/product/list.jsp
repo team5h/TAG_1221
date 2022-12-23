@@ -185,12 +185,6 @@ img{object-fit: contain;}
   left: 0px;
 }
 
-.cart-icon{
-  display: none;
-  position: absolute;
-  top: 11px;
-  right: 0px;
-}
 
 #product_box:hover .heart-icon {display: block;}
 #product_box:hover .cart-icon {display: block;}
@@ -219,18 +213,13 @@ function topFunction() {
 }//scrollFunction() end
 
 
-
-function musicCategory(){
-	var category = $('#category').val();
-	alert(category);
-}//musicCategory() end
-
-
-
-
-function categoryList() {
-	var category = $('#category').val();
-	alert(category);
+// 하트 이모티콘 클릭시
+function hearticon(this1) {
+	var pro_no = this1.value;
+	//alert(pro_no);
+	let m_id    = "${s_m_id}";
+	alert(m_id);
+	let likechk = "${likechk}";
 	
 	
 }
@@ -243,8 +232,10 @@ function categoryList() {
 <!-- 본문영역 -->
 <h2>Merchandise</h2>
 <button onclick="topFunction()" id="myBtn" title="Go to top" style="font-size: 26px;">Go to top ↑</button>
-
 <div class="wrapAll">
+
+	<input type="hidden" name="m_id" value="${s_m_id}" />
+	<input type="hidden" name="likechk" value="${likechk}" />
 	
 		<!-- intro_wrap 시작 -->
 		<div id="intro_wrap">
@@ -368,31 +359,9 @@ function categoryList() {
 									
 										<!-- 하트 아이콘 -->
 										<span class="heart-icon">
-											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<g clip-path="url(#clip0_429_9297)">
-											<path d="M19.0711 13.1421L13.4142 18.799C12.6332 19.58 11.3668 19.58 10.5858 18.799L4.92894 13.1421C2.97632 11.1895 2.97632 8.02369 4.92894 6.07106C6.88157 4.11844 10.0474 4.11844 12 6.07106C13.9526 4.11844 17.1185 4.11844 19.0711 6.07106C21.0237 8.02369 21.0237 11.1895 19.0711 13.1421Z" stroke="#292929" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-											</g>
-											<defs>
-											<clipPath id="clip0_429_9297">
-											<rect width="24" height="24" fill="white"/>
-											</clipPath>
-											</defs>
-											</svg>
-										</span>
-			
-										<!-- 장바구니 아이콘 -->
-										<span class="cart-icon">
-											<svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<g clip-path="url(#clip0_429_9132)">
-											<path d="M4 9H20L19.1654 18.1811C19.0717 19.2112 18.208 20 17.1736 20H6.82643C5.79202 20 4.92829 19.2112 4.83464 18.1811L4 9Z" stroke="#292929" stroke-width="1.5" stroke-linejoin="round"/>
-											<path d="M8 11V8C8 5.79086 9.79086 4 12 4C14.2091 4 16 5.79086 16 8V11" stroke="#292929" stroke-width="1.5" stroke-linecap="round"/>
-											</g>
-											<defs>
-											<clipPath id="clip0_429_9132">
-											<rect width="24" height="24" fill="white"/>
-											</clipPath>
-											</defs>
-											</svg>	
+										<button value="${row.pro_no}" onclick="hearticon(this)" style="border: none; background-color:transparent; outline:none; "> 
+											<img id="hearticon" src="/images/heart-192x192_1.svg"/>
+										</button>
 										</span>
 										
 										<div class="product-image">
@@ -447,29 +416,6 @@ function categoryList() {
 							</div>
 					</tr>
 				</table>   
-				
-										
-				<!-- 페이징 -->
-<%-- 				
-				<div style="width: 100%; display: block; text-align: center;">		
-					<c:if test="${paging.startPage > 1 }">
-						<a href="/list.do?nowPage=${paging.startPage - 1}&cntPerPage=${paging.cntPerPage}">&lt;</a>
-					</c:if>
-					<c:forEach begin="${paging.startPage }" end="${paging.endPage }" var="p">
-						<c:choose>
-							<c:when test="${p == paging.nowPage }">
-								<b>${p }</b>
-							</c:when>
-							<c:when test="${p != paging.nowPage }">
-								<a href="/list.do?nowPage=${p }&cntPerPage=${paging.cntPerPage}">${p }</a>
-							</c:when>
-						</c:choose>
-					</c:forEach>
-					<c:if test="${paging.endPage != paging.lastPage}">
-						<a href="/list.do?nowPage=${paging.endPage+1 }&cntPerPage=${paging.cntPerPage}">&gt;</a>
-					</c:if> --%>
-					
-
 					
 				<div style="width: 100%; display: block; text-align: center;">	
 					<c:if test="${requestScope.count > 0}">

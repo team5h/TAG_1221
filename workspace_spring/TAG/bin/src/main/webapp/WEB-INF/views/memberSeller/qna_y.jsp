@@ -3,34 +3,42 @@
 <%@ include file="ssi.jsp" %>
 <%@ include file="../header.jsp" %>
 
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+
+* {
+	font-family: 'Noto Sans KR', sans-serif; !important;
+}
+</style>
+
 <!-- 본문영역 -->
 
 <br>
-	<h1 class="saem_title"> <a href="/mypageS" style="color:black" class="saem_title"> MY PAGE </a> </h1>
+	<h1 class="saem_title fontJ"> <a href="/mypageS" style="color:black" class="saem_title fontJ"> My Page </a> </h1>
 <br> 
 
 <div class="float" style="width: 100%; height: 100%; flex: 1;">
 						
 <div class="leftcontent" style="float:left; width:15%; margin-right:5%;">
 	<div class="stickyP" style="height: 100%;">
-			<p style="font-size: 20px; font-weight: 500;" class="fontG">
+				<p class="fontJ" style="font-size: 20px; font-weight: 500;">
 				${s_p_id}&nbsp;님 <!-- 세션아이디 -->
 			</p>
 	<br>	
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;" class="fontS">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;" class="fontS">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;" class="fontS"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;" class="fontS"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;" class="fontS"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400; color: #bcbcbc;" class="fontS"> <a> 회원정보수정 </a> </li>
+				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->

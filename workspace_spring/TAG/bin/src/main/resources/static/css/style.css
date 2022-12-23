@@ -5,7 +5,12 @@
 * License: https://creativecommons.org/licenses/by/3.0/
 */
 
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.font {
+	font-family: 'Jost';
+	font-weight: 700;
+}
 
 body {
   font-family: 'Jost', sans-serif;
@@ -45,12 +50,12 @@ body {
   background-color: rgba(18, 148, 127, 0.05); }
 
 a {
-  color: #b84592;
+  color: lightgreen;
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease; }
   a:hover {
-    color: #b84592;
+    color: lightgreen;
     text-decoration: none; }
 
 ::-moz-selection {
@@ -70,7 +75,7 @@ a.text-primary {
     color: #b84592 !important; }
 
 h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-  font-family: Georgia, "Noto Sans KR", serif;
+  font-family: 'Jost', sans-serif;
   color: black; 
   }
 

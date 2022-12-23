@@ -4,26 +4,8 @@
 내꺼! 
 */
 
-@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
-@font-face {
-    font-family: 'GmarketSansMedium';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-     font-family: 'S-CoreDream-3Light';
-     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-     font-weight: normal;
-     font-style: normal;
-}
-
-@font-face {
-    font-family: 'NEXON Lv1 Gothic OTF';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+.fontJ {
+	font-family: 'Jost';
 }
 
 
@@ -73,13 +55,16 @@ input:focus, select:focus, option:focus, textarea:focus, button:focus{
 	outline: none;
 }
 
+button{
+	outline: none;
+}
+
 select {
 	width: 400px;
 	height: 30px; 
 	border:none; 
 	border-bottom: 1px solid #000000; 
 	margin-bottom:5px;
-	font-family: inherit;  
 	font-size:15px;
 	background: url('../images/icon/arrow.png') no-repeat 100% 50%; 
 	border-radius: 0px; 
@@ -287,8 +272,8 @@ input:checked + .slider:before {
 }
 
 .saem_title {
-	font-family: 'GmarketSansMedium';
 	font-weight: 700;
+	font-size:60px;
 	padding: 10px 0 50px 0;
 }
 
@@ -298,21 +283,12 @@ textarea:focus {
 
 .side_liT {
 	font-weight: bold;
-    font-family: 'GmarketSansMedium';
+    font-family: 'Jost';
     font-size: 14px;
     padding-bottom: 10px;
 }
 
-.fontG {
-	 font-family: 'GmarketSansMedium';
-	 color:black;
-}
 
-.fontS {
-	font-family: 'S-CoreDream-3Light';
-	color:black;
-	font-weight: 300;
-}
 
 .info_popup {
 	background-color: white;

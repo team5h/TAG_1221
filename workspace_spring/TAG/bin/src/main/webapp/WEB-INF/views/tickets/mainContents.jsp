@@ -3,12 +3,23 @@
 <%@ taglib prefix="fn"   uri="http://java.sun.com/jsp/jstl/functions"%>
 <script src="https://kit.fontawesome.com/698fcd5feb.js" crossorigin="anonymous"></script>
 
+
+
 <style>
 
 .barBtn{
 	padding-left:450px;
 	height:40px;
 }
+
+.barBtn .bar1, .barBtn .bar2, .barBtn .bar3{
+	padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: 14px;
+}
+
 
 .barBtn .bar1{
 	margin-left:-200px;
@@ -34,21 +45,10 @@
 	border: 3px solid white;
 }
 
-.stageBar {
-	height:60px;
-	background: lightgrey;
-	text-align:center;
-	padding: auto;
-	margin-right:50px;
-}
-
-.stageBar b{
-	font-size:36px;
-	color:gray;
-}
 
 
-#ticketSalejsp p{
+
+#ticketSalejsp p, #ticketDeliveryjsp p {
 	font-size:12px;
 }
 
@@ -101,188 +101,32 @@
 }
 
 
+.dtb {
+	border-collapse:collapse;
+	width: 600px;
+	margin-top:3px;
+	margin-bottom:3px;
+	font-size:12px;
+	align:center;
+}
 
+.dtb th, .dtb td {
+	padding-top:2px;
+}
+
+/* 이름 유효성 검사 none */
+.name_input{color:#FF0066; display: none; margin-top:5px;}
+
+/* 핸드폰 유효성 검사 */
+.tel_input {color:#FF0066; display: none; margin-top:5px;}
+.tel_check {color:#FF0066; display: none; margin-top:5px;}
+
+/* 주소 유효성 검사 */
+.addr_input{color:#FF0066; display: none; margin-top:5px;}
 
 </style>
 
 
-
-
-
-
-<div id="map1Fjsp">
-	<!-- <h2>좌석선택-가격할인-배송현장수령</h2> -->
-	<div class="barBtn">
-	    <button type="button" class="btn bar3">수령방법</button>
-	    <button type="button" class="btn bar2">할인선택</button>
-	    <button type="button" class="btn bar1">좌석선택</button>
-	</div>
-	<br>
-	<h5>스탠딩 1층</h5>
-	<p>스탠딩은 실제 좌석과 다르며 예매시 지정하는 번호가 입장 번호 순서입니다. 빠른 번호를 예매 할수록 입장 순서가 빨라집니다.</p>
-	
-	<div class="stageBar">
-		<b>STAGE</b>
-	</div>
-	
-	<div id="standA" style="display: inline-block; margin-right:40px; margin-top:20px;">
-		<h6>스탠딩 A구역</h6>
-		<table style="border-spacing: 0;">
-			<tr>
-			<c:forEach var="seatA" begin="1" end="825" step="1">
-				<td>
-					<input type="button" id=btnA${seatA} name=btnA${seatA} value="${seatA}" onclick="standAdd(this, 'A', ${seatA})">
-				</td>
-				<c:if test="${seatA mod 33 == 0}">
-					<tr></tr>
-				</c:if>
-			</c:forEach>
-			</tr>
-		</table>
-	</div>
-	<div id="standB" style="display: inline-block;">
-		<h6>스탠딩 B구역</h6>
-		<table style="border-spacing: 0;">
-			<tr>
-			<c:forEach var="seatB" begin="1" end="825" step="1">
-				<td>
-					<input type="button" id=btnB${seatB} name=btnB${seatB} value="${seatB}" onclick="standAdd(this, 'B', ${seatB})">
-				</td>
-				<c:if test="${seatB mod 33 == 0}">
-				<!-- 테이블 한줄에 30개씩 -->
-					<tr></tr>
-				</c:if>
-			</c:forEach>
-			</tr>
-		</table>
-	</div>
-</div><!-- map1Fjsp end -->
-
-<div id="map2Fjsp">
-	<div class="barBtn">
-	    <button type="button" class="btn bar3">수령방법</button>
-	    <button type="button" class="btn bar2">할인선택</button>
-	    <button type="button" class="btn bar1">좌석선택</button>
-	</div>
-	<br>
-	<h5>지정석 2층</h5>
-	<p>객석 2층은 지정좌석제입니다.</p>
-	
-	<div class="stageBar">
-		<b>STAGE</b>
-	</div>
-	
-	<div id="rseatX" style="display: inline-block; margin-left:40px;  margin-top:20px;">
-		<h6>지정좌석 X구역</h6>
-		<table style="border-spacing: 0;">
-			<tr>
-			<!-- X구역 행마다 들어가는 빈공간 배열 선언 -->
-			<c:set var="nullX" value="<%=new int[] {0,1,2,3,3,5,6} %>"/>
-			<!-- "seatX" 좌석의 고유번호(flags의 갯수와 일치) -->
-			<c:set var="seatX" value="0"/>
-			
-			<c:forEach var="r" begin="1" end="${fn:length(nullX)}" step="1">
-				<c:forEach var="nullXtd" begin="1" end="${nullX[r-1]}" step="1">
-					<td></td>
-				</c:forEach><!-- nullX end -->
-				<c:forEach var="c" begin="1" end="${15-nullX[r-1]+1}" step="1">
-					<td>
-						<c:if test="${c <= (15-nullX[r-1])}">
-							<!-- ${seatX} 1씩 늘어나게하기 -->
-							<c:set var="seatX" value="${seatX+1}"/>
-							<input type="button" id=btnX${seatX} name=btnX${seatX} value="${c}" onclick="rseatAdd(this, 'X', ${r}, ${seatX})">
-						</c:if>
-						<c:if test="${c == (15-nullX[r-1]+1)}">
-							<button disabled>${r}</button>
-							<tr></tr>
-						</c:if>
-					</td>
-				</c:forEach><!-- c end -->
-			</c:forEach><!-- r end -->
-			</tr>
-		</table>
-	</div><!-- id="rseatX" end -->
-	<div id="rseatY" style="display: inline-block;">
-		<h6>지정좌석 Y구역</h6>
-		<table style="border-spacing: 0;">
-			<tr>
-			<!-- Y구역 행마다 들어가는 빈공간 배열 선언 -->
-			<c:set var="nullYL"   value="<%=new int[] {4,3,3,2,1,0,1} %>"/><!-- Left -->
-			<c:set var="nullYR"   value="<%=new int[] {3,3,2,1,1,0,1} %>"/><!-- Right -->
-			<c:set var="nullYAll"   value="<%=new int[] {7,6,5,3,2,0,2} %>"/><!-- L+R -->
-			<!-- "seatY" 좌석의 고유번호(flags의 갯수와 일치) -->
-			<c:set var="seatY" value="0"/>
-			
-			<c:forEach var="r" begin="1" end="${fn:length(nullYL)}" step="1">
-				<c:forEach var="nullYLtd" begin="1" end="${nullYL[r-1]}" step="1">
-					<td></td>
-				</c:forEach><!-- nullYL end -->
-				<c:forEach var="c" begin="1" end="${28-nullYAll[r-1]}" step="1">
-					<c:choose><%-- if else문 --%>
-						<c:when test="${r == 7 && c <= 11}"><!-- 7열 11번째 좌석까지 생성 -->
-							<td>
-								<c:set var="seatY" value="${seatY+1}"/>
-								<input type="button" id=btnY${seatY} name=btnY${seatY} value="${c}" onclick="rseatAdd(this, 'Y', ${r}, ${seatY})">
-							</td>
-						</c:when>
-						<c:when test="${r == 7 && c >= 16}"><!-- 7열 16번째 좌석부터 생성 -->
-					    	<td>
-								<c:set var="seatY" value="${seatY+1}"/>
-								<input type="button" id=btnY${seatY} name=btnY${seatY} value="${c-4}" onclick="rseatAdd(this, 'Y', ${r}, ${seatY})">
-							</td>
-						</c:when>
-						<c:when test="${r == 7 && c > 11 && c < 16}"><!-- 7열 빈 좌석 생성 -->
-					    	<td></td>
-						</c:when>
-						<c:otherwise><!-- 그 외 일반 -->
-					    	<td>
-								<c:set var="seatY" value="${seatY+1}"/>
-								<input type="button" id=btnY${seatY} name=btnY${seatY} value="${c}" onclick="rseatAdd(this, 'Y', ${r}, ${seatY})">
-							</td>
-					  	</c:otherwise>
-					</c:choose><!-- choose end -->
-				</c:forEach><!-- c end -->
-				<c:forEach var="nullYRtd" begin="1" end="${nullYR[r-1]+1}" step="1">
-					<td>
-						<c:if test="${nullYRtd == nullYR[r-1]+1 }">
-							<button disabled>${r}</button>
-							<tr></tr>
-						</c:if>
-					</td>
-				</c:forEach><!-- nullYR end -->
-			</c:forEach><!-- r end -->
-			</tr>
-		</table>
-	</div><!-- id="rseatY" end -->
-	<div id="rseatZ" style="display: inline-block;">
-		<h6>지정좌석 Z구역</h6>
-		<table style="border-spacing: 0;">
-			<tr>
-			<!-- Z구역 행마다 들어가는 빈공간 배열 선언 -->
-			<c:set var="nullZ" value="<%=new int[] {0,1,2,3,3,5,6} %>"/>
-			<!-- "seatX" 좌석의 고유번호(flags의 갯수와 일치) -->
-			<c:set var="seatZ" value="0"/>
-			
-			<c:forEach var="r" begin="1" end="${fn:length(nullZ)}" step="1">
-				<c:forEach var="c" begin="1" end="${15-nullZ[r-1]}" step="1">
-					<td>
-						<!-- ${seatZ} 1씩 늘어나게하기 -->
-						<c:set var="seatZ" value="${seatZ+1}"/>
-						<input type="button" id=btnZ${seatZ} name=btnZ${seatZ} value="${c}" onclick="rseatAdd(this, 'Z', ${r}, ${seatZ})">
-					</td>
-				</c:forEach><!-- c end -->
-				<c:forEach var="nullZtd" begin="0" end="${nullZ[r-1]}" step="1">
-					<td>
-						<c:if test="${nullZtd == nullZ[r-1] }">
-							<tr></tr>
-						</c:if>
-					</td>
-				</c:forEach><!-- null end -->
-			</c:forEach><!-- r end -->
-			</tr>
-		</table>
-	</div><!-- id="rseatZ" end -->
-</div><!-- map2Fjsp end -->	
 
 <div id="ticketSalejsp">
 	<div class="barBtn">
@@ -372,6 +216,7 @@
 	<h6>
 		<i class="fa-regular fa-handshake"></i> 장애인·국가유공자 이용안내
 	</h6>
+	<div style="margin-left:40px;">
 	<b>장애인</b>
 	<table class="jtb" style="margin-bottom:10px;">
 	<tr>
@@ -404,6 +249,7 @@
 		법률에서 정한 국가유공자(독립유공자, 5·18민주유공자, 특수임무유공자), 참전유공자 기준으로 할인 제공<br>
 		국가유공자 배우자는 가족관계증명서와 신분증을 함께 제시하여야 한다.
 	</p>
+	</div>
 </div>
 
 <div id="ticketDeliveryjsp">
@@ -412,41 +258,183 @@
 	    <button type="button" class="btn bar2">할인선택</button>
 	    <button type="button" class="btn bar1" style="background:black; color: white;">좌석선택</button>
 	</div>
-	<h3>* 배송선택/주문자확인 *</h3>
-	<table>
+	<br>
+	<h5>
+		<i class="fa-solid fa-truck-fast"></i> 배송 선택 / 주문자 확인
+	</h5>
+	<p>티켓을 받는 방법을 선택하실 수 있으며, 특정 상품은 배송 방식이 지정되어있어 선택하지 못하실 수도 있습니다.</p>
+	
+	<!-- 주소창 입력 모달창 -->
+	<div id="wrap" style="display:none;border:1px solid;width:500px;height:404px; margin:-10px 0 20px 0; position:fixed; left:460px;">
+	  <img src="//i1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+	</div>
+	
+	
+	<table class="dtb">
 	<tr>
-		<td>수령방법선택</td>
-		<td>
+		<td style="background:black; color:white; font-size:14px; text-align:center;">수령방법선택</td>
+		<td style="padding-top:8px; font-size:14px; padding-left:10px;">
 			<input type="radio" id="dlvBtn" name="deliverBtn" value="3000" onclick="dlvSelected()"><!-- value 3000원 -->
- 				<label for="dlvBtn">배송</label><br>
- 				<input type="radio" id="pUpBtn" name="deliverBtn" value="0" onclick="pUpSelected()" checked><!-- value 0원 -->
- 				<label for="pUpBtn">현장수령</label><br>
+ 			<label for="dlvBtn">배송</label><br>
+ 			<input type="radio" id="pUpBtn" name="deliverBtn" value="0" onclick="pUpSelected()" checked><!-- value 0원 -->
+ 			<label for="pUpBtn">현장수령</label><br>
 		</td>
 	</tr>
 	<tr>
-		<td colspan='2'>주문자확인</td>
+		<th colspan='2' style="height:60px; vertical-align:bottom; border-bottom:2px solid black; font-size:14px;">주문자확인</th>
 	</tr>
+	<tr><td></td><td></td></tr><tr><td></td><td></td></tr>
 	<tr>
 		<td><label for="rec_name">이름</label></td>
-		<td><input type="text" id="rec_name" name="rec_name" value="정다슬"></td>
+		<td>
+			<input type="text" id="rec_name" name="rec_name" onchange="inputCheck()">
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<span class="name_input">이름 입력은 필수입니다.</span>
+		</td>
 	</tr>
 	<tr>
 		<td><label for="rec_tel">연락처</label></td>
-		<td><input type="text" id="rec_tel" name="rec_tel" value="010-1234-1234"></td>
+		<td><input type="text" id="rec_tel" name="rec_tel" onchange="inputCheck()"></td>
 	</tr>
-	<!-- 
 	<tr>
-		<td><label for="rec_email">이메일</label></td>
-		<td><input type="text" id="rec_email" value="mktmf1226@gmail.com"></td>
+		<td></td>
+		<td>
+			<span class="tel_input">연락처 입력은 필수입니다.</span>
+	        <span class="tel_check">연락처를 형식에 맞게 입력해주세요. ex) 010-1234-5678</span>
+		</td>
 	</tr>
-	 -->
 	<tr>
 		<td><label for="rec_addr">받는주소</label></td>
-		<td><input type="text" id="rec_addr" name="rec_addr" value="서울시 관악구"></td>
+		<td>
+			<input type="text" size="50" id="m_zipcode" name="rec_zipcode" placeholder="우편번호" readonly>
+            <input type="button" id="m_zipcodeBtn" value="주소찾기" size="50" onclick="DaumPostcode()">
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input type="text" size="50" id="m_addr1" name="rec_addr1" placeholder="주소">
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<input type="text" size="50" name="rec_addr2" id="m_addr2" placeholder="상세 주소" onchange="inputCheck()">
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<span class="addr_input">주소를 입력해주세요.</span>
+		</td>
 	</tr>
 	<tr>
 		<td><label for="msg">배송메세지</label></td>
-		<td><input type="text" id="msg" name="msg" value="배송 전 연락바랍니다."></td>
+		<td><input type="text" size="50" id="msg" name="msg" placeholder="배송메세지를 입력해주세요."></td>
 	</tr>				
 	</table>
 </div><!-- ticketDeliveryjsp end -->
+
+
+
+
+
+
+<!-- ----- DAUM 우편번호 API 시작 ----- -->
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+<script>
+    // 우편번호 찾기 화면을 넣을 element
+    var element_wrap = document.getElementById('wrap');
+
+    function foldDaumPostcode() {
+        // iframe을 넣은 element를 안보이게 한다.
+        element_wrap.style.display = 'none';
+    }
+
+    function DaumPostcode() {
+        // 현재 scroll 위치를 저장해놓는다.
+        var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = data.address; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
+
+                // 기본 주소가 도로명 타입일때 조합한다.
+                if(data.addressType === 'R'){
+                    //법정동명이 있을 경우 추가한다.
+                    if(data.bname !== ''){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if(data.buildingName !== ''){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('m_zipcode').value = data.zonecode; //5자리 새우편번호 사용
+                document.getElementById('m_addr1').value = fullAddr;
+
+                // iframe을 넣은 element를 안보이게 한다.
+                // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+                element_wrap.style.display = 'none';
+
+                // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+                document.body.scrollTop = currentScroll;
+                
+                $('#m_addr2').focus();
+            },
+            // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
+            onresize : function(size) {
+                element_wrap.style.height = size.height+'px';
+            },
+            width : '500px',
+            height : '440px'
+        }).embed(element_wrap);
+
+        // iframe을 넣은 element를 보이게 한다.
+        element_wrap.style.display = 'block';
+    }
+<!-- ----- DAUM 우편번호 API 종료----- -->
+
+
+function inputCheck(){
+	//휴대전화 규칙성
+	var tel_rule   = /^\d{2,3}-\d{3,4}-\d{4}$/;
+	
+    // 1. 이름 입력이 됐다면
+    if($("#rec_name").val().trim() != ""){
+    	$('.name_input').css("display","none"); 
+	// 2. 휴대전화 입력이 됐다면
+    }else if($("#rec_tel").val().trim() != ""){
+    	$('.tel_input').css("display","none");
+    	
+	// 2-1. 휴대전화 규칙성이 됐다면
+    }else if(tel_rule.test($("#rec_tel").val().trim()) == true){
+    	$('.tel_check').css("display","none");
+    
+    // 3. 주소  입력됐다면
+    }else if($("#m_addr2").val().trim() != ""){
+    	$('.addr_input').css("display","none");
+    	
+    }//if end
+	
+}//inputCheck()
+
+
+
+
+
+
+</script>

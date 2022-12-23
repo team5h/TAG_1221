@@ -3,11 +3,18 @@
 <%@ include file="ssi.jsp" %>
 <%@ include file="../header.jsp" %>
 
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+
+* {
+	font-family: 'Noto Sans KR', sans-serif; !important;
+}
+</style>
+
 <!-- 본문영역 -->
 
-
 <br>
-	<h1 class="saem_title"> <a href="/mypageS" style="color:black" class="saem_title"> MY PAGE </a> </h1>
+	<h1 class="saem_title fontJ"> <a href="/mypageS" style="color:black" class="saem_title fontJ"> My Page </a> </h1>
 <br> 
 
 <div class="float" style="width: 100%; height: 100%; flex: 1;">
@@ -15,24 +22,24 @@
 					
 <div class="leftcontent" style="float:left; width:15%; margin-right:5%;">
 	<div class="stickyP" style="height: 100%;">
-			<p style="font-size: 20px; font-weight: 500;" class="fontG">
+			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
 				${s_p_id}&nbsp;님 <!-- 세션아이디 -->
 			</p>
 	<br>	
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;" class="fontS">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;" class="fontS">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;" class="fontS"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;" class="fontS"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;" class="fontS"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400; color: #bcbcbc;" class="fontS"> <a> 회원정보수정 </a> </li>
+				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -97,7 +104,7 @@
 <br>
 	<form action="/mypageS/orderdetailProc/${orderdetail.order_num}" method="post">
 	<input type="hidden" value="${orderdetail.order_num}" name="order_num">
-	<div style="display: inline-block; float:left; width: 50%; height: 400px; padding-right: 10px;">
+	<div style="display: inline-block; float:left; width: 50%; height: 450px; padding-right: 10px;">
 		<span style="font-size: 14px; font-weight: bold; border-bottom:2px solid lightgreen;">&nbsp;주문자 정보&nbsp;</span>
 		<br>
 		<span style="font-size: 14px;">
@@ -111,11 +118,13 @@
 		<span style="font-size: 14px;">
 		<br> 	 <span style="color:#999999;">수령인</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_name}" style="font-size: 14px; border:none;" readonly size="45" name="rec_name">
 		<br><br> <span style="color:#999999;">연락처</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_tel}" style="font-size: 14px; border:none;"  readonly size="45" name="rec_tel">
-		<br><br> <span style="color:#999999;">배송지</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_addr}" style="font-size: 14px; border:none;" readonly size="45" name="rec_addr">
+		<br><br> <span style="color:#999999;">배송지</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_zipcode}" style="font-size: 14px; width: 65px; border:none;" readonly size="10" name="rec_zipcode">
+																		 <input type="text" value="${orderdetail.rec_addr1}" style="font-size: 14px; margin-left: 55px; padding-top: 10px; border:none;" readonly size="45" name="rec_addr1">
+																		 <input type="text" value="${orderdetail.rec_addr2}" style="font-size: 14px; border:none; padding-top:10px; margin-left: 55px;" readonly size="45" name="rec_addr2">
 		<br><br> <span style="color:#999999;">메세지</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.msg}" style="font-size: 14px; border:none;" readonly size="45">
 		</span>
 	</div> <!-- 주문자/수령인정보 -->
-	<div style="display: inline-block; float:right; width:50%; height: 400px; padding-left: 5px; padding-right: 5px;">
+	<div style="display: inline-block; float:right; width:50%; height: 450px; padding-left: 5px; padding-right: 5px;">
 		<span style="font-size: 20px; font-weight: bold; border-bottom:3px solid lightgreen;">&nbsp;결제 정보&nbsp;</span>
 		<br><br>
 				<span style="color:#999999;">상품 금액</span>	
@@ -138,7 +147,7 @@
 		<br><br><span style="color:#999999;">결제 금액</span>
 					<span style="float:right;"><fmt:formatNumber value="${orderdetail.total_price}" pattern="#,###"/>원</span>
 	 	<br><br><br>
-	 <div style="float: right;">
+	 <div style="float: right; padding-top: 60px;">
 		<button type="button" class="btn btn-outline-black btn-sm" id="updatebtn"
 				style=" width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 15px;">
 			수정
@@ -183,8 +192,12 @@
 		$('input[name="rec_tel"]').attr("readonly",false);
 		$('input[name="rec_tel"]').css("border-bottom","1px solid black");
 		
-		$('input[name="rec_addr"]').attr("readonly",false);
-		$('input[name="rec_addr"]').css("border-bottom","1px solid black");
+		$('input[name="rec_zipcode"]').attr("readonly",false);
+		$('input[name="rec_zipcode"]').css("border-bottom","1px solid black");
+		$('input[name="rec_addr1"]').attr("readonly",false);
+		$('input[name="rec_addr1"]').css("border-bottom","1px solid black");
+		$('input[name="rec_addr2"]').attr("readonly",false);
+		$('input[name="rec_addr2"]').css("border-bottom","1px solid black");
 	})//end
 	
 	$('#updateCancelbtn').click(function(){

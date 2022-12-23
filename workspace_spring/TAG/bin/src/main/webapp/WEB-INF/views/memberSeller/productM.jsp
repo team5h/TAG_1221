@@ -4,34 +4,43 @@
 <%@ include file="../header.jsp" %>
 <%@ include file="summernote_ssi.jsp" %>
 
+<style>
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css); 
+
+* {
+	font-family: 'Noto Sans KR', sans-serif; !important;
+}
+</style>
+
+
 <!-- 본문영역 -->
 
 <br>
-	<h1 class="saem_title"> <a href="/mypageS" style="color:black" class="saem_title"> MY PAGE </a> </h1>
+	<h1 class="saem_title fontJ"> <a href="/mypageS" style="color:black" class="saem_title fontJ"> My Page </a> </h1>
 <br> 
 
 <div class="float" style="width: 100%; height: 100%; flex: 1;">
 							
 <div class="leftcontent" style="float:left; width:15%; margin-right:5%;">
 	<div class="stickyP" style="height: 100%;">
-			<p style="font-size: 20px; font-weight: 500;" class="fontG">
+			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
 				${s_p_id}&nbsp;님 <!-- 세션아이디 -->
 			</p>
 	<br>	
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT" style="color:lightgreen;"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;" class="fontS">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;" class="fontS">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;" class="fontS"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;" class="fontS"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;" class="fontS"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400; color: #bcbcbc;" class="fontS"> <a> 회원정보수정 </a> </li>
+				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -233,7 +242,7 @@
 									<span style="vertical-align: middle; font-size: 13px;">&nbsp; ${row.regdate}</span>
 								</div>
 								
-								<div style="width:100%; text-align:left; margin-top: 7px;">
+								<div style="width:100%; text-align:left; margin-left: -2px; margin-top: 7px;">
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<g clip-path="url(#clip0_429_9297)">
 										<path d="M19.0711 13.1421L13.4142 18.799C12.6332 19.58 11.3668 19.58 10.5858 18.799L4.92894 13.1421C2.97632 11.1895 2.97632 8.02369 4.92894 6.07106C6.88157 4.11844 10.0474 4.11844 12 6.07106C13.9526 4.11844 17.1185 4.11844 19.0711 6.07106C21.0237 8.02369 21.0237 11.1895 19.0711 13.1421Z" stroke="#292929" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -243,7 +252,8 @@
 										<rect width="24" height="24" fill="white"/>
 										</clipPath>
 										</defs>
-									</svg>
+									</svg><!-- 좋아요 -->
+									
 									<span style="vertical-align: middle; font-size: 13px;">&nbsp; ${row.likecnt}</span>
 									
 										<input type="file" name="fileimg" id="fileimghide${row.pro_no}" style="display:none;"/>

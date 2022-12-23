@@ -142,7 +142,7 @@ text-align:right;
 
 
 
-<div style="text-align: center;">
+<div style="text-align: center; margin-bottom:100px;">
 	<h6 style="text-align:center; margin-top:80px;">티켓 결제가 완료되었습니다.</h6>
 	<h1 style="color:#33FF33; text-align:center; margin-top:20px;">NEW! 굿즈 할인 쿠폰이 발급되었습니다.</h1>
 	<div class="content" style="display:none;">
@@ -174,6 +174,7 @@ text-align:right;
 			</div><!-- EBc couponArea end -->		
 		</c:when>
 	</c:choose>
+	<p style="font-size:10px;">* 해당 쿠폰은 ${concertTitle} 관련 상품에서만 사용 가능합니다.</p>
 </div>
 
 
