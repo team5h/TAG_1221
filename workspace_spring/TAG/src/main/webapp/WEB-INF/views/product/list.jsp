@@ -13,7 +13,7 @@
 .container {max-width: 1350px; !important;} 
 
 /* 상품 테이블 전체박스 */
-#product_box {
+.product_box {
   width: 355px;
   padding: 0 25px 0 25px;
   --padding-right: 50px;
@@ -70,7 +70,7 @@ h2{
 #product_search {float: right;}
 
 /* 최신순 카테고리 오른쪽으로 */
-#catergory {float: right;}
+#category {float: right;}
 
 /* aside 네비바 큰 카테고리 (All, Concert) */
 h3{
@@ -167,7 +167,7 @@ img{object-fit: contain;}
 
 /* 상품마다 화살표 아이콘 띄우기 */
 #arrow-icon {display: none;}
-#product_box:hover #arrow-icon {display: block;}
+.product_box:hover #arrow-icon {display: block;}
 
 /* 상품안에 아이콘 */
 .product-imageandicon {
@@ -185,9 +185,9 @@ img{object-fit: contain;}
   left: 0px;
 }
 
+.product_box:hover .heart-icon {display: block;} 
 
-#product_box:hover .heart-icon {display: block;}
-#product_box:hover .cart-icon {display: block;}
+
 
 </style>
 
@@ -213,16 +213,125 @@ function topFunction() {
 }//scrollFunction() end
 
 
-// 하트 이모티콘 클릭시
+
+
+
+
+
+
+$( document ).ready(function() {
+	var likelist = [];
+	
+	<c:forEach items="${like}" var="row" varStatus="vs"> 
+		likelist = ${like};
+	</c:forEach>
+	
+	//alert(likelist);
+	
+	var pronum = 0;
+	
+	for(var i=0; i<likelist.length; i++) {
+		//alert(likelist[i]);
+		pronum = likelist[i];
+		//alert(pronum);
+		$("#hearticon"+pronum).prop("src", "/images/heart-192x192_2.svg");
+		$("#heart-icon"+pronum).css("display", "inline-block");
+	}//for end
+});
+
+
+
+//하트 이모티콘 클릭시
+var flag = false;
+
 function hearticon(this1) {
 	var pro_no = this1.value;
-	//alert(pro_no);
-	let m_id    = "${s_m_id}";
-	alert(m_id);
-	let likechk = "${likechk}";
+	let m_id   = "${s_m_id}";
+
 	
+	if(${s_m_id == null}) {
+		alert("로그인 후 이용가능합니다.");
+		let url = '/loginForm';
+		location.replace(url);
+	}else {
+		// 로그인 했을 때 클릭하면
+		if( !flag ) {
+			
+			//product에 +1
+			$.ajax({
+		 		 url   	 : "/product/likecntInc"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no}
+				,success : function(data){
+					//alert("+1 성공");
+				}//success end
+			}); //ajax end
+			
+			// member_like 에 insert
+			$.ajax({
+		 		 url   	 : "/product/likeInsert"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no, "m_id":m_id}
+				,success : function(data){
+				}//success end
+			}); //ajax end
+			
+			flag = true;
+			
+			$("#hearticon"+pro_no).prop("src", "/images/heart-192x192_2.svg");//채워진하트
+			$("#heart-icon"+pro_no).css("display", "inline-block");//display 보이게
+		
+		} else {
+			
+			//product에 -1
+			$.ajax({
+		 		 url   	 : "/product/likecntDec"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no}
+				,success : function(data){
+					//alert("-1 성공");
+				}//success end
+			}); //ajax end
+			
+			// member_like 에 insert
+			$.ajax({
+		 		 url   	 : "/product/likeDec"
+				,type 	 : "post"
+				,data 	 :  {"pro_no":pro_no, "m_id":m_id}
+				,success : function(data){
+				}
+			}); //ajax end
+			
+			
+			flag = false;
+			
+			
+			$("#hearticon"+pro_no).prop("src", "/images/heart-192x192_1.svg"); // 빈 하트
+			//$("#heart-icon"+pro_no).css("display", "none"); //
+			
+		}//if( !flag ) end
+	}//if(${s_m_id == null}) end
+		
 	
-}
+	$("#product_box"+pro_no).hover(function(){
+		//alert(pro_no);
+		//요소에 마우스를 올렸을 때 기능
+			$("#hearticon"+pro_no).css("display", "inline-block");
+			//alert("마우스 올림");
+			},function(){
+		//요소에 마우스를 올린뒤 떨어졌을때 기능
+		
+			if( flag == true ) {
+				$("#hearticon"+pro_no).css("display", "inline-block");
+			}else {
+				$("#hearticon"+pro_no).css("display", "none"); //마우스 떼면 안보이게
+			    //alert("마우스 떨어짐");
+			}//if end
+	});//$("#product_box"+pro_no).hover end
+		
+}//hearticon(this1) end
+
+
 
 
 </script>
@@ -236,21 +345,12 @@ function hearticon(this1) {
 
 	<input type="hidden" name="m_id" value="${s_m_id}" />
 	<input type="hidden" name="likechk" value="${likechk}" />
+	<input type="hidden" name="like" value="${like}" />
+	
+	
 	
 		<!-- intro_wrap 시작 -->
 		<div id="intro_wrap">
-	
-<!--
-			최신순/인기순/좋아요순 카테고리 시작
-			<span class="catergory">
-		    	<select id="catergory" name="catergory">
-		         	<option value="new">최신순</option>
-		         	<a href="#" onclick=""><option value="popular">인기순</option></a>
-		         	<option value="like">좋아요순</option>
-		  	 	</select>
-		    </span> 최신순/인기순/좋아요순 카테고리 끝 
--->		    
-		    
 		    
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
@@ -284,28 +384,14 @@ function hearticon(this1) {
 			<div class="list_aside">
 				<div class="h3_title">
 				    <!-- <a href="#" onclick="location.href='/list.do'"><h3 style="text-decoration: underline;">All</h3></a> -->
-				    <a href="#" onclick="location.href='/list.do'"><h3>All</h3></a>
+				    <a onclick="location.href='/list.do'"><h3>All</h3></a>
 			        <a href="/listConcert"><h3>Concert</h3></a>
 		        </div><!-- h3_title 끝 -->
-		        
-		        
-				<!-- 		        
-				<form name="categoryList">
-		        <div class="li_title">
-			        <ul>  
-			          <a href="#" onclick="location.href='/clothes'"><li>Clothes</li></a>
-			          <a href="#" onclick="location.href='/poster'"><li>Poster</li></a>
-			          <a href="#" onclick="musicCategory()" id="category" name="category" value="M"><li>Album</li></a>
-			          <a href="#" onclick="location.href='/acc'"><li>Acc</li></a>
-			        </ul>
-				</form> 
-				-->
-				
 				
 			 <div class="li_title">
 				<c:forEach items="${categoryAll}" var="row" varStatus="vs">
 					<ul>  
-			          <li><a href="list.do?category=${row.category}">
+			          <li><a href="/list.do?category=${row.category}">
 			          		<c:choose>
 			          			<c:when test="${row.category == 'C'}"> Clothes </c:when>
 			          			<c:when test="${row.category == 'P'}"> Poster </c:when>
@@ -326,19 +412,32 @@ function hearticon(this1) {
 			<div class="list_content">
 			
 			<div class="count-category" style="padding-bottom: 30px;">
-			<sapn id= "product_count">
-			All (${total})
+			<sapn id= "product_count"></sapn>
+			Total (${total})
 			</span>
 			
-			<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
-			<span class="catergory">
-		    	<select id="catergory" name="catergory">
-		         	<option value="new">최신순</option>
-		         	<a href="#" onclick=""><option value="popular">인기순</option></a>
-		         	<option value="like">좋아요순</option>
-		  	 	</select>
-		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
-			</div>
+				<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
+				<c:if test="${category == null}">
+				<span class="category">
+			    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+			         	<option value="/list.do">최신순</option>
+			         	<option value="/list.do/popularAll">인기순</option>
+			         	<option value="/list.do/likeAll">좋아요순</option>
+			  	 	</select>
+			    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+				</div>
+				</c:if>
+				
+				<c:if test="${category != null}">
+				<span class="category">
+			    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+			         	<option value="/list.do?category=${category}">최신순</option>
+			         	<option value="/list.do/popularCateg?category=${category}">인기순</option>
+			         	<option value="/list.do/likeCateg?category=${category}">좋아요순</option>
+			  	 	</select>
+			    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+				</c:if>
+			</div><!-- count-category end -->
 		
 			
 				<table>
@@ -349,7 +448,7 @@ function hearticon(this1) {
 							<c:forEach items="${list}" var="row" varStatus="vs">
 							<a href="/product/${row.pro_no}">
 
-							<td id="product_box">
+							<td id="product_box${row.pro_no}" class="product_box">
 							
 								<!-- 상품 이미지 -->
 								<c:choose>
@@ -357,12 +456,15 @@ function hearticon(this1) {
 									
 									<div class="product-imageandicon">
 									
+										
+								
 										<!-- 하트 아이콘 -->
-										<span class="heart-icon">
-										<button value="${row.pro_no}" onclick="hearticon(this)" style="border: none; background-color:transparent; outline:none; "> 
-											<img id="hearticon" src="/images/heart-192x192_1.svg"/>
+										<span class="heart-icon" id="heart-icon${row.pro_no}">
+										<button value="${row.pro_no}" onclick="hearticon(this)" style="border: none; background-color:transparent; outline:none;"> 
+											<img id="hearticon${row.pro_no}" src="/images/heart-192x192_1.svg"/>
 										</button>
 										</span>
+						
 										
 										<div class="product-image">
 											<a href="/product/${row.pro_no}"><img src="/storage/${row.postername}" width="300px" height="400px"></a>
@@ -376,7 +478,7 @@ function hearticon(this1) {
 								</c:choose> 
 								
 								
-								<!-- 공연명 -->
+								<!-- 공연명 --> 
 								<div id="concert_name">${row.title}</div>
 								
 								<!-- 상품명 -->
@@ -431,63 +533,170 @@ function hearticon(this1) {
 							</c:if>
 				
 				
-							<c:if test="${category == null}">
 				
-								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
-								<c:if test="${startPage > 1}">
-									<a href="/list.do?pageNum=${startPage-1}">[이전]</a>
-								</c:if>
-					
-								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
-								<c:forEach var="i" begin="${startPage}" end="${endPage}">
-									<c:choose>
-										<c:when test="${pageNum == i}">
-											<span style="font-weight: bold">${i}</span>
-										</c:when>
-										<c:when test="${pageNum != i}">
-											<a href="/list.do?pageNum=${i}">${i}</a>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-					
-								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
-								<c:if test="${endPage < pageCount}">
-									<a href="/list.do?pageNum=${startPage+5}">[다음]</a>
-								</c:if>
+							<c:if test="${category == null}">
+								
+									<!-- ${orderby == 'r'} -->
+									<c:if test="${orderby == 'r'}">
+										<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+										<c:if test="${startPage > 1}">
+											<a href="/list.do?pageNum=${startPage-1}">[이전]</a>
+										</c:if>
 							
-							</c:if>
+										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+										<c:forEach var="i" begin="${startPage}" end="${endPage}">
+											<c:choose>
+												<c:when test="${pageNum == i}">
+													<span style="font-weight: bold">${i}</span>
+												</c:when>
+												<c:when test="${pageNum != i}">
+													<a href="/list.do?pageNum=${i}">${i}</a>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+							
+										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+										<c:if test="${endPage < pageCount}">
+											<a href="/list.do?pageNum=${startPage+5}">[다음]</a>
+										</c:if>
+									</c:if><!-- ${orderby == 'r'} end -->
+									
+									
+									<!-- ${orderby == 'p'} -->
+									<c:if test="${orderby == 'p'}">
+										<c:if test="${startPage > 1}">
+											<a href="/list.do/popularAll?pageNum=${startPage-1}">[이전]</a>
+										</c:if>
+							
+										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+										<c:forEach var="i" begin="${startPage}" end="${endPage}">
+											<c:choose>
+												<c:when test="${pageNum == i}">
+													<span style="font-weight: bold">${i}</span>
+												</c:when>
+												<c:when test="${pageNum != i}">
+													<a href="/list.do/popularAll?pageNum=${i}">${i}</a>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+							
+										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+										<c:if test="${endPage < pageCount}">
+											<a href="/list.do/popularAll?pageNum=${startPage+5}">[다음]</a>
+										</c:if>
+									</c:if><!-- ${orderby == 'p'} end -->
+									
+									
+									<!-- ${orderby == 'l'} -->
+									<c:if test="${orderby == 'l'}">
+										<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+										<c:if test="${startPage > 1}">
+											<a href="/list.do/likeAll?pageNum=${startPage-1}">[이전]</a>
+										</c:if>
+							
+										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+										<c:forEach var="i" begin="${startPage}" end="${endPage}">
+											<c:choose>
+												<c:when test="${pageNum == i}">
+													<span style="font-weight: bold">${i}</span>
+												</c:when>
+												<c:when test="${pageNum != i}">
+													<a href="/list.do/likeAll?pageNum=${i}">${i}</a>
+												</c:when>
+											</c:choose>
+										</c:forEach>
+							
+										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+										<c:if test="${endPage < pageCount}">
+											<a href="/list.do/likeAll?pageNum=${startPage+5}">[다음]</a>
+										</c:if>
+										
+									</c:if><!-- ${orderby == 'l'} end -->
+							
+							</c:if><!-- ${category == null} end -->
 							
 							
 							
 							<c:if test="${category != null}">
 								
-								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
-								<c:if test="${startPage > 1}">
-									<a href="/list.do?category=${category}&pageNum=${startPage-1}">[이전]</a>
+								<c:if test="${orderby == 'r'}">
+									<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+									<c:if test="${startPage > 1}">
+										<a href="/list.do?category=${category}&pageNum=${startPage-1}">[이전]</a>
+									</c:if>
+						
+									<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+									<c:forEach var="i" begin="${startPage}" end="${endPage}">
+										<c:choose>
+											<c:when test="${pageNum == i}">
+												<span style="font-weight: bold">${i}</span>
+											</c:when>
+											<c:when test="${pageNum != i}">
+												<a href="/list.do?category=${category}&pageNum=${i}">${i}</a>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+						
+									<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+									<c:if test="${endPage < pageCount}">
+										<a href="/list.do?category=${category}&pageNum=${startPage+10}">[다음]</a>
+									</c:if>
 								</c:if>
-					
-								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
-								<c:forEach var="i" begin="${startPage}" end="${endPage}">
-									<c:choose>
-										<c:when test="${pageNum == i}">
-											<span style="font-weight: bold">${i}</span>
-										</c:when>
-										<c:when test="${pageNum != i}">
-											<a href="/list.do?category=${category}&pageNum=${i}">${i}</a>
-										</c:when>
-									</c:choose>
-								</c:forEach>
-					
-								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
-								<c:if test="${endPage < pageCount}">
-									<a href="/list.do?category=${category}&pageNum=${startPage+10}">[다음]</a>
+								
+								<c:if test="${orderby == 'p'}">
+									<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+									<c:if test="${startPage > 1}">
+										<a href="/list.do/popularCateg?category=${category}&pageNum=${startPage-1}">[이전]</a>
+									</c:if>
+						
+									<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+									<c:forEach var="i" begin="${startPage}" end="${endPage}">
+										<c:choose>
+											<c:when test="${pageNum == i}">
+												<span style="font-weight: bold">${i}</span>
+											</c:when>
+											<c:when test="${pageNum != i}">
+												<a href="/list.do/popularCateg?category=${category}&pageNum=${i}">${i}</a>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+						
+									<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+									<c:if test="${endPage < pageCount}">
+										<a href="/list.do/popularCateg?category=${category}&pageNum=${startPage+10}">[다음]</a>
+									</c:if>
 								</c:if>
-							</c:if>
+								
+								
+								<c:if test="${orderby == 'l'}">
+									<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+									<c:if test="${startPage > 1}">
+										<a href="/list.do/likeCateg?category=${category}&pageNum=${startPage-1}">[이전]</a>
+									</c:if>
+						
+									<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+									<c:forEach var="i" begin="${startPage}" end="${endPage}">
+										<c:choose>
+											<c:when test="${pageNum == i}">
+												<span style="font-weight: bold">${i}</span>
+											</c:when>
+											<c:when test="${pageNum != i}">
+												<a href="/list.do/likeCateg?category=${category}&pageNum=${i}">${i}</a>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+						
+									<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+									<c:if test="${endPage < pageCount}">
+										<a href="/list.do/likeCateg?category=${category}&pageNum=${startPage+10}">[다음]</a>
+									</c:if>
+								</c:if>
+						
+						</c:if><!-- ${category != null} end -->
 							
+					
 							
-							
-							
-					</c:if>
+					</c:if><!-- ${requestScope.count > 0} end -->
 				</div>	
 						
 			</div><!-- list_content -->
