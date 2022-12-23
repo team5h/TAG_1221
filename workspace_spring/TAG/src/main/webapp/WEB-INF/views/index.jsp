@@ -70,7 +70,7 @@
 	<nav class="site-nav mb-5">
 		<div class="sticky-nav js-sticky-header">
 
-			<div class="container position-relative">
+			<div class="container position-relative" style=" max-width: 1350px;">
 				<div class="site-navigation text-center dark">
 					<a href="home" class="logo menu-absolute m-0" style="font-size:20px;">TAG</a>
 
@@ -684,7 +684,7 @@
 	<div class="site-footer">
 
 
-		<div class="container">
+		<div class="container" style=" max-width: 1350px;">
 		<!-- 
 			<div class="row justify-content-between">
 				 

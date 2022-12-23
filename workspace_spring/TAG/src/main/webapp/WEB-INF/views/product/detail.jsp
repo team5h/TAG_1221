@@ -107,7 +107,7 @@ function topFunction() {
 					<p style="border-bottom: 1px solid black; margin-bottom: 10px;">Delivery Info</p>
 					
 					<span> 출고 정보 </span> 
-						<label id="delinfo" style="cursor: pointer;">
+						<label id="delinfo" style="vertical-align: middle; cursor: pointer; margin-bottom: 4px;">
 							<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 16 16">
 							<path d="M 7.5 1 C 3.917969 1 1 3.917969 1 7.5 C 1 11.082031 3.917969 14 7.5 14 C 11.082031 14 14 
 									11.082031 14 7.5 C 14 3.917969 11.082031 1 7.5 1 Z M 7.5 2 C 10.542969 2 13 4.457031 13 
@@ -197,7 +197,7 @@ function topFunction() {
 		      	<button id="qnabtn" style="float: right; padding: 7; font-size: 11;" class="btn btn-outline-black btn-sm">Q＆A쓰기</button>
 		     	
 		     	
-		     	<div id="modal" style="display: none; z-index: 2; position: absolute; border:1px solid; width: 700px; margin-left: 15%; background-color:white; height: 670px; padding: 20px;"> 
+		     	<div id="modal" style="display: none; z-index: 2; position: absolute; border:1px solid; width: 700px; margin-left: 15%; background-color:white; height: 645px; padding: 20px;"> 
 		     		<div class="close-area" style="float: right;">
 		     			<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 50 50">
 						<path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 
@@ -206,7 +206,7 @@ function topFunction() {
 						</svg>
 		     		</div><!-- close btn -->
 		     		
-		  		    <p style="text-align: center; font-size: 20px; font-weight: 600;">상품 문의</p>
+		  		    <p style="text-align: center; font-size: 20px; font-weight: 600;">Q & A</p>
 			     	<form id="qnainsert">
 				     	<input type="hidden" id="pro_no" name="pro_no" value="${proDetail.pro_no}">
 				     	<input type="hidden" id="qname" name="qname" value="${s_m_id}">

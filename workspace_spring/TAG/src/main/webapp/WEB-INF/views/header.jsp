@@ -41,11 +41,7 @@
 	<script src="/js/jquery.waypoints.min.js"></script>
 	<script src="/js/jquery.fancybox.min.js"></script>
 	<script src="/js/jquery.sticky.js"></script>
-	<!-- <script src="/js/aos.js"></script> -->
-	<!-- <script src="/js/custom.js"></script> -->
-	
-	<!-- 스마트에디터 -->
-	<!-- <script src="/js/ckeditor/ckeditor.js"></script> -->
+
 
 	<title>TAG : Ticket And Goods</title>
 </head>

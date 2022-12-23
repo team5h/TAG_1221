@@ -283,6 +283,25 @@ public class ProductDAO {
 		return sqlSession.insert("product.orderdetailIns", dto);
 	}
 	
+	public int pointminusIns (Map<String, Object> map) {
+		return sqlSession.insert("product.pointminusIns",map);
+	}
+	
+	public MemberGeneralDTO holdingpoint (String m_id) {
+		return sqlSession.selectOne("product.holdingpoint",m_id);
+	}
+	
+	public int pointplusIns (Map<String, Object> map) {
+		return sqlSession.insert("product.pointplusIns",map);
+	}
+	
+	public int mempointUp (Map<String, Object> map) {
+		return sqlSession.update("product.mempointUp",map);
+	}
+	
+	public int cpstusUp (int cp_no) {
+		return sqlSession.update("product.cpstusUp",cp_no);
+	}
 	
 	
 	public List<MylikeDTO> mem_like (String m_id) {
