@@ -425,14 +425,9 @@ function topFunction() {
 					</div>   
 				
 					<div>
-
-						 <form name="frm" method="post" action="/cart/cartOrder" >   
-						 <div id="hiddenplace">
-						
-						 </div>
-							<button type="submit" class="checkoutBtn" onclick="return checkoutBtn()">Checkout</button>
-						 </form>
-
+						<form method="post" action="/cart/cartOrder" >
+							<button class="checkoutBtn">Checkout</button>
+						</form>
 					</div>
 				
 				</div><!-- li_title 끝 -->
@@ -451,7 +446,7 @@ function topFunction() {
 					  <tr>
 					  	<th style="width: 40px; padding-left: 0;"><!-- 선택박스 -->
 							<div class="agreeAll">
-							<input type="checkbox" id="check_all" value="${mycart}" checked="checked">
+							<input type="checkbox" id="check_all" value="${mycart}">
 							<label for="check_all"></label>
 							</div>
 					  	</th>
@@ -484,7 +479,7 @@ function topFunction() {
 				       	
 				       	<td style="width: 30px; padding-left: 0;">
 				       	
-							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)" checked="checked">
+							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)">
 							<label for="check${row.cart_no}"></label>
 			       		
 						</td>
@@ -559,8 +554,6 @@ function topFunction() {
 // 체크박스 전체선택 시 담아줄 변수
 let cartnoList = [];
 //alert(cartnoList);
-
-$("#check_all").prop("checked", true);
 
 //----------------------------------------------------------- 체크박스 선택
 // 체크박스 전체 선택
@@ -832,6 +825,9 @@ function setRegexp(price) {
 	} //cartdelete(this) end
 	
 	
+	
+	
+	
 //----------------------------------------------------------- 장바구니 선택 삭제 값 가져오기
 	var chkArray = new Array();
 	
@@ -858,31 +854,7 @@ function setRegexp(price) {
 			//alert(chkArray);
 	}//chkbox(this1) end
 	
-
-//---------------------------------------------------------- 장바구니 결제버튼 (무조건 선택시에만 결제 가능)
-
-	function checkoutBtn() {
-		//alert(chkArray);
-		
-		if(chkArray.length < 1){
-			alert('구매하실 상품을 선택해주세요.');
-			return false
-		}//if end
-		
-		
-		for(var i = 0 ; i <  chkArray.length ; i++){
-
-		    const hiddenplace = document.getElementById("hiddenplace");
-            const tag = document.createElement('p');
-            tag.innerHTML = "<input type='hidden' value='"+chkArray[i]+"' name='cartno'/>";
-            hiddenplace.appendChild(tag);
-   
-            //alert(tag);
 	
-		}//for end
-		
-		return true;
-	}//end
 	
 //----------------------------------------------------------- 장바구니 선택 삭제 버튼 누를 때
 	function delbtn() {
@@ -925,10 +897,6 @@ function setRegexp(price) {
 	
 	
 	
-	
-	function checkoutBtn() {
-		
-	}
 	
 	
 	

@@ -60,10 +60,11 @@ input[type="checkbox"] + label:before {
 	<input type="hidden" value="" id="Fd_fee" name="d_fee">
 	<input type="hidden" value="" id="Ftotal_price" name="total_price">
 	<input type="hidden" value="${(order_proinfo.price * buystock)}" name="order_price">
-	<input type="hidden" value="${(order_proinfo.price * buystock)*0.01}" name="pt_plus">
+	<input type="hidden" value="<fmt:formatNumber type="number" maxFractionDigits="0"  value="${(order_proinfo.price * buystock)*0.01}"/>" name="pt_plus">
 	<input type="hidden" value="${buystock}" name="detail_cnt">
-	<input type="hidden" value="" id="discount" name="discount">
-
+	<!-- <input type="hidden" value="" id="discount" name="discount"> -->
+	<input type="hidden" value="" id="Fpt_minus" name="pt_minus">
+	
 	<div style="padding:0 10px; width: 60%; display: inline-block;"> 
 		<div style="margin-top: 50px; margin-bottom: 30px;"> 
 			<p style="font-weight: 600; padding-bottom: 5px; margin-bottom: 30px; border-bottom: 2px solid;">배송 정보</p>
@@ -105,7 +106,7 @@ input[type="checkbox"] + label:before {
 		</div><!-- Shipping info -->
 
 		<div style="width: 100%; margin:50px 0; clear: both;">
-			<p style="font-weight: 600; padding-bottom: 5px; margin-bottom: 30px; border-bottom: 2px solid; ">쿠폰/마일리지</p>
+			<p style="font-weight: 600; padding-bottom: 5px; margin-bottom: 30px; border-bottom: 2px solid; ">쿠폰/포인트</p>
 			
 			<table style="font-size:13px; width: 100%;">
 				<tr> 
@@ -130,16 +131,25 @@ input[type="checkbox"] + label:before {
 				</tr>
 				
 				<tr>
-					<td >마일리지</td>
+					<td >포인트</td>
 					<td style="padding-left: 60px;"> 
-						<input type="number" id="pt_minus"  name="pt_minus" style="padding-left: 5px; height: 40px;" autocapitalize="none" inputmode="numeric"/> 
+						<input type="number" id="pt_minus"  style="padding-left: 5px; height: 40px;" autocapitalize="none" inputmode="numeric"/> 
 						<button type="button" onclick="alluse()" style="margin-left:15px; height: 40; line-height: 50%; margin-bottom: 10px; border:1px solid #f0f0f0; background-color:#f0f0f0; padding: 5 10px; width:70px; font-size: 11px;">모두 사용</button>
-						<span style="margin-left: 10px; font-size:10px; color:gray;">보유 마일리지</span>
+						<span style="margin-left: 10px; font-size:10px; color:gray;">보유 포인트</span>
 						<span style="font-weight: bold;  font-size:10px;" id="holding">${order_Minfo.point} P</span>
 							<c:set var="point" value="${order_Minfo.point}"></c:set>
 					</td>
 				</tr>
 			
+				<tr>
+					<td colspan="2">
+						<p style="font-size: 10px; color: gray; font-weight: 500; margin-top: 20px;"> 
+				     		- 쿠폰 적용 시 한 주문, 한 상품에 한해서만 적용됩니다. 
+				     	<br>- 각 쿠폰은 사용기한이 정해져 있습니다.
+				     	<br>- 할인/적립(%) 쿠폰은 적립금할인 등을 제외한 총 상품 금액에 적용됩니다.
+				     	</p>
+					</td>
+				<tr>
 			</table>
 		</div><!-- coupon/point info -->
 		
@@ -202,7 +212,7 @@ input[type="checkbox"] + label:before {
 					<hr style="background-color: white; opacity: 60%;">
 					
 					<div style="width: 80px; height: 80px; overflow: hidden; float: left; display: inline-block; position: relative;">
-						<img src="/storage/${order_proinfo.postername}" style="width:100%; height:100%; object-fit:cover; background-color: white;" >
+						<img src="/storage/${order_proinfo.postername}" style="width:100%; height:100%; object-fit:cover;" >
 					</div><!-- product image -->
 					
 					<div style="width: 280px; float: left; padding: 0 0 0 15px;"> 
@@ -533,28 +543,41 @@ input[type="checkbox"] + label:before {
   		}
   		
 		
-    	var d_fee = document.getElementById("d_fee").innerText
+		var d_fee = document.getElementById("d_fee").innerText
     	var cp_dis = document.getElementById("cp_dis").innerText
     	var total_price = document.getElementById("total_price").innerText
-		var pt_minus = $('#pt_minus').val(); 
+    	var usepoint = document.getElementById("usepoint").innerText
+		//var pt_minus = $('#pt_minus').val(); 
     	
     	d_fee = d_fee.replace(',','');
     	d_fee = parseInt(d_fee);
-    	//alert(d_fee);
+    	//alert("d_fee"+d_fee);
     	
+    	cp_dis = cp_dis.replace(',','');
    		cp_dis = parseInt(cp_dis);
-    	//alert(cp_dis);
-    	//alert(pt_minus);
+    	//alert("cp_dis"+cp_dis);
+    	//alert("pt_minus"+pt_minus);
     	
     	total_price = total_price.replace(',','');
     	total_price = parseInt(total_price);
-    	//alert(total_price);
+    	//alert("total_price"+total_price);
     	
     	$('#Fd_fee').val(d_fee);
     	$('#Fcp_dis').val(cp_dis);
     	$('#Ftotal_price').val(total_price);
-    	$('#discount').val(cp_dis + pt_minus);
-    
+    	
+    	
+     	//alert("pt_minus"+pt_minus);
+     	//alert("usepoint"+usepoint);
+     	usepoint = parseInt(usepoint);
+     	//alert(usepoint);
+    	
+     	//alert($('#Fd_fee').val());
+     		
+    	//$('#discount').val(cp_dis);
+    	//alert(usepoint);
+    	$('#Fpt_minus').val(usepoint || 0);
+    	//alert($('#Fpt_minus').val());
   		return true;
   	}//end
  

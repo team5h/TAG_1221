@@ -105,6 +105,7 @@
 					      <%-- <label><input type="checkbox" name="g_id" value="SAVE">아이디 저장</label>	 --%>
 					      <label><input type="checkbox" ${empty cookie.id.value ? "":"checked" } name="saveId" value="SAVE">아이디 저장</label>			  
 						  &nbsp;&nbsp;&nbsp;
+						  <input type="checkbox"/>
 						  <a href="#" onclick="location.href='/agreementG.do'">회원가입</a>
 						  &nbsp;&nbsp;&nbsp;
 						  <a href="#" onclick="location.href=''">아이디 찾기</a>

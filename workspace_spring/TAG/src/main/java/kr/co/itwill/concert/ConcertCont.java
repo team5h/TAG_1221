@@ -76,6 +76,119 @@ public class ConcertCont {
         mav.addObject("startPage", startPage);
         mav.addObject("endPage", endPage);
         
+        mav.addObject("All", "a");
+        mav.addObject("orderby", "r");
+        
+        return mav;
+	}// concertList() end
+	
+
+//  [콘서트 리스트 - 인기순] 시작 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
+	
+	@RequestMapping("/concert/popularAll")
+	public ModelAndView popularAll(HttpServletRequest req) {
+		
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("concert/concertList");
+        
+        int totalRowCount = concertDao.concertTotal();
+        
+        
+        // 페이징 파트
+        int numPerPage = 9; // 한 페이지당 레코드(글) 갯수
+        int pagePerBlock = 5; // 페이지 리스트 (블럭당 페이지 수)
+
+        // 현재 페이지 번호 (문자형)
+        String pageNum = req.getParameter("pageNum");
+        //System.out.println(pageNum);
+        
+        if (pageNum == null) {
+            pageNum = "1";
+        } // if end
+
+        int currentPage = Integer.parseInt(pageNum);
+        int startRow = (currentPage - 1) * numPerPage + 1;
+        int endRow = currentPage * numPerPage;
+        double totcnt = (double) totalRowCount / numPerPage;
+        int totalPage = (int) Math.ceil(totcnt);
+        double d_page = (double) currentPage / pagePerBlock;
+        int Pages = (int)Math.ceil(d_page)-1;
+        int startPage = Pages * pagePerBlock+1;
+        int endPage = startPage + pagePerBlock-1;
+        
+        List list = null;
+        if (totalRowCount > 0) {
+        	list = concertDao.popularAll(startRow, endRow);//1, 5, M
+        } else {
+            list = Collections.emptyList(); // 안 넣어도 상관 없음
+        } // if end
+        		
+        mav.addObject("list", list);
+        
+ 	    mav.addObject("total", totalRowCount);
+        mav.addObject("pageNum", currentPage);
+        mav.addObject("count", totalRowCount);
+        mav.addObject("totalPage", totalPage);
+        mav.addObject("startPage", startPage);
+        mav.addObject("endPage", endPage);
+        
+        mav.addObject("orderby", "p");
+        
+        return mav;
+	}// concertList() end
+	
+	
+//  [콘서트 리스트 - 좋아요순] 시작 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
+	
+	@RequestMapping("/concert/likeAll")
+	public ModelAndView likeAll(HttpServletRequest req) {
+		
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("concert/concertList");
+        
+        int totalRowCount = concertDao.concertTotal();
+        
+        
+        // 페이징 파트
+        int numPerPage = 9; // 한 페이지당 레코드(글) 갯수
+        int pagePerBlock = 5; // 페이지 리스트 (블럭당 페이지 수)
+
+        // 현재 페이지 번호 (문자형)
+        String pageNum = req.getParameter("pageNum");
+        //System.out.println(pageNum);
+        
+        if (pageNum == null) {
+            pageNum = "1";
+        } // if end
+
+        int currentPage = Integer.parseInt(pageNum);
+        int startRow = (currentPage - 1) * numPerPage + 1;
+        int endRow = currentPage * numPerPage;
+        double totcnt = (double) totalRowCount / numPerPage;
+        int totalPage = (int) Math.ceil(totcnt);
+        double d_page = (double) currentPage / pagePerBlock;
+        int Pages = (int)Math.ceil(d_page)-1;
+        int startPage = Pages * pagePerBlock+1;
+        int endPage = startPage + pagePerBlock-1;
+        
+        List list = null;
+        if (totalRowCount > 0) {
+        	list = concertDao.likeAll(startRow, endRow);//1, 5, M
+        } else {
+            list = Collections.emptyList(); // 안 넣어도 상관 없음
+        } // if end
+        		
+        mav.addObject("list", list);
+        
+ 	    mav.addObject("total", totalRowCount);
+        mav.addObject("pageNum", currentPage);
+        mav.addObject("count", totalRowCount);
+        mav.addObject("totalPage", totalPage);
+        mav.addObject("startPage", startPage);
+        mav.addObject("endPage", endPage);
+        
+        mav.addObject("orderby", "p");
+        
         return mav;
 	}// concertList() end
 	
@@ -133,6 +246,7 @@ public class ConcertCont {
         mav.addObject("totalPage", totalPage);
         mav.addObject("startPage", startPage);
         mav.addObject("endPage", endPage);
+        mav.addObject("past", "past");
         
         return mav;
 	}//pastConcertList end
@@ -194,7 +308,7 @@ public class ConcertCont {
 	
 
 //  [콘서트 리스트 - 검색] 시작 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
-	@RequestMapping("/searchConcert")
+	@RequestMapping("/concert/searchConcert")
 	public ModelAndView search(@RequestParam(defaultValue = "") String title) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("concert/concertList");
