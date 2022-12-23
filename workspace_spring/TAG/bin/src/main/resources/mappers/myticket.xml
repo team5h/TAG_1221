@@ -9,7 +9,7 @@
 		FROM(
 			SELECT @RNO := @RNO + 1 as r, CC.*
 			FROM (
-				SELECT T.c_no, title, tck_num, m_id, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_addr, rec_tel, msg, stus, dis_descrip
+				SELECT T.c_no, title, tck_num, m_id, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg, stus, dis_descrip
 				FROM ticket_order T LEFT JOIN concert C
 									ON T.c_no = C.c_no
 									, (SELECT @RNO := 0) BB 
@@ -29,7 +29,7 @@
 	
 	<!-- 티켓 상세 : 티켓번호 상세내역 -->
 	<select id="detail" resultType="java.util.Map" parameterType="String">
-		SELECT O.c_no, tck_num, title, postername, m_id, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_addr, rec_tel, msg, stus, dis_descrip
+		SELECT O.c_no, tck_num, title, postername, m_id, cnt, order_price, dis_price, d_fee, total_price, rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg, stus, dis_descrip
 		FROM ticket_order O LEFT JOIN concert C
 							ON O.c_no = C.c_no
 		WHERE tck_num = #{tck_num}

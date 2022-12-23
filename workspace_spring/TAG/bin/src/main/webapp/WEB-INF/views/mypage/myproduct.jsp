@@ -102,7 +102,7 @@
 				<td>${row.total_price}</td>
 				<td>${row.pt_plus}</td>
 				<td>${row.rec_name}</td>
-				<td>${row.rec_addr}</td>
+				<td>${row.rec_addr1} ${row.rec_addr2}</td>
 				<td>${row.rec_tel}</td>
 				<td>${row.msg}</td>
 			</tr>

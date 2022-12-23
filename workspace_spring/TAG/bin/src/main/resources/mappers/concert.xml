@@ -159,6 +159,7 @@
 		WHERE c_no = #{c_no}
 	</update>
 	
+	
 	<!-- 공연 좋아요 마이페이지 Delete -->
 	<delete id="myLikeDelete" parameterType="java.util.Map">
 		DELETE FROM member_like

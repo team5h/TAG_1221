@@ -12,6 +12,7 @@ import kr.co.itwill.QnA.QnADTO;
 import kr.co.itwill.concert.ConcertDTO;
 import kr.co.itwill.coupon.CouponDTO;
 import kr.co.itwill.memberGeneral.MemberGeneralDTO;
+import kr.co.itwill.mylike.MylikeDTO;
 import kr.co.itwill.orderDetail.OrderDetailDTO;
 import kr.co.itwill.productOrder.ProdcutOrderDTO;
 
@@ -35,21 +36,39 @@ public class ProductDAO {
 		
 		return sqlSession.selectList("product.list", map);
 	}//list() end	
+
+//  ---------------------------------------------------- [상품목록 - 인기순]
+	public List<Map<String, Object>> popularAll(int start, int end) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectList("product.popularAll", map);
+	}//list() end
 	
+//  ---------------------------------------------------- [상품목록 - 좋아요순]
+	public List<Map<String, Object>> likeAll(int start, int end) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectList("product.likeAll", map);
+	}//list() end
+	
+
 //  ---------------------------------------------------- [상품목록 - 페이징 전체 글개수]	
 	public int total() {
 		return sqlSession.selectOne("product.total");
 	}// list2() end
 
 	
-	
-	
 //  ---------------------------------------------------- [상품목록 - 페이징 카테고리별 글개수]	
 	public int categoryTotal(String category) {
 		return sqlSession.selectOne("product.categoryTotal", category);
 	}// categoryTotal() end
 	
-//  ---------------------------------------------------- [상품목록 - 페이징 리스트]	
+	
+//  ---------------------------------------------------- [상품목록 - 페이징 카테고리별리스트]	
 	public List<Map<String, Object>> list2(Integer start, Integer end, String category) {
 		
 		HashMap<String, String> map = new HashMap<>();
@@ -61,6 +80,30 @@ public class ProductDAO {
 	}// list2() end
 	
 
+//  ---------------------------------------------------- [상품목록 - 페이징 카테고리별리스트]	
+	public List<Map<String, Object>> popularCateg(Integer start, Integer end, String category) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start.toString());
+		map.put("end", end.toString());
+		map.put("category", category);
+		
+		return sqlSession.selectList("product.popularCateg", map);
+	}// list2() end
+	
+//  ---------------------------------------------------- [상품목록 - 페이징 카테고리별리스트]	
+	public List<Map<String, Object>> likeCateg(Integer start, Integer end, String category) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start.toString());
+		map.put("end", end.toString());
+		map.put("category", category);
+		
+		return sqlSession.selectList("product.likeCateg", map);
+	}// list2() end
+	
+
+	
 	
 //  ---------------------------------------------------- [상품목록 - 콘서트 리스트]	
 	public List<ConcertDTO> concert() {
@@ -82,6 +125,29 @@ public class ProductDAO {
 		
 		return sqlSession.selectList("product.concertList", map);
 	}// list2() end
+	
+//  ---------------------------------------------------- [상품목록 - 콘서트 리스트 + 페이징 - 인기순]	
+	public List<Map<String, Object>> popularCon(Integer start, Integer end, String c_no) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start.toString());
+		map.put("end", end.toString());
+		map.put("c_no", c_no.toString());
+		
+		return sqlSession.selectList("product.popularCon", map);
+	}// list2() end
+	
+	
+//  ---------------------------------------------------- [상품목록 - 콘서트 리스트 + 페이징 - 좋아요순]	
+	public List<Map<String, Object>> likeCon(Integer start, Integer end, String c_no) {
+		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start.toString());
+		map.put("end", end.toString());
+		map.put("c_no", c_no.toString());
+		
+		return sqlSession.selectList("product.likeCon", map);
+	}// list2() end
 
 	
 
@@ -97,6 +163,24 @@ public class ProductDAO {
 	public List<ProductDTO> categoryAll() {
 		return sqlSession.selectList("product.categoryAll");
 	}//search() end
+	
+	
+	
+// ---------------------------------------------------- [공연상세 좋아요 개수 증가]	
+	public int likecntInc(ProductDTO pro_no) {
+		//System.out.println("DAO 잘 들어옴.");
+		return sqlSession.update("product.likecntInc", pro_no);
+	}//likecntUpdate() end
+	
+	
+// ---------------------------------------------------- [공연상세 좋아요 개수 감소]	
+	public int likecntDec(ProductDTO pro_no) {
+		//System.out.println("DAO 잘 들어옴.");
+		return sqlSession.update("product.likecntDec", pro_no);
+	}//likecntUpdate() end
+	
+	
+	
 	
 	
 	public Map<String, Object> proDetail(int pro_no){
@@ -198,6 +282,41 @@ public class ProductDAO {
 	public int orderdetailIns (OrderDetailDTO dto) {
 		return sqlSession.insert("product.orderdetailIns", dto);
 	}
+	
+	public int pointminusIns (Map<String, Object> map) {
+		return sqlSession.insert("product.pointminusIns",map);
+	}
+	
+	public MemberGeneralDTO holdingpoint (String m_id) {
+		return sqlSession.selectOne("product.holdingpoint",m_id);
+	}
+	
+	public int pointplusIns (Map<String, Object> map) {
+		return sqlSession.insert("product.pointplusIns",map);
+	}
+	
+	public int mempointUp (Map<String, Object> map) {
+		return sqlSession.update("product.mempointUp",map);
+	}
+	
+	public int cpstusUp (int cp_no) {
+		return sqlSession.update("product.cpstusUp",cp_no);
+	}
+	
+	
+	public List<MylikeDTO> mem_like (String m_id) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("m_id", m_id);
+		
+		return sqlSession.selectList("product.mem_like",m_id);
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }//class end

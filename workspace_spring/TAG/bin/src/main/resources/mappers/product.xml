@@ -116,7 +116,6 @@
 		GROUP BY category DESC
 	</select>
 	
-	
 <!-- 티켓 결제시 관련 상품 보여주기 (다슬언니)-->
 	<select id="viewProduct" resultType="kr.co.itwill.product.ProductDTO" parameterType="Int">	
 		SELECT *
@@ -179,6 +178,59 @@
 		FROM member_like
 		WHERE m_id = #{m_id} AND like_li = #{pro_no} AND like_cd = 'P'
 	</select>
+	
+<!-- order -->
+	<select id="order_proinfo" resultType="kr.co.itwill.product.ProductDTO">
+		SELECT  pro_name, color, size, price, postername, pro_no
+		FROM product
+		WHERE pro_no = #{pro_no}
+	</select>
+	
+	<select id="order_Minfo" resultType="kr.co.itwill.memberGeneral.MemberGeneralDTO">
+		SELECT m_name, m_zipcode, m_addr1, m_addr2, m_tel, point
+		FROM member
+		WHERE m_id = #{m_id}
+	</select>
 
-
+	<select id="mem_coupon" parameterType="java.util.Map" resultType="kr.co.itwill.coupon.CouponDTO">
+		SELECT DISTINCT(cp_no), coupon
+		FROM coupon_detail cd inner join product p on cd.c_no = p.c_no 
+		WHERE     m_id    = #{m_id} 
+		      AND pro_no  = #{pro_no} 
+		      AND cp_stus = 'N' 
+		      AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+	</select>
+	
+	<select id="mem_couponCNT" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(cp_no)
+		FROM (
+		    SELECT DISTINCT(cp_no) as cp_no
+		    FROM coupon_detail cd inner join product p on cd.c_no = p.c_no 
+		    WHERE     m_id    = #{m_id} 
+		    	  AND pro_no  = #{pro_no} 
+		    	  AND cp_stus = 'N' 
+		    	  AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+		)aa 
+	</select>
+	
+	
+	<select id="mem_couponTOTALCNT" resultType="int">
+		SELECT count(cp_no)
+		FROM coupon_detail
+		WHERE m_id = #{m_id} AND cp_stus = 'N'
+	</select>
+	
+	
+	<insert id="productorderIns" parameterType="java.util.Map">
+		INSERT INTO product_order(order_num, m_id, order_price, cp_dis, cp_no, total_price, pt_plus
+								  , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg)
+		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}
+				, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg})
+	</insert>
+	
+	<insert id="orderdetailIns" parameterType="kr.co.itwill.orderDetail.OrderDetailDTO">
+		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum ,stus)
+		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, #{discount}, #{pricesum}, '상품준비중' )
+	</insert>
+	
 </mapper>

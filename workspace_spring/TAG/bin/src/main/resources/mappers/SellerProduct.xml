@@ -91,9 +91,10 @@
 			FROM(
 			    SELECT @RNO := @RNO + 1 as r, CC.*
 			    FROM (
-			            select order_num, sum(detail_cnt) as total_cnt, sum(total_price) as total_price, m_id, rec_name, rec_addr, rec_tel, substr(order_num,1,8) as order_date
+			            select order_num, sum(detail_cnt) as total_cnt, sum(total_price) as total_price, m_id, rec_name
+			            		, rec_addr1, rec_addr2, rec_zipcode, rec_tel, substr(order_num,1,8) as order_date
 			            from (
-			                    select od.order_num, detail_cnt, od.total_price, m_id, rec_name, rec_addr, rec_tel, msg
+			                    select od.order_num, detail_cnt, od.total_price, m_id, rec_name,  rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
 			                    from order_detail od join product p on od.pro_no = p.pro_no 
 			                                        join product_order po on od.order_num = po.order_num
 			                    where p_id = #{p_id}
@@ -129,7 +130,8 @@
 	<select id="orderdetail"  resultType="java.util.Map" parameterType="java.util.Map">	
 		SELECT AA.*, (org_price - discount - pt_minus + d_fee) as total_price
 		FROM (
-		    SELECT od.order_num as order_num, sum(org_price) as org_price, sum(discount) as discount, coupon, pt_minus, d_fee, m.m_id as m_id, m_email, m_tel, rec_name, rec_tel, rec_addr, msg, substr(od.order_num,1,8) as order_date
+		    SELECT od.order_num as order_num, sum(org_price) as org_price, sum(discount) as discount, coupon, pt_minus, d_fee, m.m_id as m_id, m_email, m_tel
+		           , rec_name, rec_tel, rec_zipcode,rec_addr2, rec_addr1, msg, substr(od.order_num,1,8) as order_date
 		    FROM order_detail od join            product_order pd  on od.order_num = pd.order_num 
 		                         left outer join member m          on pd.m_id      = m.m_id
 		                         left outer join coupon_detail cpd on cpd.cp_no    = pd.cp_no 
@@ -147,7 +149,9 @@
 	<update id="orderdetailupdate" parameterType="kr.co.itwill.productOrder.ProdcutOrderDTO">
 		UPDATE product_order
 		SET  rec_name = #{rec_name}
-			,rec_addr = #{rec_addr}
+			,rec_zipcode = #{rec_zipcode}
+			,rec_addr1 = #{rec_addr1}
+			,rec_addr2 = #{rec_addr2}
 			,rec_tel  = #{rec_tel}
 		WHERE order_num = #{order_num}
 	</update>
@@ -182,9 +186,9 @@
 			    FROM (
 			        select *
 			        from (
- 						select order_num, sum(detail_cnt) as total_cnt, sum(total_price) as total_price, m_id, rec_name, rec_addr, rec_tel, substr(order_num,1,8) as order_date
+ 						select order_num, sum(detail_cnt) as total_cnt, sum(total_price) as total_price, m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, substr(order_num,1,8) as order_date
 			            from (
-			                    select od.order_num, detail_cnt, od.total_price, m_id, rec_name, rec_addr, rec_tel, msg
+			                    select od.order_num, detail_cnt, od.total_price, m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
 			                    from order_detail od join product p on od.pro_no = p.pro_no 
 			                                        join product_order po on od.order_num = po.order_num
 			                    where p_id = #{p_id}

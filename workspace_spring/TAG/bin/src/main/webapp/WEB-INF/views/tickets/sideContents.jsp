@@ -16,10 +16,14 @@
 	font-size:14px;
 }
 
-#panel {
+#panel input{
+ 	width: 225px;
 	font-size:16px;
 }
 
+#addedSeat input {
+	 width: 180px;
+}
 
 
 #reSelect, #goSaddForm, #goSale {
@@ -58,7 +62,10 @@
 	<table style="border:1px solid black; height:570px; width: 347px;">
 	<tr>
 		<td>
-			공연장 미니맵<br>
+			공연장소 : <c:choose>
+		     			<c:when test="${concert.j_id == 'yes24'}"> yes24 라이브홀 </c:when>
+		     			<c:when test="${concert.j_id == 'bluesquare'}"> 블루스퀘어 마스터홀 </c:when>
+		     		 </c:choose><br>
 			-> 구역이동은 미니맵을 이용해주세요
 		</td>
 	</tr>
@@ -130,13 +137,20 @@
 	<input type="hidden" name="dis_descrip" id="dis_descrip" value="할인내용"><!-- 할인내용 -->
 	<input type="hidden" name="stus" value="결제완료"><!-- 결과상태 -->
 	<table style="border:1px solid black; height:570px; width: 347px;">
-	<tr>
-		<td style="width:30%; background:lightgrey; ">
-			<img style="width:60px;" src="/storage/${concert.postername}">
+	<tr style="width:346px; height:137px;">
+		<td style="width:28%; background:lightgrey; padding:0;">
+			<img style="width:100%;" src="/storage/${concert.postername}">
 		</td>
-		<td style="width:70%;">
-			${concert.title}<br>
-			${concert.watch_age}
+		<td style="--width:70%;">
+			<b style="font-size:14px;">${concert.title}</b><br>
+			<hr>
+			관람연령 : ${concert.watch_age}<br>
+			공연사 : 
+			<c:choose>
+     			<c:when test="${concert.com_name == '라이브네이션코리아'}"> LIVENATION </c:when>
+     			<c:when test="${concert.com_name == '긱가이드'}"> gigguide </c:when>
+     			<c:when test="${concert.com_name == '프라이빗커브'}"> PRIVATE CURVE </c:when>
+	     	</c:choose>
 		</td>
 	</tr>
 	<tr>
@@ -178,9 +192,9 @@
 	<tr>
 		<td style="background:lightgrey;">배송료</td>
 		<td>
-			<input style="display:inline-block; width:100px;" type="text" id="dlvPrice" value="0원"><!-- 배송비 -->
+			<input style="display:inline-block; width:80px;" type="text" id="dlvPrice" value="0원"><!-- 배송비 -->
 			 | 
-			<input style="display:inline-block; width:100px;" type="text" id="dlvText" value="현장수령">
+			<input style="display:inline-block; width:50px;" type="text" id="dlvText" value="현장수령">
 		</td>
 	</tr>
 	<tr>

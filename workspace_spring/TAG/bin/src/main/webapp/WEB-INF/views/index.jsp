@@ -103,11 +103,10 @@
 						</li>
 						
 						<li class="has-children">
-							<a href="shop.html">공연장</a>
+							<a href="shop.html" onclick="return false;">공연장</a>
 							<ul class="dropdown">
-								<li><a href="#">YES24 라이브홀</a></li>
-								<li><a href="#">세종문화회관 대극장</a></li>
-								<li><a href="#">블루스퀘어 마스터카드홀</a></li>
+								<li><a href="/concertHall/yes24live">YES24 라이브홀</a></li>
+								<li><a href="/concertHall/bluesquare">블루스퀘어 마스터카드홀</a></li>
 							</ul>
 						</li>
 

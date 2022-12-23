@@ -41,11 +41,7 @@
 	<script src="/js/jquery.waypoints.min.js"></script>
 	<script src="/js/jquery.fancybox.min.js"></script>
 	<script src="/js/jquery.sticky.js"></script>
-	<!-- <script src="/js/aos.js"></script> -->
-	<!-- <script src="/js/custom.js"></script> -->
-	
-	<!-- 스마트에디터 -->
-	<!-- <script src="/js/ckeditor/ckeditor.js"></script> -->
+
 
 	<title>TAG : Ticket And Goods</title>
 </head>
@@ -101,16 +97,16 @@
 						<li class="has-children">
 							<a href="#" onclick="location.href='/list.do'">굿즈</a>
 							<ul class="dropdown">
-								<li><a href="checkout.html">전체보기</a></li>
-								<li><a href="elements.html">인기상품</a></li>
+								<li><a href="/list.do">전체상품</a></li>
+								<li><a href="/listConcert">콘서트별</a></li>
 								
 								<li class="has-children">
 									<a href="#">카테고리</a>
 									<ul class="dropdown">
-										<li><a href="#">의류</a></li>
-										<li><a href="#">포스터</a></li>
-										<li><a href="#">음반</a></li>
-										<li><a href="#">잡화</a></li>
+										<li><a href="/list.do?category=${row.category}">포스터</a></li>
+										<li><a href="/list.do?category=${row.category}">음반</a></li>
+										<li><a href="/list.do?category=${row.category}">의류</a></li>
+										<li><a href="/list.do?category=${row.category}">잡화</a></li>
 									</ul>
 								</li>
 							</ul>

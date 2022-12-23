@@ -446,6 +446,7 @@ function joinScheck() {
                  <select id="bank" name="bank">
                  	<option value="0">은행선택</option>
                     <option value="KB국민">KB국민</option>
+                    <option value="카카오뱅크">카카오뱅크</option>
                     <option value="비씨">비씨</option>
                     <option value="신한">신한</option>
                     <option value="현대">현대</option>
@@ -453,7 +454,7 @@ function joinScheck() {
                     <option value="롯데">롯데</option>
                     <option value="외환">외환</option>
                     <option value="NH">NH</option>
-                    <option value="하나">하나</option>
+                    <option value="HB하나">HB하나</option>
 	             </select>
 	        </div>
 			<div class="textbox">

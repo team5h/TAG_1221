@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.co.itwill.orderDetail.OrderDetailDTO;
+
 @Repository
 public class CartDAO {
 	
@@ -61,5 +63,28 @@ public class CartDAO {
 		return sqlSession.delete("cart.selectDelete", cart_no);
 	}//deleteMycart() end	
 	
+//--
+	public List<Map<String, Object>> cartorder (CartDTO dto) {
+		return sqlSession.selectList("cart.cartorder", dto);
+	}
 	
+	public Map<String, Object> cart_orderPrice (CartDTO dto) {
+		return sqlSession.selectOne("cart.cart_orderPrice",dto);
+	}
+	
+	public List<Map<String, Object>> c_nolist (CartDTO dto) {
+		return sqlSession.selectList("cart.c_nolist",dto);
+	}
+	
+	public List<Map<String, Object>> mem_cou (CartDTO dto) {
+		return sqlSession.selectList("cart.mem_cou" ,dto);
+	}
+	
+	public int mem_couCNT (CartDTO dto) {
+		return sqlSession.selectOne("cart.mem_couCNT",dto);
+	}
+	
+	public int cart_orderDtail (List<OrderDetailDTO> list) {
+		return sqlSession.insert("cart.cart_orderDtail",list);
+	}
 }//class end

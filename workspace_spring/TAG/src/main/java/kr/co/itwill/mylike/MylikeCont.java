@@ -179,7 +179,7 @@ public class MylikeCont {
 		int totalRowCount = mylikeDao.proCnt(s_m_id);
 		mav.addObject("proCnt", totalRowCount);
 		// 페이징 파트
-        int numPerPage = 12; // 한 페이지당 레코드(글) 개수
+        int numPerPage = 4; // 한 페이지당 레코드(글) 개수
         int pagePerBlock = 5; // 페이지 리스트 (블럭당 페이지 수)
 
         // 현재 페이지 번호 (문자형)
@@ -213,7 +213,7 @@ public class MylikeCont {
             mav.addObject("startPage", startPage);
             mav.addObject("endPage", endPage);
         } else {
-            System.out.println("상품 좋아요 상세보기///페이지 불러오기 실패");
+            System.out.println("관심 상품 상세보기 페이지 불러오기 실패");
         }// if end
 		
 		return mav;

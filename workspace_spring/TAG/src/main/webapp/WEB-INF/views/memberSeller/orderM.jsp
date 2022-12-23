@@ -73,7 +73,7 @@
 			<td style="padding:0 10px 5px 10px; width: 100px;"> 주문번호</td>
 			<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;"> 수령인 정보</td>
 			<td style="padding:0 10px 5px 10px;"> 수량</td>
-			<td style="padding:0 10px 5px 10px;"> 금액</td>
+			<td style="padding:0 10px 5px 10px;"> 상품 금액</td>
 			<td style="padding:0 10px 5px 10px;"> 주문일</td>
 		</tr>
 		

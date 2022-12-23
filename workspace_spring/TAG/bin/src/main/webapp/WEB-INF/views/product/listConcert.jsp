@@ -247,7 +247,7 @@ function topFunction() {
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
 				<form method="post" action="search">
-					<a href="detail/${row.pro_no}">${row.pro_name}</a>
+					<a href="/product/${row.pro_no}">${row.pro_name}</a>
 					<input type="text" id="pro_name" name="pro_name" value="${pro_name}">
 					<input type="submit" id="btnSubmit" value="검색" style="display:none;">
 						<label for="btnSubmit">
@@ -379,7 +379,7 @@ function topFunction() {
 										</span>
 										
 										<div class="product-image">
-											<a href="detail/${row.pro_no}"><img src="/storage/${row.postername}" width="300px" height="400px"></a>
+											<a href="/product/${row.pro_no}"><img src="/storage/${row.postername}" width="300px" height="400px"></a>
 										</div>
 									</div>
 									</c:when>
@@ -395,7 +395,7 @@ function topFunction() {
 								
 								<!-- 상품명 -->
 								<div id="product_name">
-									<a href="detail/${row.pro_no}">${row.pro_name}</a>
+									<a href="/product/${row.pro_no}">${row.pro_name}</a>
 								</div>
 					
 								<!-- 가격 -->

@@ -444,15 +444,16 @@ function updateScheck() {
             <div class="textbox">
                  <select id="bank" name="bank">
                  	<option value="0">은행선택</option>
-                    <option value="KB국민" ${dto.bank=='KB국민' ? 'selected' : ''}>KB국민</option>
-                    <option value="비씨" ${dto.bank=='비씨' ? 'selected' : ''}>비씨</option>
-                    <option value="신한" ${dto.bank=='신한' ? 'selected' : ''}>신한</option>
-                    <option value="현대" ${dto.bank=='현대' ? 'selected' : ''}>현대</option>
-                    <option value="삼성" ${dto.bank=='삼성' ? 'selected' : ''}>삼성</option>
-                    <option value="롯데" ${dto.bank=='롯데' ? 'selected' : ''}>롯데</option>
-                    <option value="외환" ${dto.bank=='외환' ? 'selected' : ''}>외환</option>
-                    <option value="NH" ${dto.bank=='NH' ? 'selected' : ''}>NH</option>
-                    <option value="하나" ${dto.bank=='하나' ? 'selected' : ''}>하나</option>
+                    <option value="KB국민" <c:if test="${dto.bank == 'KB국민'}">selected</c:if>>KB국민</option>
+                    <option value="카카오뱅크" <c:if test="${dto.bank == '카카오뱅크'}">selected</c:if>>카카오뱅크</option>
+                    <option value="비씨" <c:if test="${dto.bank == '비씨'}">selected</c:if>>비씨</option>
+                    <option value="신한" <c:if test="${dto.bank == '신한'}">selected</c:if>>신한</option>
+                    <option value="현대" <c:if test="${dto.bank == '현대'}">selected</c:if>>현대</option>
+                    <option value="삼성" <c:if test="${dto.bank == '삼성'}">selected</c:if>>삼성</option>
+                    <option value="롯데" <c:if test="${dto.bank == '롯데'}">selected</c:if>>롯데</option>
+                    <option value="외환" <c:if test="${dto.bank == '외환'}">selected</c:if>>외환</option>
+                    <option value="NH" <c:if test="${dto.bank == 'NH'}">selected</c:if>>NH</option>
+                    <option value="HB하나" <c:if test="${dto.bank == 'HB하나'}">selected</c:if>>HB하나</option>
 	             </select>
 	        </div>
 			<div class="textbox">

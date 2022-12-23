@@ -138,7 +138,7 @@ function topFunction() {
 		        		</span>
 		        	</div>
 		        			
-		        	<div id="countchk" style="display: inline-block; padding-left: 125px;"> 		
+		        	<div id="countchk" style="display: inline-block; padding-left: 90px;"> 		
 			            <div class="minus" style="display: inline-block;"><a href="javascript:change_qty2('m')" style="color:black;">
 			            	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16"> 
 			            	<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/> </svg>
@@ -172,7 +172,7 @@ function topFunction() {
 					<c:set var="pro_no" value="${proDetail.pro_no}" />
 					<c:set var="s_m_id" value="${s_m_id}" />
 					<button class="btn btn-outline-bllack btn-sm" style="width: 50%; border-right: none;" onclick="addcart()">장바구니</button>
-					<button class="btn saem_btn btn-sm" style="width: 50.1%; margin-left: -4px;"  onclick="location.href='/product/order';">바로 구매</button>
+					<button class="btn saem_btn btn-sm" style="width: 50.1%; margin-left: -5px;"  onclick="orderpage()">바로 구매</button>
 				</div>
 				
 			</div><!-- rightside -->
@@ -208,8 +208,8 @@ function topFunction() {
 		     		
 		  		    <p style="text-align: center; font-size: 20px; font-weight: 600;">상품 문의</p>
 			     	<form id="qnainsert">
-				     	<input type="hidden" name="pro_no" value="${proDetail.pro_no}">
-				     	<input type="hidden" name="qname" value="${s_m_id}">
+				     	<input type="hidden" id="pro_no" name="pro_no" value="${proDetail.pro_no}">
+				     	<input type="hidden" id="qname" name="qname" value="${s_m_id}">
 			     		<div style="float: left; padding-top: 10px; font-size:14px;"> 
 				     		<p> 아이디 </p> 
 				     		<p style="padding-top: 10px;"> 비밀번호 </p> 
@@ -592,6 +592,29 @@ function topFunction() {
 			}//if end
 		}//if end
 	}// end
+	
+	function orderpage() {
+		let pro_no = $('#pro_no').val();
+		let m_id = $('#qname').val();
+		let buystock = $('#ct_qty').val();
+		
+		//let productprice = parseInt(${price});
+		//let total_amount = productprice*buystock;
+		
+		/*
+		alert(pro_no);
+		alert(m_id);
+		alert(buystock);
+		alert(productprice);
+		alert(total_amount);
+		*/
+		
+		if (m_id == '') { 
+			location.href='/loginG.do';
+		}else {
+			location.href='/product/order?pro_no=' + pro_no +'&m_id=' + m_id + '&buystock=' + buystock;
+		}
+	}//end
 
 //----------------------------------------------------------------------- SUMMERNOTE 
 
@@ -600,7 +623,7 @@ function topFunction() {
         //placeholder: 'Hello Bootstrap 4',
         tabsize: 2,
         height: 300,
-        focus: true,
+        focus: false,
         toolbar: [
 		    // [groupName, [list of button]]
 		    ['fontname', ['fontname']],
