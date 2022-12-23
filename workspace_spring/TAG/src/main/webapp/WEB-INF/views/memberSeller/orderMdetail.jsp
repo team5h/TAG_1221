@@ -101,7 +101,8 @@
 	</div>
 	</c:forEach>
 	
-<br>
+<hr style="margin-bottom: 40px;">
+
 	<form action="/mypageS/orderdetailProc/${orderdetail.order_num}" method="post">
 	<input type="hidden" value="${orderdetail.order_num}" name="order_num">
 	<div style="display: inline-block; float:left; width: 50%; height: 450px; padding-right: 10px;">
@@ -130,12 +131,13 @@
 				<span style="color:#999999;">상품 금액</span>	
 					<span style="float:right;"><fmt:formatNumber value="${orderdetail.org_price}" pattern="#,###"/>원</span>
 		<br><br><span style="color:#999999;">마일리지</span>
-					<span style="float:right;"> - <fmt:formatNumber value="${orderdetail.pt_minus}" pattern="#,###"/></span>
+					<span style="float:right;"> - <fmt:formatNumber value="${orderdetail.pt_minus}" pattern="#,###"/>P</span>
 		<br><br><span style="color:#999999;">할인 금액</span>
 					<span style="float:right;"><fmt:formatNumber value="${orderdetail.discount}" pattern="#,###"/>원</span>
 		<br><br><span style="color:#999999;">할인 정보</span>
 					<span style="float:right;"> 
 							<c:choose>
+								<c:when test="${orderdetail.coupon == null}"> - </c:when>
 								<c:when test="${orderdetail.coupon == 'Bc'}"> 공연 예매자 (10%)</c:when>
 								<c:when test="${orderdetail.coupon == 'EBc'}"> 얼리버드 (15%)</c:when>
 								<c:when test="${orderdetail.coupon == 'Dc'}"> 배송비 할인 </c:when>

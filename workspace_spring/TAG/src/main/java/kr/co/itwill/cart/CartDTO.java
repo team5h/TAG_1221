@@ -11,11 +11,11 @@ public class CartDTO {
     
     
     private List chkList;
-    
-    
+
     
     public CartDTO() {}
 
+    
 
     
  
@@ -79,7 +79,8 @@ public class CartDTO {
 	}
 
 
-	
-    
+
+
+
     
 }//class end

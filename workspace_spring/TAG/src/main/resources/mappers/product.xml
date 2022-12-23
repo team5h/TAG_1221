@@ -223,9 +223,9 @@
 	
 	<insert id="productorderIns" parameterType="java.util.Map">
 		INSERT INTO product_order(order_num, m_id, order_price, cp_dis, cp_no, total_price, pt_plus
-								  , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg)
-		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}
-				, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg})
+								 ,pt_minus , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg, d_fee)
+		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}, 
+				#{pt_minus}, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg}, #{d_fee})
 	</insert>
 	
 	<insert id="orderdetailIns" parameterType="kr.co.itwill.orderDetail.OrderDetailDTO">
@@ -233,4 +233,31 @@
 		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, #{discount}, #{pricesum}, '상품준비중' )
 	</insert>
 	
+	<insert id="pointminusIns" parameterType="java.util.Map">
+		INSERT INTO point_detail(m_id, detail, pt_minus, pt_total, order_num, cng_date)
+		VALUES(#{m_id},'상품 구매시 사용', #{pt_minus}, #{pt_total}, #{order_num},(current_date))
+	</insert>
+	
+	<insert id="pointplusIns" parameterType="java.util.Map">
+		INSERT into point_detail(m_id, detail, pt_plus, pt_total, order_num, cng_date)
+		VALUES(#{m_id},'상품 적립금', #{pt_plus}, #{pt_total}, #{order_num}, (current_date))
+	</insert>
+	
+	<select id="holdingpoint" parameterType="String" resultType="kr.co.itwill.memberGeneral.MemberGeneralDTO">
+		SELECT point 
+		FROM member 
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<update id="mempointUp" parameterType="java.util.Map">
+		UPDATE member 
+		SET point = #{point}
+		WHERE m_id = #{m_id}
+	</update>
+	
+	<update id="cpstusUp" parameterType="int">
+		UPDATE coupon_detail 
+		SET cp_stus = 'Y'
+		WHERE cp_no = #{cp_no}
+	</update>
 </mapper>

@@ -14,7 +14,7 @@ public class MemberGeneralDTO {
 	private String m_tel;
 	private String m_email;
 	private String mem_grade;
-	private String point;
+	private int point;
 	private String regdate;
 	
 	public MemberGeneralDTO() {}
@@ -115,11 +115,11 @@ public class MemberGeneralDTO {
 		this.mem_grade = mem_grade;
 	}
 
-	public String getPoint() {
+	public int getPoint() {
 		return point;
 	}
 
-	public void setPoint(String point) {
+	public void setPoint(int point) {
 		this.point = point;
 	}
 
@@ -138,9 +138,8 @@ public class MemberGeneralDTO {
 				+ ", m_addr2=" + m_addr2 + ", m_tel=" + m_tel + ", m_email=" + m_email + ", mem_grade=" + mem_grade
 				+ ", point=" + point + ", regdate=" + regdate + "]";
 	}
-	
-	
 
+	
 	
 }//class end
 

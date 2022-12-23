@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.co.itwill.QnA.QnADTO;
 
 import kr.co.itwill.concert.ConcertDTO;
+import kr.co.itwill.memberGeneral.MemberGeneralDTO;
 import kr.co.itwill.orderDetail.OrderDetailDTO;
 import kr.co.itwill.productOrder.ProdcutOrderDTO;
 
@@ -287,8 +288,7 @@ public class ProductCont {
 	}//end
 	
 	@RequestMapping("/product/orderProc")
-	public ModelAndView orderSucc ( //@RequestParam Map<String, Object> map
-									@ModelAttribute OrderDetailDTO dto
+	public ModelAndView orderSucc (   @ModelAttribute OrderDetailDTO dto
 									, HttpServletRequest req 
 								    , HttpSession session) throws Exception {
 		//System.out.println("--");
@@ -316,11 +316,16 @@ public class ProductCont {
 
 	        if (Integer.parseInt(req.getParameter("cp_no")) == 0) {
 	        	
-	        }else {
+	        }else {	//쿠폰 사용시 
+	        	//int cp_no = Integer.parseInt(req.getParameter("cp_no"));
 	        	map.put("cp_no", req.getParameter("cp_no"));
+	        	
+	        	// 쿠폰 사용여부 업데이트 
+	        	int cpstusup = productDao.cpstusUp(Integer.parseInt(req.getParameter("cp_no")));
+	        	System.out.println("cpstusup"+cpstusup);
 	        }
 	        
-	        // ProductOrder
+	        // ProductOrder 인서트 
 	        map.put("m_id", m_id);
 	        map.put("order_price", req.getParameter("order_price"));
 	        map.put("cp_dis", req.getParameter("cp_dis"));
@@ -335,24 +340,68 @@ public class ProductCont {
 	        map.put("msg", req.getParameter("msg"));
 	        map.put("pt_plus", req.getParameter("pt_plus"));
 	        
-			int cnt = productDao.productorderIns(map);
-			//System.out.println(cnt);
+			int ProductOrdercnt = productDao.productorderIns(map);
+			System.out.println("ProductOrdercnt"+ProductOrdercnt);
 
-			// OrderDetail
+			// OrderDetail 인서트 
 			dto.setOrder_num(formatedNow);
 			
 			int org_price = Integer.parseInt(req.getParameter("order_price"));
-			int pricesum = org_price - Integer.parseInt(req.getParameter("discount"));
+			int pricesum = org_price - Integer.parseInt(req.getParameter("cp_dis"));
 			dto.setOrg_price(org_price);
 			dto.setPricesum(pricesum);
+			dto.setDiscount(Integer.parseInt(req.getParameter("cp_dis")));
+			int OrderDetailcnt = productDao.orderdetailIns(dto);
+			System.out.println("OrderDetailcnt"+OrderDetailcnt);
 			
-			int cnt2 = productDao.orderdetailIns(dto);
-			//System.out.println(cnt2);
 			
+			MemberGeneralDTO dtoMG = new MemberGeneralDTO();
+			dtoMG = productDao.holdingpoint(m_id);
+			int holdingpoint = dtoMG.getPoint();							// 보유 포인트 
+			int pt_minus = Integer.parseInt(req.getParameter("pt_minus"));	// 사용 포인트
+			int pt_plus = Integer.parseInt(req.getParameter("pt_plus"));	// 적립금
+			
+			// member - point 업데이트 
+			Map<String, Object> mempointmap = new HashMap<>();
+			int newpoint = 0;
+			
+			if(pt_minus > 0) {
+				newpoint = holdingpoint - pt_minus;
+				newpoint += pt_plus;
+			}else {
+				newpoint = holdingpoint + pt_plus;
+			}
+			
+			mempointmap.put("m_id", m_id);
+			mempointmap.put("point", newpoint);
+			
+			int mempointUpdate = productDao.mempointUp(mempointmap);
+			System.out.println("mempointUpdate"+mempointUpdate);
 			
 			// PointDetail
+			if ( pt_minus > 0 ) {	
+				// 포인트 사용시 차감 인서트			 
+				int pt_total = holdingpoint - pt_minus;
+				
+				Map<String, Object> pointminusmap = new HashMap<>();
+				pointminusmap.put("m_id", m_id);
+				pointminusmap.put("pt_minus", pt_minus);
+				pointminusmap.put("pt_total", pt_total);
+				pointminusmap.put("order_num", formatedNow);
 			
+				int PointMinuscnt = productDao.pointminusIns(pointminusmap);
+				System.out.println("PointMinuscnt"+PointMinuscnt);
+			}//if end
 			
+			// 포인트 적립 인서트	
+			Map<String, Object> pointplusmap = new HashMap<>();
+			pointplusmap.put("m_id", m_id);
+			pointplusmap.put("pt_plus", pt_plus);
+			pointplusmap.put("pt_total", newpoint);
+			pointplusmap.put("order_num", formatedNow);
+			
+			int PointPluscnt = productDao.pointplusIns(pointplusmap);
+			System.out.println("PointPluscnt"+PointPluscnt);
 			
 			mav.setViewName("/product/orderSucc");
 			
@@ -366,6 +415,11 @@ public class ProductCont {
 		}
 	}//end
 	
-	
+	@RequestMapping("/product/succtest") 
+	public ModelAndView succtest () {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/product/orderSucc");
+		return mav;
+	}
 }//class end
 

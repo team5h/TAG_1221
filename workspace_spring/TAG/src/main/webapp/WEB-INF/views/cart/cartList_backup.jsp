@@ -425,12 +425,9 @@ function topFunction() {
 					</div>   
 				
 					<div>
-						 <form name="frm" method="post" action="/cart/cartOrder" >   
-						 <div id="hiddenplace">
-						
-						 </div>
-							<button type="submit" class="checkoutBtn" onclick="return checkoutBtn()">Checkout</button>
-						 </form>
+						<form method="post" action="/cart/cartOrder" >
+							<button class="checkoutBtn">Checkout</button>
+						</form>
 					</div>
 				
 				</div><!-- li_title 끝 -->
@@ -857,31 +854,7 @@ function setRegexp(price) {
 			//alert(chkArray);
 	}//chkbox(this1) end
 	
-
-//---------------------------------------------------------- 장바구니 결제버튼 (무조건 선택시에만 결제 가능)
-
-	function checkoutBtn() {
-		//alert(chkArray);
-		
-		if(chkArray.length < 1){
-			alert('구매하실 상품을 선택해주세요.');
-			return false
-		}//if end
-		
-		
-		for(var i = 0 ; i <  chkArray.length ; i++){
-
-		    const hiddenplace = document.getElementById("hiddenplace");
-            const tag = document.createElement('p');
-            tag.innerHTML = "<input type='hidden' value='"+chkArray[i]+"' name='cartno'/>";
-            hiddenplace.appendChild(tag);
-   
-            //alert(tag);
 	
-		}//for end
-		
-		return true;
-	}//end
 	
 //----------------------------------------------------------- 장바구니 선택 삭제 버튼 누를 때
 	function delbtn() {
