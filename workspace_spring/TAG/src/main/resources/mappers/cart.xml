@@ -9,10 +9,11 @@
 
 	<!-- 나의 장바구니 리스트 -->
 	<select id="mycartList" resultType="java.util.Map" parameterType="java.util.Map" >
-		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, P.postername, p_id
+		SELECT sum(cnt) as cnt, cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, P.price, P.postername, p_id
 		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
 							 JOIN concert C ON P.c_no = C.c_no
 		WHERE m_id = #{m_id} 
+		GROUP BY PC.pro_no
 		ORDER BY p_id, cart_no DESC
 	</select>
 

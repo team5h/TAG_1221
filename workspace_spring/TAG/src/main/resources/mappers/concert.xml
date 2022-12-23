@@ -5,24 +5,6 @@
 <!--  concert  -->
 
 <mapper namespace="concert">
-
-
-	<!-- [ 콘서트목록 - 최신순 ] -->	
-	<select id="concertListLatest" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="java.util.Map">	
-		<![CDATA[
-			SELECT AA.*
-			FROM(
-				SELECT @RNO := @RNO + 1 as r, CC.*
-				FROM (
-						SELECT  c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						com_name, dlv_date, likecnt, postername, watch_age, price, edit
-						FROM concert
-				) CC, (SELECT @RNO := 0) BB 
-			ORDER BY date DESC
-			) AA 
-			WHERE r >= #{start} AND r <= #{end}
-		]]>
-	</select> 
-	
 	
 	<!-- [ 콘서트목록 - 개수 전체] -->
 	<select id="concertTotal" resultType="int">
@@ -30,6 +12,62 @@
 		FROM concert
 		ORDER BY c_no
 	</select> 	
+	
+
+	<!-- [ 콘서트목록 - 최신순 ] -->	
+	<select id="concertListLatest" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT  c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						com_name, dlv_date, likecnt, postername, watch_age, price, edit
+					FROM concert
+			) CC, (SELECT @RNO := 0) BB 
+		ORDER BY date DESC
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	<!-- [ 콘서트목록 - 인기순 ] -->	
+	<select id="popularAll" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						com_name, dlv_date, likecnt, postername, watch_age, price, edit
+					FROM concert
+					WHERE date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+					ORDER BY likecnt DESC LIMIT 1000000
+			) CC, (SELECT @RNO := 0) BB 
+	
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	<!-- [ 콘서트목록 - 좋아요순 ] -->	
+	<select id="likeAll" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="java.util.Map">	
+		<![CDATA[
+			SELECT AA.*
+			FROM(
+				SELECT @RNO := @RNO + 1 as r, CC.*
+				FROM (
+						SELECT ticket_order.cnt as ticketcnt, concert.c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, com_name, dlv_date, likecnt, postername, watch_age, price, edit
+						FROM concert INNER JOIN ticket_order
+						ON concert.c_no = ticket_order.c_no
+						WHERE date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+						GROUP by concert.c_no
+				) CC, (SELECT @RNO := 0) BB 
+				ORDER BY ticketcnt DESC
+			) AA 
+			WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
 	
 	
 	
@@ -60,6 +98,10 @@
 		WHERE date(`date`) <= date_format(CURDATE(), '%Y%m%d')
 		]]>
 	</select> 
+	
+	
+	
+	
 	
 	
 	<!-- 예정 콘서트 -->

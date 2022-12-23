@@ -568,7 +568,7 @@ function topFunction() {
 						,success : function(data){
 							//alert("like");
 							$('#empty').css('display','none');
-							$('#fill').css('display','inline-block');
+							$('#fill').css('display','inline');
 						}
 				}); //ajax end
 				

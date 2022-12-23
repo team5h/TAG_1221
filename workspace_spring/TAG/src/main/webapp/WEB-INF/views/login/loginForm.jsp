@@ -5,12 +5,6 @@
 
 
 <style>
-.table {
-	border: none;
-	text-align: center;
-    vertical-align: middle;
-
-}
 
 .login-title {
 	font-size : 25px;
@@ -18,29 +12,28 @@
 
 
 .login-btn {	
-	font-size : 14px;
-	width: 120px;
-	height: 40px;
+	font-size : 18px;
+	width: 250px;
+	height: 50px;
 	background-color: black;
 	color: white;
 	border: none;
-	border-radius: 20px; 
+	margin-top: 20px;
   }
   
   .join-btn {	
-	font-size : 14px;
-	width: 120px;
-	height: 40px;
+	font-size : 18px;
+	width: 250px;
+	height: 50px;;
 	background-color: white;
-	color: black;
-	border: 1px solid black;
-	border-radius: 20px; 
-	margin-right: 10px;
+	color: grey;
+	border: none;
+	margin-top: 20px;
   }
   
   .login-btn:hover {
   	color: black;
-  	background-color: #33FF33;
+  	background-color: lightgreen;
   }
 
 .untree_co-section {
@@ -49,30 +42,20 @@ height: 425px;
 }
 
 
-td {
- border-spacing: 0 10px;
-height: 325px;
-vertical-align:middle;
-border-top-width: 0px;
+.wrap {
+	text-align: center;
 }
 
-.seller {
-	width: 400px;
-	height: 400px;
-	border: 1px solid;
+.my-div1 {
+	--background-color: #F2F3F4;
+	width: 450px;
+	height: 270px;
+	text-align: center;
+	display: inline-block;
+	margin-top: 150px;
 }
 
-.general {
-	width: 400px;
-	height: 400px;
-	border: 1px solid;
-}
-
-/* .table {
-  height: auto;
-  min-height: 100%;
-  padding-bottom: 170px;
-} */
+	
 
 footer{
   height: 170px;
@@ -86,25 +69,35 @@ p {padding-bottom: 10px;}
 
 <!-- 본문영역 -->
 
-<table class="table"  style="text-align: center; vertical-align:middle;">
+ <!-- 판매자 회원 박스 시작 -->
+ <div class="wrap">
 
-	<td class="seller"> <!-- 판매자 회원 박스 시작 -->
-		<div class='my-div'>
-			<p class="login-title" >판매자 회원</p>
-		 	<button class="join-btn" type="button" onclick="location.href='/agreementS.do'">회원가입</button>
-		 	<button class="login-btn" type="button" onclick="location.href='loginS.do'">로그인</button>
+ 
+		<div class="my-div1">
+			<div class="my-div2">
+				<p class="login-title" >판매자 회원</p>
+				<div class="login">
+			 		<button class="login-btn" type="button" onclick="location.href='loginS.do'">로그인</button>
+			 	</div>
+			 	<div class="join">
+			 		<button class="join-btn" type="button" onclick="location.href='/agreementS.do'">회원가입</button>
+		 		</div>
+		 	</div>
 		</div>
-	</td> <!-- 판매자 회원 박스 끝 -->
-	
-	<td class="general"> <!-- 일반 회원 박스 시작 -->
-		<div class='my-div'>
-			<p class="login-title">일반 회원</p>
-		 	<button class="join-btn" type="button" onclick="location.href='/agreementG.do'">회원가입</button>
-		 	<button class="login-btn" type="button" onclick="location.href='/loginG.do'">로그인</button>
+
+		<div class="my-div1">
+			<div class="my-div2">
+				<p class="login-title">일반 회원</p>
+				<div class="login">
+			 		<button class="login-btn" type="button" onclick="location.href='/loginG.do'">로그인</button>
+			 	</div>
+			 	<div class="join">
+			 		<button class="join-btn" type="button" onclick="location.href='/agreementG.do'">회원가입</button>
+				</div>
+			</div>
 		</div>
-	</td> <!-- 일반 회원 박스 끝 -->
-	
-</table>
+
+</div>
 
 
 <!-- 본문영역 -->
