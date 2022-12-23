@@ -31,7 +31,7 @@
 		FROM(
 		    SELECT @RNO := @RNO + 1 as r, CC.*
 		    FROM (
-		        SELECT substring_index(DT.order_num,'-',1) AS orderDate, DT.order_num, PP.pro_name, PP.color, PP.size, DT.detail_cnt, DT.org_price, DT.discount, DT.total_price, DT.stus
+		        SELECT substring_index(DT.order_num,'-',1) AS orderDate, DT.order_num, PP.pro_name, PP.color, PP.size, DT.detail_cnt, DT.org_price, DT.discount, DT.pricesum, DT.stus
 				FROM order_detail DT JOIN product PP
 				ON DT.pro_no=PP.pro_no, (SELECT @RNO := 0) BB
 				WHERE order_num=#{order_num}        
