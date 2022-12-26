@@ -81,7 +81,7 @@
 				<td>${row.detail_cnt}</td>
 				<td>${row.org_price}</td>
 				<td>${row.discount}</td>
-				<td>${row.total_price}</td>
+				<td>${row.pricesum}</td>
 				<td>${row.stus}</td>
 			</tr>
 			</c:forEach>

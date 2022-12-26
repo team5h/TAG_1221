@@ -15,12 +15,12 @@
 		float: left;
 		width: 10%;
 		/*border: 1px solid black;*/
-		margin-right: 5%;
+		margin-right: 10%;
 	}
 	
 	.rightcontent {
 		float: right;
-		width: 85%;
+		width: 80%;
 		/*border: 1px solid black;*/
 	}
 	
@@ -36,9 +36,11 @@
 	*/
 	
 	.column {
-		/*float: left;*/
-		padding: 0 10px;
+		/*float: left;
+		padding: 0 10px;*/
 		display: inline;
+		margin-left: auto;
+		margin-right: auto;
 	}
 	
 	.row1 { margin: 0 -5px; }
@@ -58,7 +60,7 @@
 	}
 	
 	.card {
-		width: 33%;
+		width: 30%;
 		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 		padding: 16px;
 		margin: 10px;
@@ -76,6 +78,12 @@
 	.card a { color: black; }
 	
 	.card a:hover { color: lightgreen; }
+	
+	table {
+		margin-left: auto;
+		margin-right: auto;
+		/*border: 1px solid red;*/
+	}
 </style>
 
 <!-- 본문 시작 -->
@@ -84,7 +92,7 @@
 	<h1 class="saem_title fontJ"><a href="/mypage/mypageG" style="color: black;" class="saem_title fontJ"> My Page </a></h1>
 <br>
 
-<div class="container" style="width: 100%; flex: 1 1 1px;">
+<div class="container1">
 	<div class="leftcontent">
 		<div class="stickyP" style="height: 5%">
 			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
@@ -122,31 +130,30 @@
 	
 	
 	<div class="rightcontent">
-		<div class=mylike_product row1>
+		<div class="mylike_product row1">
 			<p style="text-align: center; font-weight: bold;">관심 상품</p>
-			<div class="column">
-			<c:forEach var="row" items="${list_p}" varStatus="vs">
-				<div class="card">
-					<c:choose>
-						<c:when test="${row.postername != null}">
-							<a href="/product/${row.like_li}"><img src="/storage/${row.postername}" width="100px"></a>
-						</c:when>
-						<c:otherwise>
-							등록된 사진 없음!!<br>
-						</c:otherwise>
-					</c:choose>
-					<div id="product_name">
-						<a href="/product/${row.like_li}">${row.pro_name}</a>
-					</div><!-- product_name end -->
-				</div><!-- card end -->
-				<!-- 테이블 한줄에 3칸씩
-				<c:if test="${vs.count mod 3==0 }">
-					<div></div>
-				</c:if> -->
-			</c:forEach>
-			</div><!-- column end -->
+			<br>
+			<table>
+				<tr class="column">
+				<c:forEach var="row" items="${list_p}" varStatus="vs">
+					<td class="card">
+						<c:choose>
+							<c:when test="${row.postername != null}">
+								<a href="/product/${row.like_li}"><img src="/storage/${row.postername}" width="100px"></a>
+							</c:when>
+							<c:otherwise>
+								등록된 사진 없음!!<br>
+							</c:otherwise>
+						</c:choose>
+						<div id="product_name">
+							<a href="/product/${row.like_li}">${row.pro_name}</a>
+						</div><!-- product_name end -->
+					</td><!-- card end -->
+				</c:forEach>
+				</tr><!-- column end -->
+			</table>
 			
-			<!-- 페이징 -->
+			<%-- <!-- 페이징 -->
 			<div style="width: 100%; display: block; text-align: center;">	
 				<c:if test="${requestScope.count > 0}">
 					<c:set var="pageCount" value="${requestScope.totalPage}" />
@@ -182,11 +189,11 @@
 							<a href="/mypage/mylike/all_p?pageNum=${startPage+5}">[다음]</a>
 						</c:if>
 				</c:if>
-			</div><!-- 페이징 끝 -->
+			</div><!-- 페이징 끝 --> --%>
 			
 		</div><!-- mylike_product end -->
 	</div><!-- rightcontent end -->
-</div><!-- container end -->
+</div><!-- container1 end -->
 
 <!-- 본문 끝 -->
 

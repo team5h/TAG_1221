@@ -9,7 +9,7 @@
 
 <!-- 티켓결제 티켓 주문상세내역서 insert -->
 <insert id="addDetail2" parameterType="java.util.List">
-	INSERT INTO TICKET_DETAIL (tck_num, cseat ,price, flagnum)
+	INSERT INTO ticket_detail (tck_num, cseat ,price, flagnum)
 	VALUES 
 			<foreach collection="list" item="item" separator=",">
 			(
@@ -38,7 +38,7 @@
 
 <!-- 티켓결제 티켓 주문상세내역서 insert DB저장용 -->
 <insert id="addDetailTest" parameterType="java.util.List">
-	INSERT INTO TICKET_DETAIL (tck_num, cseat ,price, flagnum)
+	INSERT INTO ticket_detail (tck_num, cseat ,price, flagnum)
 	VALUES 
 			<foreach collection="list" item="item" separator=",">
 			(

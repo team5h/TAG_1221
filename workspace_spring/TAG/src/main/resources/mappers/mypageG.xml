@@ -10,7 +10,6 @@
 		JOIN product PD
 		ON PD.pro_no=DT.pro_no
 		WHERE m_id=#{s_m_id}
-		GROUP BY OD.order_num, PD.pro_name
 		ORDER BY order_num DESC
 		LIMIT 0, 2
 	</select>

@@ -7,7 +7,16 @@
 <mapper namespace="product">
 
 
-<!-- [ 상품목록 - 최신순 ] -->
+	<!-- [ 상품목록 - 페이징 글개수 전체] -->
+	<select id="total" resultType="int">
+		SELECT COUNT(*) 
+		FROM product INNER JOIN concert 
+		ON product.c_no = concert.c_no
+		WHERE  status = 'Y' AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+	</select> 
+
+
+	<!-- [ 상품목록 - 최신순 ] -->
 	<select id="list" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
 		SELECT AA.*
@@ -17,33 +26,65 @@
 					SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
 					FROM product INNER JOIN concert 
 					ON product.c_no = concert.c_no
-					WHERE  status = 'Y'
+					WHERE  status = 'Y' AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
 					ORDER BY regdate DESC
 			) CC , (SELECT @RNO := 0) BB 
-		ORDER BY pro_no DESC
 		) AA 
 		WHERE r >= #{start} AND r <= #{end}
 		]]>
 	</select> 
-
-
-<!-- [ 상품목록 - 페이징 글개수 전체] -->
-	<select id="total" resultType="int">
-		SELECT COUNT(*) FROM product
-	</select> 
 	
 	
-<!-- [ 상품목록 - 페이징 글개수 카테고리별] -->
-	<select id="categoryTotal" resultType="int" parameterType="String">
+	<!-- [ 상품목록 - 인기순 (판매순) ] -->
+	<select id="popularAll" resultType="java.util.Map" parameterType="java.util.Map">
 		<![CDATA[
-		SELECT COUNT(*) 
-		FROM product 
-		WHERE status = 'Y' && category = #{category}
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT date, product.likecnt, pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no
+					WHERE  status = 'Y' AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+					ORDER BY likecnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
 		]]>
 	</select> 
 	
 	
-<!-- [ 상품목록 - 페이징 ] -->	
+	<!-- [ 상품목록 - 좋아요순 ] -->
+	<select id="likeAll" resultType="java.util.Map" parameterType="java.util.Map">
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT product.pro_no, sum(detail_cnt) as procnt, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product LEFT OUTER JOIN order_detail ON product.pro_no = order_detail.pro_no
+								 JOIN concert ON product.c_no = concert.c_no
+					WHERE  status = 'Y' AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+					GROUP BY pro_no
+					ORDER BY procnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
+	<!-- [ 상품목록 - 페이징 글개수 카테고리별] -->
+	<select id="categoryTotal" resultType="int" parameterType="String">
+		<![CDATA[
+		SELECT COUNT(*) 
+		FROM product INNER JOIN concert 
+		ON product.c_no = concert.c_no
+		WHERE status = 'Y' && category = #{category} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+		]]>
+	</select> 
+	
+	<!-- [ 상품목록 (카테고리별) - 페이징 ] -->	
 	<select id="list2" resultType="java.util.Map" parameterType="java.util.Map">	
 		<![CDATA[
 		SELECT AA.*
@@ -52,7 +93,8 @@
 			FROM (
 				SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
 					FROM product INNER JOIN concert 
-					ON product.c_no = concert.c_no && category = #{category}
+					ON product.c_no = concert.c_no 
+					WHERE  status = 'Y' && category = #{category} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
 				ORDER BY regdate DESC
 			) CC, (SELECT @RNO := 0) BB 
 		ORDER BY pro_no DESC
@@ -62,25 +104,69 @@
 	</select> 
 	
 	
-<!-- [ 공연목록 (굿즈페이지의 Concert 카테고리 select에 넣을 목록) ] -->	
-	<select id="concert" resultType="kr.co.itwill.concert.ConcertDTO" >
-		SELECT c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						
-			   com_name, dlv_date, likecnt, postername, watch_age, price, edit
-		FROM   concert
-	</select> 
-	
-	
-<!-- [ 상품목록 - 콘서트별 ] -->
-	<select id="concertTotal" resultType="int" parameterType="String">
+		<!-- [ 상품목록 (카테고리별) - 페이징 인기순 ] -->	
+	<select id="popularCateg" resultType="java.util.Map" parameterType="java.util.Map">	
 		<![CDATA[
-		SELECT COUNT(*) 
-		FROM product 
-		WHERE status = 'Y' && c_no = #{c_no}
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+				SELECT product.pro_no, sum(detail_cnt) as procnt, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+				FROM product LEFT OUTER JOIN order_detail ON product.pro_no = order_detail.pro_no
+							 JOIN concert ON product.c_no = concert.c_no
+				WHERE  status = 'Y' AND category = #{category} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+				GROUP BY pro_no
+				ORDER BY procnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
 		]]>
 	</select> 
 	
 	
-<!-- [ 상품목록 - 콘서트별 리스트 + 페이징 ] -->	
+		<!-- [ 상품목록 (카테고리별) - 페이징 좋아요 ] -->	
+	<select id="likeCateg" resultType="java.util.Map" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT date, product.likecnt, pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no
+					WHERE  status = 'Y'  AND category = #{category}  AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+					ORDER BY likecnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
+	
+	
+	
+	<!-- [ 공연목록 (굿즈페이지의 Concert 카테고리 select에 넣을 목록) ] -->	
+	<select id="concert" resultType="kr.co.itwill.concert.ConcertDTO" >
+		SELECT   c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						
+			     com_name, dlv_date, likecnt, postername, watch_age, price, edit
+		FROM     concert
+		WHERE    date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+		ORDER BY date DESC
+	</select> 
+	
+	
+	<!-- [ 상품목록 - 콘서트별 ] -->
+	<select id="concertTotal" resultType="int" parameterType="String">
+		<![CDATA[
+		SELECT COUNT(*) 
+		FROM   product  
+		WHERE  status = 'Y' && c_no = #{c_no}
+		]]>
+	</select> 
+	
+	
+	<!-- [ 상품목록 - 콘서트별 리스트 + 페이징 ] -->	
 	<select id="concertList" resultType="java.util.Map" parameterType="java.util.Map">	
 		<![CDATA[
 		SELECT AA.*
@@ -90,7 +176,7 @@
 				SELECT pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
 					FROM product INNER JOIN concert 
 					ON product.c_no = concert.c_no
-				WHERE  status = 'Y' && product.c_no = #{c_no}
+				WHERE  status = 'Y' && product.c_no = #{c_no} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
 				ORDER BY regdate DESC
 			) CC, (SELECT @RNO := 0) BB 
 		ORDER BY pro_no DESC
@@ -98,9 +184,50 @@
 		WHERE r >= #{start} AND r <= #{end}
 		]]>
 	</select> 
+	
+	
+	<!-- [ 상품목록 - 콘서트별 리스트 + 페이징 : 인기순] -->	
+	<select id="popularCon" resultType="java.util.Map" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+				SELECT product.pro_no, sum(detail_cnt) as procnt, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+				FROM product LEFT OUTER JOIN order_detail ON product.pro_no = order_detail.pro_no
+							 JOIN concert ON product.c_no = concert.c_no
+				WHERE  status = 'Y' AND product.c_no = #{c_no} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+				GROUP BY pro_no
+				ORDER BY procnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
+	<!-- [ 상품목록 - 콘서트별 리스트 + 페이징 : 좋아요순] -->	
+	<select id="likeCon" resultType="java.util.Map" parameterType="java.util.Map">	
+		<![CDATA[
+		SELECT AA.*
+		FROM(
+			SELECT @RNO := @RNO + 1 as r, CC.*
+			FROM (
+					SELECT date, product.likecnt, pro_no, category, product.c_no, concert.title, p_id, product.pro_name, stock, color, size, product.price, product.postername, status, regdate
+					FROM product INNER JOIN concert 
+					ON product.c_no = concert.c_no
+					WHERE  status = 'Y' AND product.c_no = #{c_no} AND date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+					ORDER BY likecnt DESC LIMIT 1000000
+			) CC , (SELECT @RNO := 0) BB 
+		) AA 
+		WHERE r >= #{start} AND r <= #{end}
+		]]>
+	</select> 
+	
+	
 
 	
-<!-- [ 상품검색 ] -->	
+	<!-- [ 상품검색 ] -->	
 	<select id="search" resultType="kr.co.itwill.product.ProductDTO" parameterType="String">
 		SELECT category, c_no, p_id, pro_name, stock, color, size, price, postername, status, regdate
 		FROM product
@@ -109,14 +236,15 @@
 	</select> 
 	
 	
-<!-- 상품목록 - 카테고리 나누기 -->
+	<!-- 상품목록 - 카테고리 나누기 -->
 	<select id="categoryAll" resultType="kr.co.itwill.product.ProductDTO">
 		SELECT category
 		from product
 		GROUP BY category DESC
 	</select>
 	
-<!-- 티켓 결제시 관련 상품 보여주기 (다슬언니)-->
+	
+	<!-- 티켓 결제시 관련 상품 보여주기 (다슬언니)-->
 	<select id="viewProduct" resultType="kr.co.itwill.product.ProductDTO" parameterType="Int">	
 		SELECT *
 		FROM (
@@ -128,7 +256,7 @@
 		WHERE rnum between 1 and 3;
 	</select> 	
 
-<!-- 디테일 -->
+	<!-- 디테일 -->
 	<select id="proDetail" resultType="java.util.Map" parameterType="int">
 		SELECT pro_no, p.c_no, pro_name, stock, color, size, p.price, p.edit, p.postername, title
 		FROM product p JOIN concert c ON p.c_no = c.c_no
@@ -223,14 +351,68 @@
 	
 	<insert id="productorderIns" parameterType="java.util.Map">
 		INSERT INTO product_order(order_num, m_id, order_price, cp_dis, cp_no, total_price, pt_plus
-								  , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg)
-		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}
-				, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg})
+								 ,pt_minus , rec_name, rec_zipcode, rec_addr1, rec_addr2, rec_tel, msg, d_fee)
+		VALUES (#{order_num}, #{m_id}, #{order_price}, #{cp_dis}, #{cp_no}, #{total_price}, #{pt_plus}, 
+				#{pt_minus}, #{rec_name},#{rec_zipcode}, #{rec_addr1}, #{rec_addr2}, #{rec_tel}, #{msg}, #{d_fee})
 	</insert>
 	
 	<insert id="orderdetailIns" parameterType="kr.co.itwill.orderDetail.OrderDetailDTO">
 		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum ,stus)
 		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, #{discount}, #{pricesum}, '상품준비중' )
 	</insert>
+	
+
+	<insert id="pointminusIns" parameterType="java.util.Map">
+		INSERT INTO point_detail(m_id, detail, pt_minus, pt_total, order_num, cng_date)
+		VALUES(#{m_id},'상품 구매시 사용', #{pt_minus}, #{pt_total}, #{order_num},(current_date))
+	</insert>
+	
+	<insert id="pointplusIns" parameterType="java.util.Map">
+		INSERT into point_detail(m_id, detail, pt_plus, pt_total, order_num, cng_date)
+		VALUES(#{m_id},'상품 적립금', #{pt_plus}, #{pt_total}, #{order_num}, (current_date))
+	</insert>
+	
+	<select id="holdingpoint" parameterType="String" resultType="kr.co.itwill.memberGeneral.MemberGeneralDTO">
+		SELECT point 
+		FROM member 
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<update id="mempointUp" parameterType="java.util.Map">
+		UPDATE member 
+		SET point = #{point}
+		WHERE m_id = #{m_id}
+	</update>
+	
+	<update id="cpstusUp" parameterType="int">
+		UPDATE coupon_detail 
+		SET cp_stus = 'Y'
+		WHERE cp_no = #{cp_no}
+	</update>
+
+
+	<!-- 회원이 좋아요 한 목록 -->	
+	<select id="mem_like" parameterType="java.util.Map" resultType="String">
+		SELECT like_li
+		FROM member_like
+		WHERE m_id = #{m_id} AND like_cd = 'P';
+	</select>
+	
+	
+	<!-- 상품에 좋아요 +1 -->
+	<update id="likecntInc" parameterType="kr.co.itwill.product.ProductDTO">
+		UPDATE product 
+		SET likecnt = likecnt + 1 
+		WHERE pro_no = #{pro_no}
+	</update>
+		
+		
+	<!-- 상품 좋아요 conut -1 -->
+	<update id="likecntDec" parameterType="kr.co.itwill.product.ProductDTO">
+		UPDATE product 
+		SET likecnt = likecnt -1 
+		WHERE pro_no = #{pro_no}
+	</update>
+	
 	
 </mapper>

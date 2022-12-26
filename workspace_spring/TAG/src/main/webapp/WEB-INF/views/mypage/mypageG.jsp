@@ -13,18 +13,73 @@
 	.leftcontent {
 		float: left;
 		width: 10%;
-		/*border: 1px solid black;*/
-		margin-right: 5%;
+		/*margin-left:0px;
+		border: 1px solid black;*/
+		margin-right: 10%;
 	}
 	
 	.rightcontent {
 		float: right;
-		width: 85%;
-		/*border: 1px solid black;*/
+		width: 80%;
+		/*margin-left: 100px;
+		border: 1px solid black;*/
 	}
 	
-	/*.container{border: 1px solid green}*/
+	/*
+	.container1 {
+		width: 1400px;
+		width: 100%;
+		height: 100%;
+		flex: 1 1 1px;
+	}
+	*/
+	
+	.moS1 {
+		width: 200px;
+		height: 40px;
+		position: relative;
+		left: 175px;
+		bottom: 197px;
+		right: 50px;
+		padding: 10px;
+		text-align: center;
+		display: none;
+	}
+
+	.moS2 {
+		width: 200px;
+		height: 40px;
+		position: relative;
+		left: 175px;
+		bottom: 365px;
+		right: 50px;
+		padding: 10px;
+		text-align: center;
+		display: none;
+	}
+	
+	.site-footer { padding-bottom: 0px;}
 </style>
+
+
+<script>
+	function modalS1(){
+		//alert("성공");
+		$('.moS1').css("display", "inline-block");
+	}//modalS() end
+	
+	function modalOut1(){
+		$('.moS1').css("display", "none");
+	}//modalOut() end
+	
+	function modalS2(){
+		$('.moS2').css("display", "inline-block");
+	}//modalS() end
+	
+	function modalOut2(){
+		$('.moS2').css("display", "none");
+	}//modalOut() end
+</script>
 
 <!-- 본문 시작 -->
 
@@ -32,7 +87,7 @@
 	<h1 class="saem_title fontJ"><a href="/mypage/mypageG" style="color: black;" class="saem_title fontJ"> My Page </a></h1>
 <br>
 
-<div class="container" style="width: 100%; flex: 1 1 1px; ">
+<div class="container1">
 	<div class="leftcontent">
 		<div class="stickyP" style="height: 5%">
 			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
@@ -94,7 +149,7 @@
 	
 		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;">			
 			<tr style="border-bottom:3px solid black; font-size: 16px;">
-				<td colspan='3' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 티켓 예매내역</td>
+				<td colspan='3' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 티켓 예매내역 <a onmouseover="modalS2()" onmouseout="modalOut2()">ⓘ</a></td>
 			</tr>
 			
 			<c:if test="${tckCount == 0}">
@@ -109,7 +164,7 @@
 				<tr style=" border-bottom:0.1px solid black; font-size: 12px;">
 					<td style="padding:10px 10px 10px 10px;">예매일</td>
 					<td style="padding:10px 10px 10px 10px;">예매번호</td>
-					<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;">공연명</td>
+					<td colspan="4" style="padding:0 10px 5px 10px; width: 550px;">공연명</td>
 					<td style="padding:10px 10px 10px 10px;">관람일시</td>
 					<td style="padding:10px 10px 10px 10px;">매수</td>
 					<td style="padding:10px 10px 10px 10px;">예매상태</td>
@@ -124,7 +179,7 @@
 					<td style="border-bottom:1px solid #ededed;">
 						<a href="/mypage/myticket/${row.tck_num}">${row.tck_num}</a>
 					</td>
-					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all;">${row.title}</td>
+					<td colspan="4" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all;">${row.title}</td>
 					<td style="border-bottom:1px solid #ededed;">${row.date}</td>
 					<td style="border-bottom:1px solid #ededed;">${row.cnt}</td>
 					<td style="border-bottom:1px solid #ededed;">${row.stus}</td>
@@ -133,9 +188,11 @@
 			</c:if>
 		</table><!-- 최근 티켓 테이블 end -->
 		<br>
+		<br>
+		
 		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;">
 			<tr style=" border-bottom:3px solid black; font-size: 16px;">
-			 	<td colspan='1' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 상품 구매내역</td>
+			 	<td colspan='1' style="padding-bottom: 8px; font-weight: 600; /*border: 1px solid red;*/ text-align: left;">최근 상품 구매내역 <a onmouseover="modalS1()" onmouseout="modalOut1()">ⓘ</a></td>
 			</tr>
 			
 			<c:if test="${orderCount == 0}">
@@ -146,33 +203,39 @@
 			
 			<c:if test="${orderCount != 0}">
 			<table class="table table-hover">
-				<tr style=" border-bottom:0.1px solid black; font-size: 12px;">
+				<tr style=" border-bottom:0.1px solid black; font-size: 12px; text-align: center;">
 					<td style="padding:10px 10px 10px 10px;">구매일</td>
 					<td style="padding:10px 10px 10px 10px;">주문번호</td>
-					<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;">상품명</td>
-					<td style="padding:10px 10px 10px 10px;">수량</td>
+					<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;">상품</td>
+					<!-- <td style="padding:10px 10px 10px 10px;">수량</td> -->
 					<td style="padding:10px 10px 10px 10px;">배송상태</td>
 				</tr>
 				
 				<c:forEach var="row" items="${list_p}" varStatus="vs">
-				<tr>
-					<td style="border-bottom:1px solid #ededed;">
+				<tr style="font-size: 14px;">
+					<td style="border-bottom:1px solid #ededed; text-align: center;">
 						<fmt:parseDate value="${row.orderDate}" var="datefmt" pattern="yyyyMMdd"/>
 						<fmt:formatDate value="${datefmt}" pattern="yyyy.MM.dd"/>
 					</td>
-					<td style="border-bottom:1px solid #ededed;">
+					<td style="border-bottom:1px solid #ededed; text-align: center;">
 						<a href="pDetail/${row.order_num}">${row.order_num}</a>
 					</td>
-					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all; ">${row.pro_name}</td>
-					<td style="border-bottom:1px solid #ededed;">${row.detail_cnt}</td>
-					<td style="border-bottom:1px solid #ededed;">${row.stus}</td>
+					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all; ">
+						${row.pro_name} 포함 ${row.detail_cnt}개
+					</td>
+					<!-- <td style="border-bottom:1px solid #ededed; text-align: center;">${row.detail_cnt}개</td> -->
+					<td style="border-bottom:1px solid #ededed; text-align: center;">${row.stus}</td>
 				</tr>
 				</c:forEach>
 			</table>
 			</c:if>
 		</table><!-- 최근 상품 테이블 end -->
+		
+	 	<div class="moS1">최근 2건만 표시됩니다.</div>
+	 	<div class="moS2">최근 2건만 표시됩니다.</div>
+		
 	</div><!-- rightcontent end -->
-</div><!-- container end -->
+</div><!-- container1 end -->
 
 <!-- 본문 끝 -->
 

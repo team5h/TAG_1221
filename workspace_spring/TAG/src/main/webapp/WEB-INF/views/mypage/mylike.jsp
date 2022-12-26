@@ -15,12 +15,12 @@
 		float: left;
 		width: 10%;
 		/*border: 1px solid black;*/
-		margin-right: 5%;
+		margin-right: 10%;
 	}
 	
 	.rightcontent {
 		float: right;
-		width: 85%;
+		width: 80%;
 		/*border: 1px solid black;*/
 	}
 		
@@ -58,6 +58,13 @@
 	.card a { color: black; }
 	
 	.card a:hover { color: lightgreen; }
+	
+	table {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	.btnCenter { text-align: center; display: block; margin: 20px 0 0 839px; }
 </style>
 
 <!-- 본문 시작 -->
@@ -66,7 +73,7 @@
 	<h1 class="saem_title fontJ"><a href="/mypage/mypageG" style="color: black;" class="saem_title fontJ"> My Page </a></h1>
 <br>
 
-<div class="container" style="width: 100%; flex: 1 1 1px;">
+<div class="container1">
 	<div class="leftcontent">
 		<div class="stickyP" style="height: 5%">
 			<p class="fontJ" style="font-size: 20px; font-weight: 500;">
@@ -105,16 +112,18 @@
 
 	<div class="rightcontent">
 		<div class="mylike_concert row1">
-			<p style="text-align: center; font-weight: bold;">관심 공연</p>
 			<c:if test="${conCnt == 0}">
-				관심 공연이 없습니다.<br>
-				공연 목록에서 좋아요를 눌러서 관심 공연으로 추가해 보세요!
+				<p style="text-align: center;">관심 공연이 없습니다.</p>
+				<p style="text-align: center;">공연 목록에서 좋아요를 눌러서 관심 공연으로 추가해 보세요!</p>
 			</c:if>
 			
 			<c:if test="${conCnt != 0}">
-				<div class="column">
+			<p style="text-align: center;">관심 공연</p>
+			<br>
+			<table>
+				<tr class="column">
 				<c:forEach var="row" items="${like_c}" varStatus="vs">
-					<div class="card">
+					<td class="card">
 						<c:choose>
 							<c:when test="${row.postername != null}">
 								<a href="/concert/${row.like_li}"><img src="/storage/${row.postername}" width="100px"></a>
@@ -126,30 +135,35 @@
 						<div id="concert_name">
 							<a href="/concert/${row.like_li}">${row.title}</a>
 						</div><!-- concert_name end -->
-					</div><!-- card end -->
-					<!-- 테이블 한줄에 3칸씩
-					<c:if test="${vs.count mod 3==0 }">
-						<tr></tr>
-					</c:if> -->
+					</td><!-- card end -->
+					
 				</c:forEach>
-				<button class="btn btn-outline-black btn-sm" onclick="location.href='/mypage/mylike/all_c'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">전체보기</button>
-				</div><!-- column end -->
+				
+				</tr><!-- column end -->
+			</table>
+			<c:if test="${conCnt > 1 }">
+				<button type="button" class="btn btn-outline-black btn-sm btnCenter" onclick="location.href='/mypage/mylike/all_c'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">전체보기</button>
+			</c:if>
+			
 			</c:if>
 		</div><!-- mylike_concert end -->
+		
 		<br>
 		<br>
 		<br>
-		<div class=mylike_product row1>
-			<p style="text-align: center; font-weight: bold;">관심 상품</p>
+		<div class="mylike_product row1">
 			<c:if test="${proCnt == 0}">
-				관심 상품이 없습니다.<br>
-				상품 목록에서 좋아요를 눌러서 관심 상품으로 추가해 보세요!
+				<p style="text-align: center;">관심 상품이 없습니다.</p>
+				<p style="text-align: center;">상품 목록에서 좋아요를 눌러서 관심 상품으로 추가해 보세요!</p>
 			</c:if>
 			
 			<c:if test="${proCnt != 0}">
-				<div class="column">
+			<p style="text-align: center;">관심 상품</p>
+			<br>
+			<table>
+				<tr class="column">
 				<c:forEach var="row" items="${like_p}" varStatus="vs">
-					<div class="card">
+					<td class="card">
 						<c:choose>
 							<c:when test="${row.postername != null}">
 								<a href="/product/${row.like_li}"><img src="/storage/${row.postername}" width="100px"></a>
@@ -161,19 +175,20 @@
 						<div id="product_name">
 							<a href="/product/${row.like_li}">${row.pro_name}</a>
 						</div><!-- product_name end -->
-					</div><!-- card end -->
-					<!-- 테이블 한줄에 3칸씩
-					<c:if test="${vs.count mod 3==0 }">
-						<tr></tr>
-					</c:if> -->
+					</td><!-- card end -->
+					
 				</c:forEach>
-				<button class="btn btn-outline-black btn-sm" onclick="location.href='/mypage/mylike/all_p'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">전체보기</button>
-				</div><!-- column end -->
+				
+				</tr><!-- column end -->
+			</table>
+			<c:if test="${proCnt > 1 }">
+				<button type="button" class="btn btn-outline-black btn-sm btnCenter" onclick="location.href='/mypage/mylike/all_p'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">전체보기</button>
 			</c:if>
 			
+			</c:if>
 		</div><!-- mylike_product end -->
 	</div><!-- rightcontent end -->
-</div><!-- container end -->
+</div><!-- container1 end -->
 
 <!-- 본문 끝 -->
 

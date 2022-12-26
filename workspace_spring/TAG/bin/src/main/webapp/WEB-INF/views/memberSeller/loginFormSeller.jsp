@@ -5,7 +5,7 @@
 <%@ include file="../header.jsp" %>
 
 
-<title>일반회원 로그인</title>
+<title>판매자 로그인</title>
 
 
 

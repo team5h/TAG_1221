@@ -30,14 +30,17 @@
 		<![CDATA[
 		SELECT AA.*
 		FROM(
-		    SELECT @RNO := @RNO + 1 as r, CC.*
-		    FROM (
-		        SELECT substring_index(DT.order_num,'-',1) AS orderDate, DT.order_num, PP.pro_name, PP.color, PP.size
-		        , DT.detail_cnt, DT.org_price, DT.discount, DT.pricesum, DT.stus		
-				FROM order_detail DT JOIN product PP
-				ON DT.pro_no=PP.pro_no, (SELECT @RNO := 0) BB
-				WHERE order_num=#{order_num}        
-		    ) CC
+		      SELECT @RNO := @RNO + 1 as r, CC.*
+		      FROM (
+		          SELECT substring_index(DT.order_num,'-',1) AS orderDate, DT.order_num, PP.pro_name, PP.color, PP.size
+		          , DT.org_price, (cp_dis+pt_minus) AS discount, d_fee, (org_price - cp_dis - pt_minus + d_fee) AS pricesum
+		          , DT.detail_cnt, DT.stus      
+		        FROM order_detail DT JOIN product PP
+		        ON DT.pro_no=PP.pro_no
+		        JOIN product_order po
+		        on dt.order_num = po.order_num, (SELECT @RNO := 0) BB
+		        WHERE DT.order_num= #{order_num}
+		      ) CC
 		) AA 
 		WHERE r >= #{start} AND r <= #{end}
 		]]>

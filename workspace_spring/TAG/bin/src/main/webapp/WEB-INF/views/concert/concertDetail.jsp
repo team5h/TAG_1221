@@ -503,19 +503,19 @@ line-height : 10px;
 					<!-- include 영역 시작 -->
 					<c:choose>
 		     			<c:when test="${concert.j_id == 'yes24'}">
-		     				<%@ include file="../tickets/hallYes24Live.jsp" %>
+		     				<%@ include file="/WEB-INF/views/tickets/hallYes24Live.jsp" %>
 		     			</c:when>
 		     			<c:when test="${concert.j_id == 'bluesquare'}"> 
-		     				<%@ include file="../tickets/hallBlueSquare.jsp" %>
+		     				<%@ include file="/WEB-INF/views/tickets/hallBlueSquare.jsp" %>
 		     			</c:when>
 		     		</c:choose>
-		     		<%@ include file="../tickets/mainContents.jsp" %>
+		     		<%@ include file="/WEB-INF/views/tickets/mainContents.jsp" %>
 					<!-- include 영역 끝 -->
 				</div><!-- mainContainer end -->
 				
 				<div class="sideContainer" id="sideContainer">
 					<!-- include 영역 시작 -->
-					<%@ include file="../tickets/sideContents.jsp" %>
+					<%@ include file="/WEB-INF/views/tickets/sideContents.jsp" %>
 					<!-- include 영역 끝 -->
 				</div><!-- sideContainer end -->
 			</form>
