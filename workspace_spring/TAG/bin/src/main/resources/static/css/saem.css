@@ -132,13 +132,13 @@ input[type=checkbox] + label {
     cursor: pointer; 
     padding: 0 10px 0 25px;
     background-repeat: no-repeat;
-    background-image: url('./img/checker-off.svg');
+    /*background-image: url('./img/checker-off.svg');*/
 }
 input[type=checkbox]:checked + label {
-    background-image: url('./img/checker-on.svg');
+    /*background-image: url('./img/checker-on.svg');*/
 }
 input[type=checkbox]:disabled + label {
-    background-image: url('./img/checker-disabled.svg');
+    /*background-image: url('./img/checker-disabled.svg');*/
 }
 	
 
@@ -294,7 +294,7 @@ textarea:focus {
 	background-color: white;
     border: 2px solid lightgreen;
     font-size: 11px;
-    width: 350px;
+    width: 360px;
     padding: 5px 5px 5px 5px;
     height: 50px;
 }

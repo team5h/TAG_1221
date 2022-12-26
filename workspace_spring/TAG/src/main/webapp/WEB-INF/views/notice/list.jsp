@@ -15,18 +15,18 @@
 
 <!-- 본문 시작 -->
 
-<h3 style="text-align: center;">공지사항</h3>
 <br>
+<h3 style="text-align: center;">공지사항</h3>
 
 <div class="container">
 	<p>
 		<c:if test="${mem_grade=='M'}">
-			<button type="button" onclick="location.href='/write'">글쓰기</button>
+			<button class="btn btn-outline-black btn-sm" onclick="location.href='/write'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">글쓰기</button>
 		</c:if>
 	</p>
 	<p align="right">총 ${total}개의 글</p>
-	<table class="table table-hover" border="1">
-		<tr class="info">
+	<table class="table table-hover">
+		<tr class="info" style="border-top: 3px solid black; border-bottom: 0.1px solid black; text-align: center; font-size: 14px;">
 			<th>글 번호</th>
 			<th>제목</th>
 			<th>작성자</th>
@@ -81,9 +81,9 @@
 					<a href="/notice/list?pageNum=${startPage+5}">[다음]</a>
 				</c:if>
 		</c:if>
-	</div>
+	</div><!-- 페이징 끝 -->
 	
-</div>	
+</div><!-- container1 end -->
 
 <%-- 
 <hr>

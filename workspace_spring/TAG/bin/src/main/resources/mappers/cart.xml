@@ -9,10 +9,11 @@
 
 	<!-- 나의 장바구니 리스트 -->
 	<select id="mycartList" resultType="java.util.Map" parameterType="java.util.Map" >
-		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, P.postername, p_id
+		SELECT sum(cnt) as cnt, cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, P.price, P.postername, p_id
 		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
 							 JOIN concert C ON P.c_no = C.c_no
 		WHERE m_id = #{m_id} 
+		GROUP BY PC.pro_no
 		ORDER BY p_id, cart_no DESC
 	</select>
 
@@ -60,9 +61,88 @@
 	</delete>
 	
 	
-	<!-- 장바구니 정보  -->
+	<!-- 장바구니 선택 결제  -->
+	<select id="cartorder" parameterType="kr.co.itwill.cart.CartDTO" resultType="java.util.Map">
+		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, (P.price*cnt) as org_price,  P.postername, p_id, p.c_no
+		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+		                     JOIN concert C ON P.c_no = C.c_no
+		WHERE m_id = #{m_id}   AND cart_no IN ( 
+													<foreach collection="chkList" item="value" separator=",">
+														#{value}
+													</foreach>
+												  ) 
+		ORDER BY p_id, cart_no DESC
+	</select>
 	
-
-
- 
+	<!-- 장바구니 상품금액(상품가*수량) 총합 -->
+	<select id="cart_orderPrice" parameterType="kr.co.itwill.cart.CartDTO" resultType="java.util.Map" >
+		SELECT sum(order_price) as order_price
+		FROM (
+		    SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, (P.price*cnt) as order_price,  P.postername, p_id
+		    FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
+		                         JOIN concert C ON P.c_no = C.c_no
+		    WHERE m_id = #{m_id}  AND cart_no IN ( 
+													<foreach collection="chkList" item="value" separator=",">
+														#{value}
+													</foreach>
+												  ) 
+		    ORDER BY p_id, cart_no DESC
+		)aa
+	</select>
+ 	
+ 	<select id="mem_cou"  parameterType="kr.co.itwill.cart.CartDTO" resultType="java.util.Map">
+		SELECT cart_no, pc.m_id as m_id, pc.pro_no as pro_no, p.c_no as c_no, cp_no, coupon
+		FROM product_cart pc join product p on pc.pro_no = p.pro_no
+		                            left outer join coupon_detail cd on cd.c_no = p.c_no
+		WHERE pc.m_id = #{m_id} 
+		      AND cart_no IN ( 
+								<foreach collection="chkList" item="value" separator=",">
+									#{value}
+								</foreach>
+							  ) 
+			  AND cp_stus = 'N' 
+		      AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+		group by cp_no
+ 	</select>
+ 	
+ 	<select id="mem_couCNT" parameterType="kr.co.itwill.cart.CartDTO" resultType="int">
+ 		
+		SELECT COUNT(cp_no)
+		FROM (
+				SELECT cart_no, pc.m_id, pc.pro_no, p.c_no, cp_no, coupon
+				FROM product_cart pc join product p on pc.pro_no = p.pro_no
+				                            left outer join coupon_detail cd on cd.c_no = p.c_no
+				WHERE pc.m_id = #{m_id} 
+				      AND cart_no IN ( 
+										<foreach collection="chkList" item="value" separator=",">
+											#{value}
+										</foreach>
+									  ) 
+					  AND cp_stus = 'N' 
+		      		  AND date(`exp_date`) >= date_format(CURDATE(), '%Y%m%d')
+				GROUP BY cp_no
+		)aa
+		 	
+ 	</select>
+ 	
+ 	<!-- 주문상세 -->
+ 	<insert id="cart_orderDtail" parameterType="java.util.List">
+	INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum, stus)
+	VALUES 
+			<foreach collection="list" item="item" separator=",">
+			(
+			
+			  #{item.order_num}
+			 ,#{item.pro_no}
+			 ,#{item.detail_cnt}
+			 ,#{item.org_price}
+			 ,#{item.discount}
+			 ,#{item.pricesum}
+			 ,#{item.stus}
+			
+			)
+			</foreach>			 
+			
+</insert>
+ 	
 </mapper>

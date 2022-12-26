@@ -2,6 +2,10 @@
 
 <%@ include file="../header.jsp" %>
 
+<style>
+	.line { border-bottom: 1px solid black; }
+</style>
+
 <script>
 	function notice_update(){
 		document.form1.action="/notice/update";
@@ -18,24 +22,25 @@
 
 <!-- 본문 시작 -->
 
+<br>
 <h3 style="text-align: center;">상세보기</h3>
 <br>
 
 <div class="container">
 	<p>
-		<button type="button" onclick="location.href='/notice/list'">목록</button>
+		<button class="btn btn-outline-black btn-sm" onclick="location.href='/notice/list'" style="width: 80px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 14px; display: block;">목록</button>
 	</p>
 	<form name="form1" method="post" enctype="">
 	<table class="table">
-		<tr>
+		<tr class="line">
 			<th class="info">작성일</th>
 			<td>${notice.regdate}</td>
 		</tr>
-		<tr>
+		<tr class="line">
 			<th class="info">제목</th>
 			<td>${notice.subject}</td>
 		</tr>
-		<tr>
+		<tr class="line">
 			<th class="info">작성자</th>
 			<td>관리자</td>
 		</tr>
