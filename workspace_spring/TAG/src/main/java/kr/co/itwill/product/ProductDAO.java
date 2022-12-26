@@ -102,7 +102,6 @@ public class ProductDAO {
 		return sqlSession.selectList("product.likeCateg", map);
 	}// list2() end
 	
-
 	
 	
 //  ---------------------------------------------------- [상품목록 - 콘서트 리스트]	
@@ -114,17 +113,29 @@ public class ProductDAO {
 	public int concertTotal(String c_no) {
 		return sqlSession.selectOne("product.concertTotal", c_no);
 	}// categoryTotal() end
+	
+	
+//  ---------------------------------------------------- [상품목록 - 콘서트별 상품 전체 + 페이징]
+	public List<Map<String, Object>> concertList(int start, int end) {
+		HashMap<String, Integer> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		
+		return sqlSession.selectList("product.concertList", map);
+	}//concertList() end
+	
 
-//  ---------------------------------------------------- [상품목록 - 콘서트 리스트 + 페이징]
-	public List<Map<String, Object>> concertList(Integer start, Integer end, String c_no) {
+//  ---------------------------------------------------- [상품목록 - 해당 콘서트 상품만 묶음 + 페이징]
+	public List<Map<String, Object>> concertList2(Integer start, Integer end, String c_no) {
 		
 		HashMap<String, String> map = new HashMap<>();
 		map.put("start", start.toString());
 		map.put("end", end.toString());
 		map.put("c_no", c_no.toString());
 		
-		return sqlSession.selectList("product.concertList", map);
-	}// list2() end
+		return sqlSession.selectList("product.concertList2", map);
+	}// concertList2() end
+	
 	
 //  ---------------------------------------------------- [상품목록 - 콘서트 리스트 + 페이징 - 인기순]	
 	public List<Map<String, Object>> popularCon(Integer start, Integer end, String c_no) {
@@ -150,14 +161,31 @@ public class ProductDAO {
 	}// list2() end
 
 	
+	
+//  ---------------------------------------------------- [상품목록 - 상품 개수]	
+	public int searchcnt(String pro_name) {
+		return sqlSession.selectOne("product.searchcnt", "%" + pro_name.toUpperCase() + "%");
+	}// categoryTotal() end
 
 	
-//  ---------------------------------------------------- [상품검색]	
-	public List<ProductDTO> search(String pro_name) {
+//  ---------------------------------------------------- [상품검색] 원본
+	public List<Map<String, Object>> search(String pro_name) {
 		return sqlSession.selectList("product.search", "%" + pro_name.toUpperCase() + "%");
 	}//search() end
 	
 
+//  ---------------------------------------------------- [상품검색] 페이징
+//	public List<Map<String, Object>> search(Integer start, Integer end, String pro_name) {
+//		
+//		HashMap<String, String> map = new HashMap<>();
+//		map.put("start", start.toString());
+//		map.put("end", end.toString());
+//		map.put("pro_name", "%" + pro_name.toUpperCase().toString() + "%");
+//		
+//		return sqlSession.selectList("product.search", map);
+//	}//search() end	
+	
+	
 	
 //  ---------------------------------------------------- [상품목록 - 카테고리 전체]	
 	public List<ProductDTO> categoryAll() {
@@ -204,8 +232,14 @@ public class ProductDAO {
 		return sqlSession.selectOne("product.qnadetail",map);
 	}
 	
-	public List<QnADTO> qnalist (int pro_no) {
-		return sqlSession.selectList("product.qnalist",pro_no);
+	public List<QnADTO> qnalist (int start, int end, int pro_no) {
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("start", start);
+		map.put("end", end);
+		map.put("pro_no", pro_no);
+		
+		return sqlSession.selectList("product.qnalist",map);
 	}
 	
 	public int addcart (int cnt, int pro_no, String m_id) {
@@ -227,6 +261,10 @@ public class ProductDAO {
 		return sqlSession.insert("product.like",map);
 	}//end
 	
+	public int pro_likecntIns(int pro_no) {
+		return sqlSession.update("product.pro_likecntIns",pro_no);
+	}
+	
 	public int unlike (int pro_no, String m_id) {
 		Map<String, Object> map = new HashMap<>();
 		
@@ -235,6 +273,10 @@ public class ProductDAO {
 		
 		return sqlSession.delete("product.unlike",map);
 	}//end
+	
+	public int pro_likecntDel (int pro_no) {
+		return sqlSession.update("product.pro_likecntDel",pro_no);
+	}
 	
 	public int likechk (String m_id, int pro_no) {
 		Map<String, Object> map = new HashMap<>();
@@ -311,7 +353,9 @@ public class ProductDAO {
 		return sqlSession.selectList("product.mem_like",m_id);
 	}
 	
-	
+	public int qnalistCNT (int pro_no) {
+		return sqlSession.selectOne("product.qnalistCNT",pro_no);
+	}
 	
 	
 	

@@ -284,8 +284,8 @@ function topFunction() {
 		    
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
-				<form method="post" action="searchConcert">
-					<a href="concert/${row.title}">${row.title}</a>
+				<form method="post" action="/searchConcert">
+					<a href="/concert/${row.title}">${row.title}</a>
 					<input type="text" id="title" name="title" value="${title}">
 					<input type="submit" id="btnSubmit" value="검색" style="display:none;">
 						<label for="btnSubmit">
@@ -404,7 +404,7 @@ function topFunction() {
 									<fmt:parseNumber var="nowDate" value="${now.time/ (1000*60*60*24)}" integerOnly="true" scope="request"></fmt:parseNumber>
 									<fmt:parseNumber var="oldDate" value="${regDate.time/ (1000*60*60*24)}" integerOnly="true" scope="request"></fmt:parseNumber>
 									
-									<c:set var="dDayCount" value="${oldDate-nowDate}"/>
+									<c:set var="dDayCount" value="${oldDate-nowDate +1}"/>
 								</div>
 							    
 									<c:choose>  
@@ -414,11 +414,11 @@ function topFunction() {
 										<c:when test="${dDayCount == 0}"> 
 											<div style="font-weight: 500;">D - DAY</div>
 										</c:when> 
-										<c:otherwise> 
+										<c:when test="${dDayCount > 0}"> 
 											<div style="font-weight: 500;">
 											<c:out value="D - ${dDayCount}"></c:out>
 											</div>
-										</c:otherwise> 
+										</c:when> 
 									</c:choose> 
 									
 									

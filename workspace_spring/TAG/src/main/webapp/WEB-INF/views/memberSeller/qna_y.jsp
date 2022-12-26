@@ -28,17 +28,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -59,17 +59,20 @@
 	<c:forEach var="row" items="${answerlist}" varStatus="vs">
 		<tr>
 			<td>
-				<div style="background-color: white; height: 100px; border-top: 1px solid #ededed; border-bottom: 1px solid #ededed; margin-bottom: -3px; ">   
+				<div style="background-color: white; height: 100px; border-top: 1px solid #ededed; border-bottom: 1px solid #ededed; margin-bottom: -3px; margin-top: -5px; ">   
 					<div style="width: 80px; height: 80px; overflow: hidden; float: left; margin: 9px 10px 0px 10px; display: inline-block; position: relative;">
 						<img src="/storage/${row.postername}" style="width:100%; height:100%; object-fit:cover;" >
 					</div><!-- product image -->
 					
 					<div style="display: inline-block; width: 80%; float: left; text-align: left; padding-top: 9px; margin-left: 10px;">
 						<p style="margin-bottom: 0; font-size: 10px; font-weight: 500; color:lightgreen;">${row.pro_name}</p>
-						<p style="font-size: 22px; font-weight: 600;">${row.subject}</p>
-						<p style="margin: 5px 0 5px 0; font-size: 12px; color: #b0b0b0;">${row.nickname} ｜ 
+						<p style="font-size: 22px; font-weight: 600; margin-bottom: 10px;">${row.subject}</p>
+						<p style="margin: 5px 0 5px 0; font-size: 12px; color: #b0b0b0;">
+						
+									${row.q_no} ｜ ${row.nickname} ｜ 
 																	<fmt:parseDate var="dateString" value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss" />
-					   												<fmt:formatDate value="${dateString}" pattern="yyyy.MM.dd HH시 mm분" /></p>
+					   												<fmt:formatDate value="${dateString}" pattern="yyyy.MM.dd HH시 mm분" />
+					    </p>
 					</div>
 					
 					<div style="display: inline-block; margin-top: 37px; ">
@@ -243,7 +246,7 @@
 						$(contentid).val(value);
 						$(contentid).prop("disabled", true);
 						$(contentid).css('border','none');
-						
+						location.reload();
 					}//end
 		})
 	}//end

@@ -88,9 +88,13 @@ public class ConcertDAO {
 		return sqlSession.selectOne("concert.yejungConcertTotal");
 	}//concertTotal() end
 	
+//  ---------------------------------------------------- [콘서트검색 - 개수]	
+	public int searchConcertCnt(String title) {
+		return sqlSession.selectOne("concert.searchConcertCnt", "%" + title.toUpperCase() + "%");
+	}// searchConcertCnt() end	
 	
 //  ---------------------------------------------------- [콘서트검색]	
-	public List<ConcertDTO> searchConcert(String title) {
+	public List<Map<String, Object>> searchConcert(String title) {
 		return sqlSession.selectList("concert.searchConcert", "%" + title.toUpperCase() + "%");
 	}//search() end
 	

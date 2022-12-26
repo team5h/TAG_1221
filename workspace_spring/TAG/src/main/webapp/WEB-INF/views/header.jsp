@@ -42,8 +42,8 @@
 	<script src="/js/jquery.fancybox.min.js"></script>
 	<script src="/js/jquery.sticky.js"></script>
 
-
 	<title>TAG : Ticket And Goods</title>
+	
 </head>
 
 <body>
@@ -82,10 +82,10 @@
 
 			<div class="container position-relative" style=" max-width: 1350px;">
 				<div class="site-navigation text-center dark">
-					<a href="/home" class="logo menu-absolute m-0" style="font-size:20px;">TAG</a>
+					<a href="/home" class="logo menu-absolute m-0" style="font-size:20px; font-family: 'Jost';">TAG</a>
 
 					<ul class="js-clone-nav pl-0 d-none d-lg-inline-block site-menu">
-						<li class="active"><a href="/home">HOME</a></li>
+						<li class="active"><a href="/home" style="font-family: 'Jost';">HOME</a></li>
 						<li class="has-children">
 							<a href="/concert">공연</a>
 							<ul class="dropdown">
@@ -103,10 +103,10 @@
 								<li class="has-children">
 									<a href="#">카테고리</a>
 									<ul class="dropdown">
-										<li><a href="/list.do?category=${row.category}">포스터</a></li>
-										<li><a href="/list.do?category=${row.category}">음반</a></li>
-										<li><a href="/list.do?category=${row.category}">의류</a></li>
-										<li><a href="/list.do?category=${row.category}">잡화</a></li>
+										<li><a href="/list.do?category=P">포스터</a></li>
+										<li><a href="/list.do?category=M">음반</a></li>
+										<li><a href="/list.do?category=C">의류</a></li>
+										<li><a href="/list.do?category=A">잡화</a></li>
 									</ul>
 								</li>
 							</ul>
@@ -245,6 +245,9 @@
 							</clipPath>
 							</defs>
 							</svg>					
+						<c:if test="${mycartCnt != 0}">
+						${mycartCnt}
+						</c:if>
 						</a>
 						
 						

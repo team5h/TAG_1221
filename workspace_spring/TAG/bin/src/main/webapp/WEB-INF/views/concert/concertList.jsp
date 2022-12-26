@@ -284,7 +284,7 @@ function topFunction() {
 		    
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
-				<form method="post" action="searchConcert">
+				<form method="post" action="/searchConcert">
 					<a href="concert/${row.title}">${row.title}</a>
 					<input type="text" id="title" name="title" value="${title}">
 					<input type="submit" id="btnSubmit" value="검색" style="display:none;">
@@ -395,7 +395,7 @@ function topFunction() {
 								</span>
 								
 								<!-- 공연 날짜 디데이 카운트 -->
-								<div class="dDayCount-display" style="display: none;">
+<%-- 								<div class="dDayCount-display" style="display: none;">
 									<jsp:useBean id="now" class="java.util.Date" />
 									
 									<fmt:parseDate var="regDate" value="${row.date}" pattern="yyyy-MM-dd"/>
@@ -405,22 +405,22 @@ function topFunction() {
 									<fmt:parseNumber var="oldDate" value="${regDate.time/ (1000*60*60*24)}" integerOnly="true" scope="request"></fmt:parseNumber>
 									
 									<c:set var="dDayCount" value="${oldDate-nowDate}"/>
-								</div>
+								</div> --%>
 							    
-									<c:choose>  
+<%-- 									<c:choose>  
 										<c:when test="${dDayCount < 0}"> 
 											<div style="color: lightgrey;">종료된 공연입니다.</div>
 										</c:when> 
 										<c:when test="${dDayCount == 0}"> 
 											<div style="font-weight: 500;">D - DAY</div>
 										</c:when> 
-										<c:otherwise> 
+										<c:when test="${dDayCount >= 0}"> 
 											<div style="font-weight: 500;">
 											<c:out value="D - ${dDayCount}"></c:out>
 											</div>
-										</c:otherwise> 
-									</c:choose> 
-									
+										</c:when> 
+									</c:choose>  --%>
+
 									
 								<!-- 공연 날짜 디데이 카운트 종료 -->
 

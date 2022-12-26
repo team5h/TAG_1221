@@ -354,7 +354,7 @@ function hearticon(this1) {
 		    
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
-				<form method="post" action="search">
+				<form method="post" action="/search">
 					<a href="/product/${row.pro_no}">${row.pro_name}</a>
 					<input type="text" id="pro_name" name="pro_name" value="${pro_name}">
 					<input type="submit" id="btnSubmit" value="검색" style="display:none;">
@@ -416,27 +416,26 @@ function hearticon(this1) {
 			Total (${total})
 			</span>
 			
-				<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
-				<c:if test="${category == null}">
-				<span class="category">
-			    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
-			         	<option value="/list.do">최신순</option>
-			         	<option value="/list.do/popularAll">인기순</option>
-			         	<option value="/list.do/likeAll">좋아요순</option>
-			  	 	</select>
-			    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
-				</div>
-				</c:if>
-				
-				<c:if test="${category != null}">
-				<span class="category">
-			    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
-			         	<option value="/list.do?category=${category}">최신순</option>
-			         	<option value="/list.do/popularCateg?category=${category}">인기순</option>
-			         	<option value="/list.do/likeCateg?category=${category}">좋아요순</option>
-			  	 	</select>
-			    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
-				</c:if>
+			<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
+			<c:if test="${category == null}">
+			<span class="category">
+		    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+		         	<option value="/list.do">최신순</option>
+		         	<option value="/list.do/popularAll">인기순</option>
+		         	<option value="/list.do/likeAll">좋아요순</option>
+		  	 	</select>
+		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+			</c:if>
+			
+			<c:if test="${category != null}">
+			<span class="category">
+		    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+		         	<option value="/list.do?category=${category}">최신순</option>
+		         	<option value="/list.do/popularCateg?category=${category}">인기순</option>
+		         	<option value="/list.do/likeCateg?category=${category}">좋아요순</option>
+		  	 	</select>
+		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+			</c:if>
 			</div><!-- count-category end -->
 		
 			
@@ -501,7 +500,7 @@ function hearticon(this1) {
 										</g>
 										</g>
 										</svg>
-										</a>
+									</a>
 									</span>
 									
 								</div>
@@ -519,6 +518,10 @@ function hearticon(this1) {
 					</tr>
 				</table>   
 					
+					
+					
+					
+				<!-- 페이징 -->	
 				<div style="width: 100%; display: block; text-align: center;">	
 					<c:if test="${requestScope.count > 0}">
 						<c:set var="pageCount" value="${requestScope.totalPage}" />
@@ -540,7 +543,7 @@ function hearticon(this1) {
 									<c:if test="${orderby == 'r'}">
 										<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 										<c:if test="${startPage > 1}">
-											<a href="/list.do?pageNum=${startPage-1}">[이전]</a>
+											<a href="/list.do?pageNum=${startPage-1}"> < </a>
 										</c:if>
 							
 										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -557,7 +560,7 @@ function hearticon(this1) {
 							
 										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 										<c:if test="${endPage < pageCount}">
-											<a href="/list.do?pageNum=${startPage+5}">[다음]</a>
+											<a href="/list.do?pageNum=${startPage+5}"> > </a>
 										</c:if>
 									</c:if><!-- ${orderby == 'r'} end -->
 									
@@ -565,7 +568,7 @@ function hearticon(this1) {
 									<!-- ${orderby == 'p'} -->
 									<c:if test="${orderby == 'p'}">
 										<c:if test="${startPage > 1}">
-											<a href="/list.do/popularAll?pageNum=${startPage-1}">[이전]</a>
+											<a href="/list.do/popularAll?pageNum=${startPage-1}"> < </a>
 										</c:if>
 							
 										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -582,7 +585,7 @@ function hearticon(this1) {
 							
 										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 										<c:if test="${endPage < pageCount}">
-											<a href="/list.do/popularAll?pageNum=${startPage+5}">[다음]</a>
+											<a href="/list.do/popularAll?pageNum=${startPage+5}"> > </a>
 										</c:if>
 									</c:if><!-- ${orderby == 'p'} end -->
 									
@@ -591,7 +594,7 @@ function hearticon(this1) {
 									<c:if test="${orderby == 'l'}">
 										<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 										<c:if test="${startPage > 1}">
-											<a href="/list.do/likeAll?pageNum=${startPage-1}">[이전]</a>
+											<a href="/list.do/likeAll?pageNum=${startPage-1}"> < </a>
 										</c:if>
 							
 										<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -608,7 +611,7 @@ function hearticon(this1) {
 							
 										<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 										<c:if test="${endPage < pageCount}">
-											<a href="/list.do/likeAll?pageNum=${startPage+5}">[다음]</a>
+											<a href="/list.do/likeAll?pageNum=${startPage+5}"> > </a>
 										</c:if>
 										
 									</c:if><!-- ${orderby == 'l'} end -->
@@ -694,9 +697,8 @@ function hearticon(this1) {
 						
 						</c:if><!-- ${category != null} end -->
 							
-					
-							
 					</c:if><!-- ${requestScope.count > 0} end -->
+				
 				</div>	
 						
 			</div><!-- list_content -->

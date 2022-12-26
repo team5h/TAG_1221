@@ -200,6 +200,29 @@ public class SellerProductCont {
 	}// end
 
 	
+	@RequestMapping("/productdetail/{pro_no}")
+	public ModelAndView productdetail(@PathVariable int pro_no, HttpSession session){
+		ModelAndView mav = new ModelAndView();
+		
+		String p_id = (String) session.getAttribute("s_p_id");
+
+		if(p_id!=null) { //session아이디를 불러왔다면
+			
+			mav.setViewName("/memberSeller/productMdetail");
+			mav.addObject("productdetail", sellerproductdao.productdetail(pro_no, p_id));
+			
+			return mav;
+			
+		}else { //session아이디를 불러오지 못했다면
+			mav.setViewName("/memberGeneral/alert"); //알림페이지로 이동
+			mav.addObject("msg", "로그인이 필요합니다");
+			mav.addObject("url", "/loginForm"); //로그인 폼 url명령어 입력
+			
+			return mav;
+		}//if end
+		
+	}//end
+	
 	@ResponseBody
 	@RequestMapping(value = "/mypageS/delete", method = RequestMethod.POST )
 	 public int ckdelete(@RequestParam Map<String, Object> parameters) throws Exception{
@@ -446,6 +469,8 @@ public class SellerProductCont {
 	        mav.addObject("totalPage", totalPage);
 	        mav.addObject("startPage", startPage);
 	        mav.addObject("endPage", endPage);
+	        
+	        mav.addObject("page", "page");
 			
 			return mav;
 			

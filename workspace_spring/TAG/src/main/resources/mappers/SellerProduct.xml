@@ -33,6 +33,12 @@
 		]]>
 	</select>
 
+	<select id="productdetail" resultType="kr.co.itwill.memberSeller.SellerProductDTO" parameterType="java.util.Map">
+		SELECT pro_no, category, p.c_no, title, p_id, pro_name, stock, color, size, p.price, p.edit, p.postername, status, regdate
+		FROM product p join concert c on p.c_no = c.c_no  
+		WHERE pro_no = #{pro_no} AND p_id = #{p_id}
+	</select>
+
 	<select id="totpro_cnt" resultType="int">
 	SELECT COUNT(pro_no) AS totpro_cnt
 	FROM product 
@@ -91,21 +97,24 @@
 			FROM(
 			    SELECT @RNO := @RNO + 1 as r, CC.*
 			    FROM (
-			            select order_num, sum(detail_cnt) as total_cnt, total_price, m_id, rec_name
+						SELECT order_num, sum(detail_cnt) as total_cnt, m_id, rec_name, (org_price - cp_dis - pt_minus + d_fee) as total_price
 			            		, rec_addr1, rec_addr2, rec_zipcode, rec_tel, substr(order_num,1,8) as order_date
-			            from (
-			                    select od.order_num, detail_cnt, od.pricesum, m_id, rec_name, total_price,  rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
-			                    from order_detail od join product p on od.pro_no = p.pro_no 
+			            FROM (
+			                    SELECT od.order_num, detail_cnt, m_id, rec_name, org_price, cp_dis, pt_minus, d_fee, rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
+			                    FROM order_detail od join product p on od.pro_no = p.pro_no 
 			                                        join product_order po on od.order_num = po.order_num
-			                    where p_id = #{p_id}
+			                    WHERE p_id = #{p_id}
 			            )aa
-			            group by order_num
+			            GROUP BY order_num
+                        
 			    ) CC, (SELECT @RNO := 0) BB 
 			ORDER BY order_num DESC
 			) AA 
 			WHERE r >= #{start} AND r <= #{end}
 		]]>
 	</select>
+	
+	
 	
 	<select id="totord_cnt" resultType="int" parameterType="String">
 		SELECT count(order_num) AS totord_cnt
@@ -128,9 +137,9 @@
 	</select>
 	
 	<select id="orderdetail"  resultType="java.util.Map" parameterType="java.util.Map">	
-		SELECT AA.*, (org_price - discount - pt_minus + d_fee) as total_price
+		SELECT AA.*, (org_price - cp_dis - pt_minus + d_fee) as total_price
 		FROM (
-		    SELECT od.order_num as order_num, sum(org_price) as org_price, sum(discount) as discount, coupon, pt_minus, d_fee, m.m_id as m_id, m_email, m_tel
+		    SELECT od.order_num as order_num, sum(org_price) as org_price, cp_dis, coupon, pt_minus, d_fee, m.m_id as m_id, m_email, m_tel
 		           , rec_name, rec_tel, rec_zipcode ,rec_addr2, rec_addr1, msg, substr(od.order_num,1,8) as order_date
 		    FROM order_detail od join            product_order pd  on od.order_num = pd.order_num 
 		                         left outer join member m          on pd.m_id      = m.m_id
@@ -139,6 +148,8 @@
 		    WHERE od.order_num = #{order_num} AND p_id = #{p_id}
 		)AA
 	</select>
+	
+
 	
 	<update id="orderstusupdate">
 		UPDATE order_detail
@@ -164,7 +175,7 @@
 			    FROM (
 			        select *
 			        from (
-			                SELECT p.pro_no,pro_name, p.p_id, stock, color, size, price, regdate, edit, category, status, postername, likecnt, count(o.pro_no) AS sales, (stock-(count(o.pro_no))) AS afstock
+			                SELECT P.pro_no, pro_name, P.p_id, stock, color, size, price, regdate, edit, category, status, postername, likecnt, count(O.pro_no) AS sales, (stock-(count(O.pro_no))) AS afstock
 			                FROM product P LEFT JOIN order_detail O
 			                               ON P.pro_no = O.pro_no
 			                GROUP BY p.pro_no
@@ -186,9 +197,9 @@
 			    FROM (
 			        select *
 			        from (
- 						select order_num, sum(detail_cnt) as total_cnt, sum(pricesum) as total_price, m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, substr(order_num,1,8) as order_date
+ 						select order_num, sum(detail_cnt) as total_cnt,  m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, substr(order_num,1,8) as order_date
 			            from (
-			                    select od.order_num, detail_cnt, od.pricesum, m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
+			                    select od.order_num, detail_cnt, m_id, rec_name, rec_addr1, rec_addr2, rec_zipcode, rec_tel, msg
 			                    from order_detail od join product p on od.pro_no = p.pro_no 
 			                                        join product_order po on od.order_num = po.order_num
 			                    where p_id = #{p_id}

@@ -129,13 +129,17 @@ public class ProductCont {
  		//System.out.println("잘 도착 했다.");
  		
  		String c_no = req.getParameter("c_no");
- 		//System.out.println(c_no);
  		String m_id = (String)session.getAttribute("s_m_id");
  		
  		ModelAndView mav = new ModelAndView();
  		mav.setViewName("product/listConcert");
  		
- 		int totalRowCount = productDao.concertTotal(c_no);
+        int totalRowCount = 0;
+        if(c_no==null) {
+        	totalRowCount = productDao.total(); // 카테고리 전체 총 글갯수
+        }else {
+        	totalRowCount = productDao.concertTotal(c_no); // 카테고리별 글 개수
+        }//if end
  		//System.out.println(totalRowCount);
  		
  		
@@ -163,7 +167,11 @@ public class ProductCont {
         
         List list = null;
         if (totalRowCount > 0) {
-        	list = productDao.concertList(startRow, endRow, c_no);//1, 5, M
+        	if (c_no == null){
+        		list = productDao.concertList(startRow, endRow);//1, 5, M
+        	} else {
+        		list = productDao.concertList2(startRow, endRow, c_no);//1, 5, M
+        	}
         } else {
             list = Collections.emptyList(); // 안 넣어도 상관 없음
         } // if end
@@ -191,21 +199,29 @@ public class ProductCont {
  		return mav;
  	}//listConcert() end    
  	
-
+ 	
     
 //  [상품검색] 시작  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
-    
-	@RequestMapping("/search")
-	public ModelAndView search(@RequestParam(defaultValue = "") String pro_name) {
-		ModelAndView mav = new ModelAndView();
+   
+ 	@RequestMapping("/search")
+	public ModelAndView search(@RequestParam(defaultValue = "") String pro_name, HttpSession session) {
+		
+ 		String m_id = (String)session.getAttribute("s_m_id");
+ 		
+ 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("product/list");
-		mav.addObject("list", productDao.search(pro_name));
+		
+	
+		mav.addObject("list", productDao.search(pro_name));	// 검색 상품리스트
+		mav.addObject("total", productDao.searchcnt(pro_name)); //총 개수
+		
+		mav.addObject("categoryAll", productDao.categoryAll()); //카테고리 보이게
+		mav.addObject("like", productDao.mem_like(m_id)); // 좋아요
 		
 		mav.addObject("pro_name", pro_name);
 		
 		return mav;
 	}//search() end
-
 	
 
 //  [상품리스트 - 음반 카테고리] 시작  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -216,7 +232,7 @@ public class ProductCont {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("product/list");
 		
-		System.out.println(category);
+		//System.out.println(category);
    
 	    return mav;
 	}//search() end	
@@ -225,23 +241,77 @@ public class ProductCont {
 
 	
 	@RequestMapping("/product/{pro_no}")
-	public ModelAndView productdetail(@PathVariable int pro_no, HttpSession session) {
+	public ModelAndView productdetail(@PathVariable int pro_no, HttpSession session, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		
 		String m_id = (String)session.getAttribute("s_m_id");
-		
+/**/
 		mav.setViewName("/product/detail");
-		//System.out.println(pro_no);
+		
+		//페이징
+		int totalRowCount = productDao.qnalistCNT(pro_no); // 총 개수
+		
+		//페이징설정 
+		int numPerPage = 5;
+		int pagePerBlock = 10;
+		
+		String pageNum = req.getParameter("pageNum");	// 현재 페이지값 받아오기
+		if (pageNum == null) {
+			pageNum = "1";
+		}//if end
+		
+		int currentPage = Integer.parseInt(pageNum);			// 현재 페이지
+		int startRow 	= (currentPage-1) * numPerPage + 1;		// 한 페이지 글 목록에서 시작하는 행
+		int endRow		= currentPage * numPerPage; 			// 한 페이지 글 목록에서 끝나는 행
+		
+		// 페이지 수 
+		double totcnt = (double)totalRowCount/numPerPage;		// 전체 페이지 수 (전체글개수 / 5개)
+		int totalPage = (int)Math.ceil(totcnt);					// Math.ceil : 소수점 올림
+		
+		double d_page = (double)currentPage/pagePerBlock;		// 현재 페이지 넘버 / 전체 페이지 수
+		int Pages = (int)Math.ceil(d_page) -1;					// 페이지 목록을 하나로 묶음? (1-10 목록은 1, 11-20 목록은 2)
+		int startPage = Pages*pagePerBlock +1;					// 페이지 목록(ex 1~10번페이지 / 11~20번 페이지)에서 시작하는 페이지 넘버 (10개씩이면 1,11,21···.)
+		int endPage = startPage + pagePerBlock -1;			    // 페이지 목록에서 마지막 페이지 넘버 (10개씩이면 10,20,30···.)
+		
+		List list = null;
+		
+        if (totalRowCount > 0) {
+        	
+        	list = productDao.qnalist(startRow, endRow, pro_no);
+        	
+        } else {
+        	
+            list = Collections.emptyList(); // 안 넣어도 상관 없음
+            
+        } // if end
+        
 		mav.addObject("proDetail", productDao.proDetail(pro_no));
 		mav.addObject("pro_qnacnt",productDao.pro_qnacnt(pro_no));
-		mav.addObject("qnalist",productDao.qnalist(pro_no));
+	  //mav.addObject("qnalist",productDao.qnalist(pro_no));
+
+        mav.addObject("total", totalRowCount);
+        mav.addObject("qnalist",list);
+        mav.addObject("pageNum", currentPage);
+
+        mav.addObject("count", totalRowCount);
+        mav.addObject("totalPage", totalPage);
+        mav.addObject("startPage", startPage);
+        mav.addObject("endPage", endPage);
+        
+	
+		//System.out.println(pro_no);
 		
 		if(!(m_id == null)) {
 			mav.addObject("likechk", productDao.likechk(m_id, pro_no));
 		} 
 		
+		
+        
 		return mav;
 	}// end
+	
+	
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "/product/qnainsert", method = RequestMethod.POST)
@@ -273,12 +343,16 @@ public class ProductCont {
 	@ResponseBody
 	@RequestMapping(value = "/product/like", method = RequestMethod.POST)
 	public int like(@RequestParam int pro_no, @RequestParam String m_id) {
+		int cnt = productDao.pro_likecntIns(pro_no);
+		//System.out.println(cnt);
 		return productDao.like(pro_no, m_id);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/product/unlike", method = RequestMethod.POST)
 	public int unlike(@RequestParam int pro_no, @RequestParam String m_id) {
+		int cnt = productDao.pro_likecntDel(pro_no);
+		//System.out.println(cnt);
 		return productDao.unlike(pro_no, m_id);
 	}	
 	
@@ -334,7 +408,7 @@ public class ProductCont {
 	        	
 	        	// 쿠폰 사용여부 업데이트 
 	        	int cpstusup = productDao.cpstusUp(Integer.parseInt(req.getParameter("cp_no")));
-	        	System.out.println("cpstusup"+cpstusup);
+	        	//System.out.println("cpstusup"+cpstusup);
 	        }
 	        
 	        // ProductOrder 인서트 
@@ -353,7 +427,7 @@ public class ProductCont {
 	        map.put("pt_plus", req.getParameter("pt_plus"));
 	        
 			int ProductOrdercnt = productDao.productorderIns(map);
-			System.out.println("ProductOrdercnt"+ProductOrdercnt);
+			//System.out.println("ProductOrdercnt"+ProductOrdercnt);
 
 			// OrderDetail 인서트 
 			dto.setOrder_num(formatedNow);
@@ -361,10 +435,10 @@ public class ProductCont {
 			int org_price = Integer.parseInt(req.getParameter("order_price"));
 			int pricesum = org_price - Integer.parseInt(req.getParameter("cp_dis"));
 			dto.setOrg_price(org_price);
-			dto.setPricesum(pricesum);
-			dto.setDiscount(Integer.parseInt(req.getParameter("cp_dis")));
+			//dto.setPricesum(pricesum);
+			//dto.setDiscount(Integer.parseInt(req.getParameter("cp_dis")));
 			int OrderDetailcnt = productDao.orderdetailIns(dto);
-			System.out.println("OrderDetailcnt"+OrderDetailcnt);
+			//System.out.println("OrderDetailcnt"+OrderDetailcnt);
 			
 			
 			MemberGeneralDTO dtoMG = new MemberGeneralDTO();
@@ -388,7 +462,7 @@ public class ProductCont {
 			mempointmap.put("point", newpoint);
 			
 			int mempointUpdate = productDao.mempointUp(mempointmap);
-			System.out.println("mempointUpdate"+mempointUpdate);
+			//System.out.println("mempointUpdate"+mempointUpdate);
 			
 			// PointDetail
 			if ( pt_minus > 0 ) {	
@@ -402,7 +476,8 @@ public class ProductCont {
 				pointminusmap.put("order_num", formatedNow);
 			
 				int PointMinuscnt = productDao.pointminusIns(pointminusmap);
-				System.out.println("PointMinuscnt"+PointMinuscnt);
+				//System.out.println("PointMinuscnt"+PointMinuscnt);
+				
 			}//if end
 			
 			// 포인트 적립 인서트	
@@ -413,7 +488,7 @@ public class ProductCont {
 			pointplusmap.put("order_num", formatedNow);
 			
 			int PointPluscnt = productDao.pointplusIns(pointplusmap);
-			System.out.println("PointPluscnt"+PointPluscnt);
+			//System.out.println("PointPluscnt"+PointPluscnt);
 			
 			mav.setViewName("/product/orderSucc");
 			

@@ -29,17 +29,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT" style="color:lightgreen;"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;" >  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;" >  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;" > - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;" > - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;" > - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;" > - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;" > - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;" > - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -96,8 +96,8 @@
 					</td>
 				</tr>
 			</table>
-				<span class="productck" id="categoryck">&nbsp;상품의 <strong>카테고리</strong>를 선택해주세요&nbsp;</span>
-				<span class="productck" id="sizeck">&nbsp;상품의 <strong>사이즈</strong>를 선택해주세요&nbsp;</span>
+				<span class="productck" id="categoryck" style="margin-left: 50px;">&nbsp;상품의 <span style="color:lightgreen;">카테고리</span>를 선택해주세요&nbsp;</span>
+				<span class="productck" id="sizeck" style="margin-left: 50px;">&nbsp;상품의 <span style="color:lightgreen;">사이즈</span>를 선택해주세요&nbsp;</span>
 		</div> <!-- 체크박스 -->
 		
 		
@@ -125,11 +125,11 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4" style="padding-top:5px;">
-						<span class="productck" id="colorck" style="text-align:left;">&nbsp;상품의 <strong>색상</strong>을 작성해주세요&nbsp;</span>
-						<span class="productck" id="priceck" style="margin-left:165px;">&nbsp;상품의 <strong>가격</strong>을 작성해주세요&nbsp;</span>
-						<span class="productck" id="stockck" style="margin-left:331px;">&nbsp;상품의 <strong>재고 총 수량</strong>을 작성해주세요&nbsp;</span>
-						<span class="productck" id="fileck" style="float: right;">&nbsp;상품의 <strong>대표 이미지</strong>를 등록해주세요&nbsp;</span>
+					<td colspan="4" style="padding-top:10px; text-align: center;">
+						<span class="productck" id="colorck">&nbsp;상품의 <span style="color:lightgreen;">색상</span>을 작성해주세요&nbsp;</span>
+						<span class="productck" id="priceck">&nbsp;상품의 <span style="color:lightgreen;">가격</span>을 작성해주세요&nbsp;</span>
+						<span class="productck" id="stockck">&nbsp;상품의 <span style="color:lightgreen;">재고 총 수량</span>을 작성해주세요&nbsp;</span>
+						<span class="productck" id="fileck">&nbsp;상품의  <span style="color:lightgreen;">대표 이미지</span>를 등록해주세요&nbsp;</span>
 					</td>
 				</tr>
 			</table>	

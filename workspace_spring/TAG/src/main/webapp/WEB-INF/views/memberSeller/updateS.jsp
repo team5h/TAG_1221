@@ -386,10 +386,10 @@ function updateScheck() {
         	<div class="textbox">
 				<input type="text" id="p_id" name="p_id" value="${dto.p_id}" oninput="checkId()" readonly>
 				<!-- id ajax 중복체크 -->
-				<div>
-				<span class="id_input">아이디는 변경할 수 없습니다.<br>
-					(단, 회사명이 바뀌어 아이디를 변경해야 하는 경우에는 관리자에게 문의해 주세요.)
-				</span>
+				<div style="font-size:11px; margin-top: 5px;">
+					<span class="id_input" >아이디는 변경할 수 없습니다.<br>
+						(회사명 변경으로 인한 아이디 수정의 경우 관리자에게 문의 바랍니다.)
+					</span>
 				</div>
 			</div>
 
