@@ -73,7 +73,7 @@ h2{
 #product_search {float: right;}
 
 /* 최신순 카테고리 오른쪽으로 */
-#catergory {float: right;}
+#category {float: right;}
 
 /* aside 네비바 큰 카테고리 (All, Concert) */
 h3{
@@ -284,7 +284,7 @@ function topFunction() {
 		    
 		    <!-- 상품검색 시작 -->
 			<span id= "product_search">
-				<form method="post" action="searchConcert">
+				<form method="post" action="/searchConcert">
 					<a href="concert/${row.title}">${row.title}</a>
 					<input type="text" id="title" name="title" value="${title}">
 					<input type="submit" id="btnSubmit" value="검색" style="display:none;">
@@ -314,19 +314,26 @@ function topFunction() {
 			<div id="list_content" class="list_content">
 			
 			<div class="count-category" style="paading-bottom: 30px; padding-left: 5px; ">
-			<sapn id= "product_count">
+			<span id= "product_count">
 			All (${total})
 			</span>
 			
+			<c:if test="${past == null}">
 			<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
-			<span class="catergory">
-		    	<select id="catergory" name="catergory">
-		         	<option value="new">최신순</option>
-		         	<a href="#" onclick=""><option value="popular">인기순</option></a>
-		         	<option value="like">좋아요순</option>
-		  	 	</select>
-		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+				<span class="category">
+			    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+			         	<option value="/concert" <c:if test="${categoryOption eq '최신순'}">selected</c:if>>최신순</option>
+			         	<option value="/concert/popularAll" <c:if test="${categoryOption eq '인기순'}">selected</c:if>>인기순</option>
+			         	<option value="/concert/likeAll" <c:if test="${categoryOption eq '좋아요순'}">selected</c:if>>좋아요순</option>
+			  	 	</select>
+			    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
 			</div>
+			</c:if>
+			
+			<c:if test="${past == 'past'}">
+				<div class="category">
+			    </div><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+			</c:if>
 		
 			
 				<table>
@@ -388,7 +395,7 @@ function topFunction() {
 								</span>
 								
 								<!-- 공연 날짜 디데이 카운트 -->
-								<div class="dDayCount-display" style="display: none;">
+<%-- 								<div class="dDayCount-display" style="display: none;">
 									<jsp:useBean id="now" class="java.util.Date" />
 									
 									<fmt:parseDate var="regDate" value="${row.date}" pattern="yyyy-MM-dd"/>
@@ -398,16 +405,21 @@ function topFunction() {
 									<fmt:parseNumber var="oldDate" value="${regDate.time/ (1000*60*60*24)}" integerOnly="true" scope="request"></fmt:parseNumber>
 									
 									<c:set var="dDayCount" value="${oldDate-nowDate}"/>
-								</div>
+								</div> --%>
 							    
-									<c:choose>  
+<%-- 									<c:choose>  
 										<c:when test="${dDayCount < 0}"> 
 											<div style="color: lightgrey;">종료된 공연입니다.</div>
 										</c:when> 
-										<c:otherwise> 
-											<div style="font-weight: 500;"><c:out value="D - ${dDayCount}"></c:out></div>
-										</c:otherwise> 
-									</c:choose> 
+										<c:when test="${dDayCount == 0}"> 
+											<div style="font-weight: 500;">D - DAY</div>
+										</c:when> 
+										<c:when test="${dDayCount >= 0}"> 
+											<div style="font-weight: 500;">
+											<c:out value="D - ${dDayCount}"></c:out>
+											</div>
+										</c:when> 
+									</c:choose>  --%>
 									
 									
 								<!-- 공연 날짜 디데이 카운트 종료 -->
@@ -443,11 +455,10 @@ function topFunction() {
 							</c:if>
 				
 				
-							<c:if test="${category == null}">
-				
+							<c:if test="${orderby == 'p'}">
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
-									<a href="/list.do?pageNum=${startPage-1}">[이전]</a>
+									<a href="/concert/popularAll?pageNum=${startPage-1}">[이전]</a>
 								</c:if>
 					
 								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -457,25 +468,25 @@ function topFunction() {
 											<span style="font-weight: bold">${i}</span>
 										</c:when>
 										<c:when test="${pageNum != i}">
-											<a href="/list.do?pageNum=${i}">${i}</a>
+											<a href="/concert/popularAll?pageNum=${i}">${i}</a>
 										</c:when>
 									</c:choose>
 								</c:forEach>
 					
 								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 								<c:if test="${endPage < pageCount}">
-									<a href="/list.do?pageNum=${startPage+10}">[다음]</a>
+									<a href="/concert/popularAll?pageNum=${startPage+10}">[다음]</a>
 								</c:if>
 							
 							</c:if>
 							
 							
 							
-							<c:if test="${category != null}">
+							<c:if test="${orderby == 'l'}">
 								
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
-									<a href="/list.do?category=${category}&pageNum=${startPage-1}">[이전]</a>
+									<a href="/concert/likeAll?category=${category}&pageNum=${startPage-1}">[이전]</a>
 								</c:if>
 					
 								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -485,14 +496,14 @@ function topFunction() {
 											<span style="font-weight: bold">${i}</span>
 										</c:when>
 										<c:when test="${pageNum != i}">
-											<a href="/list.do?category=${category}&pageNum=${i}">${i}</a>
+											<a href="/concert/likeAll?category=${category}&pageNum=${i}">${i}</a>
 										</c:when>
 									</c:choose>
 								</c:forEach>
 					
 								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 								<c:if test="${endPage < pageCount}">
-									<a href="/list.do?category=${category}&pageNum=${startPage+10}">[다음]</a>
+									<a href="/concert/likeAll?category=${category}&pageNum=${startPage+10}">[다음]</a>
 								</c:if>
 							</c:if>
 							

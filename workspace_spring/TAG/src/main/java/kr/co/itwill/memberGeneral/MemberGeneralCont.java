@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.itwill.coupon.CouponDTO;
+import kr.co.itwill.point.PointDTO;
+
 @Controller
 public class MemberGeneralCont {
 
@@ -164,12 +167,20 @@ public class MemberGeneralCont {
 	// [회원가입] - 성공 / 실패 
 	@RequestMapping(value = "/joinGproc.do", method = RequestMethod.POST)
 	public String joinGproc( MemberGeneralDTO dto, 
+							 CouponDTO coupon,
+							 PointDTO point,
 							 HttpServletRequest req, 
-							 HttpServletResponse resp)throws Exception{
+							 HttpServletResponse resp
+							 )throws Exception{
+		
 		
 		int cnt = memberGeneralDao.joinG(dto);
-		if(cnt == 1) { //로그인 성공
-		   req.setAttribute("msg", "회원가입을 축하합니다.");
+		if(cnt == 1) { //회원가입 성공
+			
+		   memberGeneralDao.joinGpoint(point); //포인트발급
+		   memberGeneralDao.joinGcoupon(coupon);//쿠폰발급
+		   
+		   req.setAttribute("msg", "회원가입을 축하드힙니다.");
 		   req.setAttribute("url", "/home");
 		}//if end
 		

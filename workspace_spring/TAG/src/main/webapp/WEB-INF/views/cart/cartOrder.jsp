@@ -270,7 +270,7 @@ input[type="checkbox"] + label:before {
 				<div style="overflow: auto; height: 170px;">
 					
 					<c:forEach var="row" items="${cartorder}" varStatus="vs">
-							<input type="hidden" value="${row.pro_no}" name="prono"/>
+							<input type="hidden" value="${row.pro_no}" name="pro_no"/>
 							<input type="hidden" value="${row.cnt}" name="detail_cnt"/>
 							<input type="hidden" value="${row.org_price}" name="org_price"/>
 							

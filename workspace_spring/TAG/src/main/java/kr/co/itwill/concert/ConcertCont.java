@@ -33,7 +33,7 @@ public class ConcertCont {
 	public ModelAndView concertList(HttpServletRequest req) {
 		
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("concert/concertList");
+        mav.setViewName("/concert/concertList");
         
         int totalRowCount = concertDao.concertTotal();
         
@@ -308,11 +308,14 @@ public class ConcertCont {
 	
 
 //  [콘서트 리스트 - 검색] 시작 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
-	@RequestMapping("/concert/searchConcert")
+	@RequestMapping("/searchConcert")
 	public ModelAndView search(@RequestParam(defaultValue = "") String title) {
+		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("concert/concertList");
+		
 		mav.addObject("list", concertDao.searchConcert(title));
+		mav.addObject("total", concertDao.searchConcertCnt(title));
 		
 		mav.addObject("title", title);
 		

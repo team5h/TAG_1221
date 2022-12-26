@@ -48,6 +48,7 @@
 		]]>
 	</select> 
 	
+	
 	<!-- [ 콘서트목록 - 좋아요순 ] -->	
 	<select id="likeAll" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="java.util.Map">	
 		<![CDATA[
@@ -114,7 +115,7 @@
 				SELECT c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						
 					   com_name, dlv_date, likecnt, postername, watch_age, price, edit
 				FROM concert
-				WHERE date(`date`) >= date_format(CURDATE(), '%Y%m%d')
+				WHERE date(`date`) > date_format(CURDATE(), '%Y%m%d')
 			) CC, (SELECT @RNO := 0) BB 
 		ORDER BY date 
 		) AA 
@@ -133,8 +134,16 @@
 	</select> 
 	
 	
+	<!-- 콘서트 검색 개수-->
+	<select id="searchConcertCnt" resultType="int">
+		SELECT COUNT(*)
+		FROM concert
+		WHERE upper(title) LIKE #{title}
+		ORDER BY title
+	</select> 
+	
 	<!-- 콘서트 검색 -->
-	<select id="searchConcert" resultType="kr.co.itwill.concert.ConcertDTO" parameterType="String">
+	<select id="searchConcert" resultType="java.util.Map" parameterType="String">
 		SELECT c_no, title, date, start_time, end_time, open_eb, close_eb, open_tck, close_tck, genre, j_id, 						
 			   com_name, dlv_date, likecnt, postername, watch_age, price, edit
 		FROM concert
