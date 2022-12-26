@@ -129,13 +129,17 @@ public class ProductCont {
  		//System.out.println("잘 도착 했다.");
  		
  		String c_no = req.getParameter("c_no");
- 		//System.out.println(c_no);
  		String m_id = (String)session.getAttribute("s_m_id");
  		
  		ModelAndView mav = new ModelAndView();
  		mav.setViewName("product/listConcert");
  		
- 		int totalRowCount = productDao.concertTotal(c_no);
+        int totalRowCount = 0;
+        if(c_no==null) {
+        	totalRowCount = productDao.total(); // 카테고리 전체 총 글갯수
+        }else {
+        	totalRowCount = productDao.concertTotal(c_no); // 카테고리별 글 개수
+        }//if end
  		//System.out.println(totalRowCount);
  		
  		
@@ -163,7 +167,11 @@ public class ProductCont {
         
         List list = null;
         if (totalRowCount > 0) {
-        	list = productDao.concertList(startRow, endRow, c_no);//1, 5, M
+        	if (c_no == null){
+        		list = productDao.concertList(startRow, endRow);//1, 5, M
+        	} else {
+        		list = productDao.concertList2(startRow, endRow, c_no);//1, 5, M
+        	}
         } else {
             list = Collections.emptyList(); // 안 넣어도 상관 없음
         } // if end
@@ -191,21 +199,29 @@ public class ProductCont {
  		return mav;
  	}//listConcert() end    
  	
-
+ 	
     
 //  [상품검색] 시작  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  //
-    
-	@RequestMapping("/search")
-	public ModelAndView search(@RequestParam(defaultValue = "") String pro_name) {
-		ModelAndView mav = new ModelAndView();
+   
+ 	@RequestMapping("/search")
+	public ModelAndView search(@RequestParam(defaultValue = "") String pro_name, HttpSession session) {
+		
+ 		String m_id = (String)session.getAttribute("s_m_id");
+ 		
+ 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("product/list");
-		mav.addObject("list", productDao.search(pro_name));
+		
+	
+		mav.addObject("list", productDao.search(pro_name));	// 검색 상품리스트
+		mav.addObject("total", productDao.searchcnt(pro_name)); //총 개수
+		
+		mav.addObject("categoryAll", productDao.categoryAll()); //카테고리 보이게
+		mav.addObject("like", productDao.mem_like(m_id)); // 좋아요
 		
 		mav.addObject("pro_name", pro_name);
 		
 		return mav;
 	}//search() end
-
 	
 
 //  [상품리스트 - 음반 카테고리] 시작  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //

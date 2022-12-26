@@ -52,6 +52,24 @@
 				)
 	</insert>
 	
+	<!-- [회원가입] 포인트 3000점 적립 -->
+	<insert id="joinGpoint" parameterType="kr.co.itwill.point.PointDTO">
+		insert into point_detail (m_id, detail, pt_plus, pt_total, cng_date)
+		values ( #{m_id} , '회원가입 축하 포인트 적립', '3000',  '3000', (current_date))
+	</insert>
+	
+	<!-- [회원가입] 배송비 쿠폰 3000점 발급 -->
+	<insert id="joinGcoupon" parameterType="kr.co.itwill.coupon.CouponDTO">
+		insert into coupon_detail (m_id, coupon, issue_date, exp_date)
+		values ( #{m_id} , 'Dc', (current_date), date_add((CURRENT_DATE), interval +1 month))
+	</insert>
+	
+	
+	
+	
+	
+	
+	
 	
 	<select id="memberupdateG" resultType="kr.co.itwill.memberGeneral.MemberGeneralDTO" parameterType="String">
 		select m_id, m_pw, m_name, nickname, birth, gender, m_zipcode, m_addr1, m_addr2, m_tel, m_email, mem_grade, point, regdate

@@ -220,6 +220,10 @@ function topFunction() {
 	$('html, body').animate({scrollTop:0}, '200');
 }//scrollFunction() end
 
+
+
+
+
 $( document ).ready(function() {
 	var likelist = [];
 	
@@ -315,7 +319,7 @@ function hearticon(this1) {
 		
 	
 	$("#product_box"+pro_no).hover(function(){
-		//alert(pro_no);
+		alert(pro_no);f
 		//요소에 마우스를 올렸을 때 기능
 			$("#hearticon"+pro_no).css("display", "inline-block");
 			//alert("마우스 올림");
@@ -332,6 +336,7 @@ function hearticon(this1) {
 		
 }//hearticon(this1) end
 
+
 </script>
 
 
@@ -345,12 +350,11 @@ function hearticon(this1) {
 		<!-- intro_wrap 시작 -->
 		<div id="intro_wrap">
 
-			<select name="c_no" id="c_no" onchange="if(this.value) location.href=(this.value);" style="width:250px;">
+			<select name="concertSelect" id="concertSelect" onchange="if(this.value) location.href=(this.value);" style="width:250px;">
 		         <option value="/listConcert">공연을 선택해주세요.</option>
 		         <c:forEach var="row" items="${concertlist}" varStatus="vs"> 
-		         	 <option value="/listConcert?c_no=${row.c_no}"
-		         	 <%-- <c:if test="${row[vs.index == '1' ]}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option> --%>
-		         	 <c:if test="${(c_no) == (row.c_no)}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option>
+		         	<%-- <option value="/listConcert?c_no=${row.c_no}" <c:if test="${concertlist[vs.index] == '1'}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option> --%>
+		         	 <option id="concertSelect" value="/listConcert?c_no=${row.c_no}"<c:if test="${(c_no) == (row.c_no)}">selected</c:if>>[${row.date}] &nbsp; ${row.title}</option>
 		         </c:forEach>
 		      </select>
 
@@ -424,6 +428,19 @@ function hearticon(this1) {
 			</span>
 			
 			<!-- 최신순/인기순/좋아요순 카테고리 시작 -->
+			<c:if test="${c_no == null}">
+			<span class="category">
+		    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
+		         	<option value="/listConcert">최신순</option>
+		         	<option value="/list.do/popularAll">인기순</option>
+		         	<option value="/list.do/likeAll">좋아요순</option>
+		  	 	</select>
+		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
+		    </c:if>
+			
+			
+			
+			<c:if test="${c_no != null}">
 			<span class="category">
 		    	<select id="category" name="category" onchange="if(this.value) location.href=(this.value);">
 		         	<option value="/listConcert?c_no=${c_no}">최신순</option>
@@ -431,7 +448,8 @@ function hearticon(this1) {
 		         	<option value="/listConcert/likeCon?c_no=${c_no}">좋아요순</option>
 		  	 	</select>
 		    </span><!-- 최신순/인기순/좋아요순 카테고리 끝 -->
-			</div>
+		    </c:if>
+			</div><!-- count-category end -->
 			
 				<table>
 					<br>
@@ -525,11 +543,41 @@ function hearticon(this1) {
 							<c:if test="${endPage > pageCount}">
 								<c:set var="endPage" value="${pageCount}" />
 							</c:if>
+							
+							
+							
+						<c:if test="${c_no == null}">	
+							<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+								<c:if test="${startPage > 1}">
+									<a href="/listConcert?&pageNum=${startPage-1}"> < </a>
+								</c:if>
+					
+								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+								<c:forEach var="i" begin="${startPage}" end="${endPage}">
+									<c:choose>
+										<c:when test="${pageNum == i}">
+											<span style="font-weight: bold">${i}</span>
+										</c:when>
+										<c:when test="${pageNum != i}">
+											<a href="/listConcert?&pageNum=${i}">${i}</a>
+										</c:when>
+									</c:choose>
+								</c:forEach>
+					
+								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+								<c:if test="${endPage < pageCount}">
+									<a href="/listConcert?&pageNum=${startPage+10}"> > </a>
+								</c:if>
+							</c:if>
+						
+						
 				
+				
+						<c:if test="${c_no != null}">
 							<c:if test="${orderby == 'r'}"><!-- 최신순 recent -->
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
-									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}"> < </a>
 								</c:if>
 					
 								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -546,7 +594,7 @@ function hearticon(this1) {
 					
 								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 								<c:if test="${endPage < pageCount}">
-									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}"> > </a>
 								</c:if>
 							</c:if>
 							
@@ -554,7 +602,7 @@ function hearticon(this1) {
 							<c:if test="${orderby == 'p'}">
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
-									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
+									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage-1}"> < </a>
 								</c:if>
 					
 								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -571,7 +619,7 @@ function hearticon(this1) {
 					
 								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 								<c:if test="${endPage < pageCount}">
-									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
+									<a href="/listConcert/popularCon?c_no=${c_no}&pageNum=${startPage+10}"> > </a>
 								</c:if>
 							</c:if>
 							
@@ -579,7 +627,7 @@ function hearticon(this1) {
 							<c:if test="${orderby == 'l'}">
 								<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
 								<c:if test="${startPage > 1}">
-									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}">[이전]</a>
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage-1}"> < </a>
 								</c:if>
 					
 								<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
@@ -596,16 +644,16 @@ function hearticon(this1) {
 					
 								<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
 								<c:if test="${endPage < pageCount}">
-									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}">[다음]</a>
+									<a href="/listConcert?c_no=${c_no}&pageNum=${startPage+10}"> > </a>
 								</c:if>
 							</c:if>
+						</c:if><!-- ${c_no != null} -->
+						
+					</c:if>	<!-- ${requestScope.count > 0} end -->
 						
 						
 						
 						
-						
-						
-						</c:if>
 							
 				</div>	
 						
