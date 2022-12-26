@@ -39,8 +39,8 @@ public class CartCont {
 	
 	@Autowired
 	ProductDAO productDao;
-	
-	
+
+
 
 //----------------------------------------------------------- [장바구니 리스트]
 	@RequestMapping("/cart")
@@ -56,7 +56,7 @@ public class CartCont {
         //System.out.println(cartDao.mycartList(m_id));
         //cartDao.mycartList(m_id);
         mav.addObject("mycart", cartDao.mycartList(m_id));
-        mav.addObject("total", cartDao.sameCompany(m_id));
+        mav.addObject("mycartCnt", cartDao.mycartCnt(m_id));
         return mav;
 	}// concertList() end
 	

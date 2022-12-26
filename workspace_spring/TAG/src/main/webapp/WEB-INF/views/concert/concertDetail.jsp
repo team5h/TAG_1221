@@ -200,7 +200,8 @@ img{object-fit: contain;}
 }
 /* 콘서트포스터 밑에 하트 아이콘 */
 .heart-icon{
-padding-top: 10px;
+padding-top: 12px;
+padding-left: 2px;
 }
 
 .likecnt{
@@ -210,11 +211,14 @@ line-height : 10px;
 /* 콘서트 정보 */
 .concert-inform{
   width: 1000px;
-  height: 6700px;
+  --height: 6700px;
   margin: 0 auto;
-  margin-top: 50px;
+  --margin-top: 50px;
   --background-color: lightgreen;
 }
+
+
+#reservationBtn:hover {background-color: lightgreen; color: black;}
 
 
 </style>
@@ -314,7 +318,7 @@ line-height : 10px;
 										<td href="#">
 											<c:choose>
 								     			<c:when test="${concert.j_id == 'yes24'}"> yes24 라이브홀 </c:when>
-								     			<c:when test="${concert.j_id == 'bluesquare'}"> 블루스퀘어 마스터홀 </c:when>
+								     			<c:when test="${concert.j_id == 'bluesqure'}"> 블루스퀘어 마스터홀 </c:when>
 								     		</c:choose>
 										</td>
 									</div>
@@ -325,7 +329,7 @@ line-height : 10px;
 									<div id="concert-time">
 										<td style="font-weight: 600"> 관람시간 </td>
 										<td href="#">
-										<div style="padding-bottom: 7px;">
+										<div style="padding-bottom: 5px;">
 											<!-- 날짜 포맷 변경 -->
 											<fmt:parseDate var="regDate" value="${concert.date}" pattern="yyyy-MM-dd"/>
 											<fmt:formatDate value="${regDate}" pattern="yyyy. MM. dd (E)"/>
@@ -351,11 +355,12 @@ line-height : 10px;
 									<tr>		
 									<div id="concert-price">
 										<td style="font-weight: 600"> 가격 </td>
-										<td href="#">
-											<div>스탠딩 R <fmt:formatNumber value="${concert.price}" pattern="#,###"/>원</div>
-											<div>지정석 R <fmt:formatNumber value="${concert.price}" pattern="#,###"/>원</div>
-											<div>지정석 S <fmt:formatNumber value="${concert.price-11000}" pattern="#,###"/>원</div>
-											<div>지정석 A <fmt:formatNumber value="${concert.price-22000}" pattern="#,###"/>원</div>
+										<td>
+												<div style="padding-bottom: 5px;">스탠딩 R <fmt:formatNumber value="${concert.price}" pattern="#,###"/>원</div>
+												<div style="padding-bottom: 5px;">지정석 R <fmt:formatNumber value="${concert.price}" pattern="#,###"/>원</div>
+												<div style="padding-bottom: 5px;">지정석 S <fmt:formatNumber value="${concert.price-11000}" pattern="#,###"/>원</div>
+												<div>지정석 A <fmt:formatNumber value="${concert.price-22000}" pattern="#,###"/>원</div>
+											</div>
 										</td>
 									</div>
 									</tr>	
@@ -363,21 +368,37 @@ line-height : 10px;
 									<!-- 얼리버드 예매 기간 -->
 									<tr>		
 									<div id="concert-earlybird">
-										<td style="font-weight: 600"> 선예매 기간 </td>
-										<td href="#">
-										<div style="padding-bottom: 7px;">
-										
+									
 										<c:if test="${concert.open_eb == null}">
-											선예매 없는 공연
+										<td style="font-weight: 600"> 일반예매 </td>
+										<td href="#">
+										<div style="padding-bottom: 5px;">
+											<fmt:parseDate var="open_tck" value="${concert.open_tck}" pattern="yyyy-MM-dd HH:mm:ss.S"/>
+											<fmt:formatDate value="${open_tck}" pattern="yyyy. MM. dd (E) hh:mm"/>
+										</div>
+										<div>
+											<fmt:parseDate var="close_tck" value="${concert.close_tck}" pattern="yyyy-MM-dd HH:mm:ss.S"/>
+											<fmt:formatDate value="${close_tck}" pattern="yyyy. MM. dd (E) hh:mm" />						
+										</div>
+										</td>
 										</c:if>
-											<fmt:parseDate var="open_eb" value="${concert.open_eb}" pattern="yyyy-MM-dd hh:mm:ss"/>
+									
+										<c:if test="${concert.open_eb != null}">
+										<td style="font-weight: 600"> 선예매 기간 </td>
+										<td>
+										<div style="padding-bottom: 5px;">
+											<fmt:parseDate var="open_eb" value="${concert.open_eb}" pattern="yyyy-MM-dd HH:mm:ss.S"/>
 											<fmt:formatDate value="${open_eb}" pattern="yyyy. MM. dd (E) hh:mm"/>
 										</div>
 										<div>
-											<fmt:parseDate var="close_eb" value="${concert.close_eb}" pattern="yyyy-MM-dd hh:mm:ss"/>
+											<fmt:parseDate var="close_eb" value="${concert.close_eb}" pattern="yyyy-MM-dd HH:mm:ss.S"/>
 											<fmt:formatDate value="${close_eb}" pattern="yyyy. MM. dd (E) hh:mm"/>						
-											</div>
+										</div>
 										</td>
+										</c:if>
+										
+										
+										
 									</div>
 									</tr>	
 									
@@ -448,7 +469,37 @@ line-height : 10px;
 								<!-- 캘린더 코드 종료 -->
 								
 								<button id="reservationBtn" style="font-size: 18px;" > 예매하기 </button>
-							     
+								
+							 	<jsp:useBean id="now" class="java.util.Date" />							  <!-- 오늘날짜 -->
+								<fmt:formatDate value="${now}" pattern="yyyy-MM-dd HH:mm" var="today" />	
+								
+								<fmt:parseDate var="date" value="${concert.date}" pattern="yyyy-MM-dd"/>  <!-- 콘서트 날짜 -->
+								<fmt:formatDate value="${date}" pattern="yyyy-MM-dd HH:mm" var="date" />	 
+								 
+								<fmt:parseDate var="open_eb" value="${concert.open_eb}" pattern="yyyy-MM-dd HH:mm:ss.S"/> <!-- 선예매 시작시간 --> 
+								<fmt:formatDate value="${open_eb}" pattern="yyyy-MM-dd HH:mm" var="open_eb" />	
+								
+								<fmt:parseDate var="close_eb" value="${concert.close_eb}" pattern="yyyy-MM-dd HH:mm"/> <!-- 선예매 종료시간 -->
+								<fmt:formatDate value="${close_eb}" pattern="yyyy-MM-dd HH:mm" var="close_eb" />	
+								
+								<fmt:parseDate var="open_tck" value="${concert.open_tck}" pattern="yyyy-MM-dd HH:mm:ss.S"/> <!-- 일반예매 시작시간 -->
+								<fmt:formatDate value="${open_tck}" pattern="yyyy-MM-dd HH:mm" var="open_tck" />	
+											
+								<fmt:parseDate var="close_tck" value="${concert.close_tck}" pattern="yyyy-MM-dd HH:mm:ss.S"/> <!-- 일반예매 종료시간 -->
+								<fmt:formatDate value="${close_tck}" pattern="yyyy-MM-dd HH:mm" var="close_tck" />	
+									
+								<!-- 오늘이 선예매 기간인지? 날짜 포맷 정확히 맞춰줘야 비교가능 -->
+								<c:if test="${open_eb <= today && close_eb >= today}"> 
+									<div style="margin: 20px 26px 0px 28px; padding: 12px 0 0 10px; text-align: center; font-size: 16px; border: 1px solid lightgreen;">
+									<div style="font-size: 16px;">
+									현재 <b>선예매</b> 기간입니다. 
+									</div>
+									<div style="padding-top: 5px; padding-bottom: 12px; font-size: 14px; color: lightgreen;">
+									선예매 시 관련 공연 굿즈 15% 할인 
+									</div>
+									</div>
+								</c:if>
+								 
 							</div><!-- calendar_aside 끝 -->
 							</td>
 							<!-- 캘린더 td 끝 -->
@@ -466,8 +517,8 @@ line-height : 10px;
 		
 		
 		<!-- 공연 상세 이미지 -->
-		<div class="concert-inform" style="text-align: center; width: 844px; height: 7630px; background-color: lightgreen;">
-			<img class="edit-img" src="/storage/${concert.edit}" style="width: 800px; margin: 0 auto; padding: 22px 0 22px 0;">
+		<div class="concert-inform" style="text-align: center; ">
+			<img class="edit-img" src="/storage/${concert.edit}" style="position: relative; top: 50px; width: 800px; margin: 0 auto; padding: 22px 0 22px 0;">
 		</div>
 		
 		
@@ -750,15 +801,53 @@ var openBmodal = document.getElementById("reservationBtn");
 //Get the <span> element that closes the modal
 var closeBmodal = document.getElementsByClassName("closeBmodal")[0];
 
+
 //When the user clicks the button, open the modal 
 openBmodal.onclick = function() {
 	//로그인 확인
 	if(${s_m_id == null}){
 		alert("로그인 후 이용가능합니다.");
 		location.href="/loginForm";
-	}else{
-		modal.style.display = "block";
+		
+	}else{ //로그인 완료 후
+		
+		let today     = "${today}";	   //오늘날짜
+		let date 	  = "${date}";	   //콘서트 날짜
+		let open_eb   = "${open_eb}";  //티켓 선예매 오픈날짜
+		let close_eb  = "${close_eb}"; //티켓 선예매 종료날짜
+		let open_tck  = "${open_tck}"; //티켓 일반예매 오픈날짜
+		let close_tck = "${close_tck}";//티켓 일반예매 종료날짜
+		
+
+		//예매기간 확인
+		/* if(!(open_eb <= today && close_eb > today)){ //얼리버드 기간이 아니면
+			alert("예매가능한 기간이 아닙니다.");
+		} else if (!(open_tck <= today && close_tck > today)) { //일반예매 기간도 아니면
+			alert("예매가능한 기간이 아닙니다.");
+		} else if (date < today) { // 종료된 공연
+			alert("이미 종료된 공연입니다.");
+		}else {
+			modal.style.display = "block";
+		}// if end */
+		
+		
+		
+	if(date < today) { //공연 기간이 지나면
+		alert("이미 종료된 공연입니다.");
+	} else {
+		if(open_eb <= today && close_eb > today || open_tck <= today && close_tck > today) {
+			modal.style.display = "block";	
+		}else {
+			alert("예매가능한 기간이 아닙니다.");
+		}//if end
 	}//if end
+
+	
+	
+	
+		
+	}//if end
+
 }
 
 //When the user clicks on <span> (x), close the modal

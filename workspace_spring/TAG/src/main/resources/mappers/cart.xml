@@ -14,7 +14,7 @@
 							 JOIN concert C ON P.c_no = C.c_no
 		WHERE m_id = #{m_id} 
 		GROUP BY PC.pro_no
-		ORDER BY p_id, cart_no DESC
+		ORDER BY cart_no DESC
 	</select>
 
 
@@ -158,5 +158,12 @@
 							</foreach>
 						  ) 
 	</delete>
+
  	
+ 	<!-- 장바구니 수량체크 -->
+ 	<select id="mycartCnt" parameterType="kr.co.itwill.cart.CartDTO" resultType="int">
+ 		select COUNT(*)
+		from product_cart
+		where m_id = #{m_id}
+ 	</select>
 </mapper>

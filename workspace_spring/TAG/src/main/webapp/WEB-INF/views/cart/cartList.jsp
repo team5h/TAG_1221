@@ -388,7 +388,6 @@ function topFunction() {
 
 <button onclick="topFunction()" id="myBtn" title="Go to top" style="font-size: 26px;">Go to top ↑</button>
 
-
 <div class="wrapAll">
 	
 		<!-- intro_wrap 시작 -->
@@ -436,7 +435,7 @@ function topFunction() {
 				
 			</div><!-- list_aside 끝 -->
 			
-			
+	<c:if test="${not empty mycart}"> 			
 			<!-- list_content 시작 -->
 			<div class="list_content">
 				
@@ -453,20 +452,12 @@ function topFunction() {
 							</div>
 					  	</th>
 					    <th>상품정보</th>
-					    <th>가격</th>
-					    <th>수량</th>
+					    <th style="text-align: center;">가격</th>
+					    <th style="text-align: center;">수량</th>
 					    <!-- <th>배송비</th> -->
 					    <th></th>
 					  </tr>
 					</thead>
-					
-					<c:if test="${empty mycart}"> 
-						<tr>
-							<td colspan="9" style="padding-top: 20px; font-size: 16px;">
-								장바구니가 비었습니다.
-							</td>
-						</tr>
-					</c:if>
 					
  					<c:forEach var="row" items="${mycart}" varStatus="vs">
  					
@@ -481,7 +472,9 @@ function topFunction() {
 				       	
 				       	<td style="width: 30px; padding-left: 0;">
 				       	
-							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)">
+
+							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="selectcheck" class="normal" onchange="chkbox(this)" checked="checked">
+
 							<label for="check${row.cart_no}"></label>
 			       		
 						</td>
@@ -511,7 +504,7 @@ function topFunction() {
 				        </td>
 
 				        <!-- 가격 -->
-				        <td style="width: 130px;">
+				        <td style="width: 130px; text-align: center;">
 				        <input type="hidden" id="product_price${row.cart_no}" name="product_price" value="${row.price}">
 					        ￦
 					        <span id="totalAmount${row.cart_no}">
@@ -546,12 +539,12 @@ function topFunction() {
 					
 			</div><!-- list_content -->
 		</div><!-- list_container -->
-		
-
 </div><!-- wrapAll end -->
+</c:if> <!-- not empty mtcart -->
 
 
 <script>
+
 
 // 장바구니 비어있으면 주문요약 숨기기
 <c:if test="${empty mycart}"> 
@@ -586,6 +579,7 @@ $(".checkbox_group").on("click", ".normal", function() {
 
     $("#check_all").prop("checked", is_checked);
 });
+
 
 // ----------------------------------------------------------- 수량옵션
 $('._count :button').on({
@@ -624,10 +618,12 @@ $('._count :button').on({
 });
 
 
+
 // 기본 총 상품가격(가격 * 수량)
 var cart_price = 0; //계산용 금액 30000
 var cart_price_text = ""; //표시용 금액 (콤마 찍어주기위함) 30,000
 var cart_point = 0;
+var select_priceAll = 0;
 
 
 // foreach문으로 mycart 테이블에 있는 가격과 수량을 곱한다. 
@@ -636,15 +632,112 @@ var cart_point = 0;
 </c:forEach>
 
 
-cart_point = cart_price * 0.01;
-cart_price_text  = setRegexp(cart_price); // 표시용 금액에 배송비 더하고 뺀 값 넣어준다.
-$('#summaryOrder').text(cart_price_text); //id="summaryOrder"(총 주문금액)의 텍스트에 표시용 변수를 넣어준다.
-$('#summaryTotal').text(cart_price_text); //id="summaryTotal"(총 결제금액)의 텍스트에 표시용 변수를 넣어준다.
-$('#summarPoint').text(cart_point);
-//alert(cart_price);
+
+var is_checked = $('#check_all').is(':checked');
+console.log("체크되어있는지? is_checked : " + is_checked);
+
+let cartnoList = [];
+//console.log(cartnoList);
+
+<c:forEach var="row" items="${mycart}" varStatus="status">
+	cartnoList.push("${row.cart_no}");
+	console.log("cartnoList" + cartnoList);
+</c:forEach>
+
+console.log("cartnoList 초기값 chkArray에 들어감 " + chkArray);
+
+
+
+
+/* //체크박스 전체선택 시 담아줄 변수
+let cartnoList = [];
+console.log("전체선택 pk 넘버 cartnoList : " + cartnoList);
+
+// jstl에 있는 ${row.cart_no} 변수를 모두 담는다.
+<c:forEach var="row" items="${mycart}" varStatus="status">
+	cartnoList.push("${row.cart_no}");
+</c:forEach> */
+
+
+
+select_priceAll = cart_price;
+caculate(cart_price);
 
 // 함수 사용 (기본 총 상품가격 cart_price) 넣는다. 밑에 함수를 사용
 deliveryPrice(cart_price);
+
+
+
+// ----------------------------------------------------------------- 체크박스 전체 선택
+$(".checkbox_group").on("click", "#check_all", function () {
+    var checked = $(this).is(":checked");
+    
+	// 전체삭제 금액
+	var price_all = cart_price ;
+	
+	//선택한 금액 초기화 
+	select_priceAll = 0;
+
+  if(checked){
+  	$(this).parents(".checkbox_group").find('input').prop("checked", true);
+
+  	<c:forEach var="row" items="${mycart}" varStatus="status">
+		cartnoList.push("${row.cart_no}");
+		console.log("cartnoList 더하기 " + cartnoList);
+	</c:forEach>
+  	
+	caculate(price_all);
+	select_priceAll = price_all;
+	
+	console.log('전체선택 체크 (select_priceAll) : ' + select_priceAll);
+	
+  } else {
+  	$(this).parents(".checkbox_group").find('input').prop("checked", false);
+  	
+    
+  	<c:forEach var="row" items="${mycart}" varStatus="status">
+		cartnoList.pop("${row.cart_no}");
+		console.log("cartnoList 빼기 " + cartnoList);
+	</c:forEach>
+	
+
+  	
+  	
+  	<c:forEach var="row" items="${mycart}" varStatus="status">
+    	price_all -= ${row.price} * ${row.cnt};
+	</c:forEach>
+	
+	caculate(price_all);
+	select_priceAll = 0;
+	//console.log('전체선택 체크 해제(select_priceAll) : ' + select_priceAll);
+	
+  } //end if 
+
+});
+
+
+
+// 금액 계산 후 주문요약에 보여주는 함수
+function caculate(cart_price) {
+	cart_price_text  = setRegexp(cart_price);
+	cart_point = cart_price * 0.01;
+	$('#summaryOrder').text(cart_price_text);
+	$('#summaryTotal').text(cart_price_text);
+	$('#summarPoint').text("+ " + cart_point);
+}//caculate(cart_price) end
+
+
+
+// 체크박스 개별 선택
+$(".checkbox_group").on("click", ".normal", function() {
+    var is_checked = true;
+
+    $(".checkbox_group .normal").each(function(){
+        is_checked = is_checked && $(this).is(":checked");
+    });
+
+    $("#check_all").prop("checked", is_checked);
+});
 
 //----------------------------------------------------------- 배송비 추가, 감소 함수
 function deliveryPrice (cart_price) {
@@ -652,10 +745,10 @@ function deliveryPrice (cart_price) {
 	var total_price = 0;
 	var total_price_text = "";
 	
-	if(cart_price < 50000) {
+	if(cart_price < 50000 && cart_price > 0) {
 		$('#summaryDelivery').text("+ 3,000");
 		total_price = cart_price + 3000;
-		console.log('cartprice: ' + cart_price + 'totalprice : ' + total_price);
+		//console.log('cartprice: ' + cart_price + 'totalprice : ' + total_price);
 		total_price_text = setRegexp(total_price);
 		$('#summaryTotal').text(total_price_text);
 	} else if (cart_price >= 50000) {
@@ -663,6 +756,8 @@ function deliveryPrice (cart_price) {
 		total_price = cart_price;
 		total_price_text = setRegexp(total_price);
 		$('#summaryTotal').text(total_price_text);
+	} else {
+		$('#summaryDelivery').text("0");
 	}//if end
 }//deliveryPrice() end
 
@@ -707,9 +802,9 @@ function countplus(this1) {
 		$('#summaryOrder').text(cart_price_text);
 		//$('#summaryTotal').text(total_price_text);
 		$('#summarPoint').text(cart_point); //적립포인트
+		$('#totalAmount'+cart_no).text(total_price);
 		
 		deliveryPrice(cart_price);
-		$('#totalAmount'+cart_no).text(total_price);
 	}//if else
 		
 	
@@ -762,7 +857,6 @@ function countminus(this1) {
 		var total_price = price * count;
 		
 		cart_point = cart_price * 0.01; //적립 포인트
-		
 		total_price = setRegexp(total_price);
 		cart_price_text  = setRegexp(cart_price);
 		total_price_text = setRegexp(total_price);
@@ -790,7 +884,6 @@ function countminus(this1) {
 function setRegexp(price) {
 	
 	var reg_price = String(price).replace(/,/g , '');
-	console.log('setRegexp price : ' + reg_price);
 	var regexp = /\B(?=(\d{3})+(?!\d))/g;
 	reg_price = reg_price.toString().replace(regexp, ',');
 	
@@ -832,6 +925,8 @@ function setRegexp(price) {
 		});//$.ajax({}) end
 	} //cartdelete(this) end
 	
+
+	
 	
 	
 	
@@ -843,17 +938,46 @@ function setRegexp(price) {
 		// 체크박스의 value값을 가져온다. 
 		var cart_no = this1.value;
 		//alert(cart_no);
-		
+		var price = $('#product_price'+cart_no).val();//장바구니에 담겨있는 가격 (1개)
+		var count = $('#product-qty'+cart_no).val()*1;//장바구니에 담겨있는 수량
+		var select_price = price * count; // 선택된 상품의 총 가격 (1개 가격 * 수량)
+		console.log('chkbox:select_price : ' + select_price);
 		// 한 행의 체크박스가 체크되면
+		
+		// 전체 선택이 되어 있다면 select_priceAll = cart_price;
+		
+		
 		if (this1.checked) {
 			//chkArray 배열에 cart_no을 넣어준다
 			chkArray.push(cart_no);
 			//alert(chkArray);
+			console.log('chkArray : ' + chkArray);
+			
+			select_priceAll += select_price;
+			console.log('chkbox:this1.checked(select_priceAll) : ' + select_priceAll);
+			caculate(select_priceAll);
+			deliveryPrice(select_priceAll);
+			
+
+
 		}else {
 			// 체크되지 않는다면 
 			// index 변수에 chkArray변수의 특정값 (cart_no)를 넣어주고
 			var index = chkArray.indexOf(cart_no);
 			// 만약 index 에 -1보다 크면
+			
+			select_priceAll -= select_price;
+			
+			if(select_priceAll <= 0) {
+				select_priceAll = 0; 
+			} 
+			
+			console.log('chkbox:this1.unchecked(select_priceAll) : ' + select_priceAll);
+			
+			caculate(select_priceAll);
+			deliveryPrice(select_priceAll);
+			
+			
 			if (index > -1) {
 				//chkArray 배열의 index, 1을 잘라준다.
 				chkArray.splice(index, 1);
@@ -866,15 +990,42 @@ function setRegexp(price) {
 //---------------------------------------------------------- 장바구니 결제버튼 (무조건 선택시에만 결제 가능)
 
 	function checkoutBtn() {
-		//alert(chkArray);
 		
-		if(chkArray.length < 1){
-			alert('구매하실 상품을 선택해주세요.');
-			return false
-		}//if end
+		console.log("cartnoList" + cartnoList);
+		console.log(chkArray);
 		
 		
-		for(var i = 0 ; i <  chkArray.length ; i++){
+		var is_checked = $('#check_all').is(':checked');
+		console.log("checkoutBtn의 is_checked " + is_checked);
+		
+		if(is_checked == true) {
+			
+			if(cartnoList.length < 1){
+				console.log("cartnoList의 if문 " + cartnoList);
+				
+				alert('구매하실 상품을 선택해주세요.');
+				return false
+			}//if end 
+			
+			
+			for(var i = 0 ; i <  cartnoList.length ; i++){
+
+			    const hiddenplace = document.getElementById("hiddenplace");
+	            const tag = document.createElement('p');
+	            tag.innerHTML = "<input type='hidden' value='"+cartnoList[i]+"' name='cartno'/>";
+	            hiddenplace.appendChild(tag);
+	   
+	            //alert(tag);
+			}//for end
+				
+		}else {
+			
+			if(chkArray.length < 1){
+				alert('구매하실 상품을 선택해주세요.');
+				return false
+			}//if end 
+			
+			for(var i = 0 ; i <  chkArray.length ; i++){
 
 		    const hiddenplace = document.getElementById("hiddenplace");
             const tag = document.createElement('p');
@@ -882,8 +1033,13 @@ function setRegexp(price) {
             hiddenplace.appendChild(tag);
    
             //alert(tag);
-	
 		}//for end
+		
+		}
+ 
+		
+		
+		
 		
 		return true;
 	}//end
@@ -926,22 +1082,6 @@ function setRegexp(price) {
 		}//if end
 		
 	}//delbtn() end
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

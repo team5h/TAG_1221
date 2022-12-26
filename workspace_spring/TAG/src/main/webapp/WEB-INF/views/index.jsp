@@ -219,8 +219,14 @@
 						
 						
 						<!-- 장바구니 아이콘 -->
-						<a href="/cart" class="cart">
-							<!-- <span class="item-in-cart">2</span> --><!-- 장바구니 담으면 뜨는 숫자 -->
+						
+
+						<a href="/cart" class="cart" onclick="cartbtn()">
+							<c:if test="${mycartCnt != 0}">
+								<span class="item-in-cart">
+								${mycartCnt}
+								</span> 
+							</c:if>
 							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<g clip-path="url(#clip0_429_9132)">
 							<path d="M4 9H20L19.1654 18.1811C19.0717 19.2112 18.208 20 17.1736 20H6.82643C5.79202 20 4.92829 19.2112 4.83464 18.1811L4 9Z" stroke="#292929" stroke-width="1.5" stroke-linejoin="round"/>
@@ -838,7 +844,15 @@
 
 
 <script>
+function cartbtn() {
+	
+	if(s_m_id == null) {
+		alert("로그인 후 이용가능합니다.");
+		let url = '/loginForm';
+		location.replace(url);
+	}
 
+}
 
 
 

@@ -21,6 +21,13 @@ public class CartDAO {
 	SqlSession sqlSession;
 	
 
+//----------------------------------------------------------- [장바구니 개수]
+	public int mycartCnt(String m_id) {
+		return sqlSession.selectOne("cart.mycartCnt", m_id);
+	}//countUP() end
+	
+	
+	
 //----------------------------------------------------------- [장바구니 리스트]
 	public List<Map<String, String>> mycartList(String m_id){
 		
