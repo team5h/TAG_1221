@@ -6,8 +6,6 @@ public class OrderDetailDTO {
 	private int pro_no;
 	private int detail_cnt;
 	private int org_price;
-	private int discount;
-	private int pricesum;
 	private String stus;
 
 	public OrderDetailDTO() {}
@@ -44,22 +42,6 @@ public class OrderDetailDTO {
 		this.org_price = org_price;
 	}
 
-	public int getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(int discount) {
-		this.discount = discount;
-	}
-
-	public int getPricesum() {
-		return pricesum;
-	}
-
-	public void setPricesum(int pricesum) {
-		this.pricesum = pricesum;
-	}
-
 	public String getStus() {
 		return stus;
 	}
@@ -71,10 +53,9 @@ public class OrderDetailDTO {
 	@Override
 	public String toString() {
 		return "OrderDetailDTO [order_num=" + order_num + ", pro_no=" + pro_no + ", detail_cnt=" + detail_cnt
-				+ ", org_price=" + org_price + ", discount=" + discount + ", pricesum=" + pricesum + ", stus=" + stus
-				+ "]";
+				+ ", org_price=" + org_price + ", stus=" + stus + "]";
 	}
-	
-	
+
+
 	
 }//DTO 

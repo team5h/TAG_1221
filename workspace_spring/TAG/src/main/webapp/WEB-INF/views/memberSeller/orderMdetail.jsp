@@ -29,17 +29,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -105,7 +105,7 @@
 
 	<form action="/mypageS/orderdetailProc/${orderdetail.order_num}" method="post">
 	<input type="hidden" value="${orderdetail.order_num}" name="order_num">
-	<div style="display: inline-block; float:left; width: 50%; height: 450px; padding-right: 10px;">
+	<div style="display: inline-block; float:left; width: 50%; height: 450px; padding-right: 50px;">
 		<span style="font-size: 14px; font-weight: bold; border-bottom:2px solid lightgreen;">&nbsp;주문자 정보&nbsp;</span>
 		<br>
 		<span style="font-size: 14px;">
@@ -117,8 +117,12 @@
 		<span style="font-size: 14px; font-weight: bold; border-bottom:2px solid lightgreen;">&nbsp;수령인 정보&nbsp;</span>
 		<br>
 		<span style="font-size: 14px;">
-		<br> 	 <span style="color:#999999;">수령인</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_name}" style="font-size: 14px; border:none;" readonly size="45" name="rec_name">
-		<br><br> <span style="color:#999999;">연락처</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_tel}" style="font-size: 14px; border:none;"  readonly size="45" name="rec_tel">
+		<br> 	 <span style="color:#999999;">수령인</span>  &nbsp;&nbsp;  
+				 <input type="text" value="${orderdetail.rec_name}" style="width: 80px; display:inline-block; font-size: 14px; border:none;" readonly size="45" name="rec_name">
+			     
+			     <span style="color:#999999; padding-left: 118px;">연락처</span>  &nbsp;&nbsp;  
+			     <input type="text" value="${orderdetail.rec_tel}" style="width:120px; display:inline-block; font-size: 14px; border:none;"  readonly size="45" name="rec_tel">
+		
 		<br><br> <span style="color:#999999;">배송지</span>  &nbsp;&nbsp;  <input type="text" value="${orderdetail.rec_zipcode}" style="font-size: 14px; width: 65px; border:none;" readonly size="10" name="rec_zipcode">
 																		 <input type="text" value="${orderdetail.rec_addr1}" style="font-size: 14px; margin-left: 55px; padding-top: 10px; border:none;" readonly size="45" name="rec_addr1">
 																		 <input type="text" value="${orderdetail.rec_addr2}" style="font-size: 14px; border:none; padding-top:10px; margin-left: 55px;" readonly size="45" name="rec_addr2">
@@ -130,11 +134,11 @@
 		<br><br>
 				<span style="color:#999999;">상품 금액</span>	
 					<span style="float:right;"><fmt:formatNumber value="${orderdetail.org_price}" pattern="#,###"/>원</span>
-		<br><br><span style="color:#999999;">마일리지</span>
+		<br><br><span style="color:#999999;">사용 포인트</span>
 					<span style="float:right;"> - <fmt:formatNumber value="${orderdetail.pt_minus}" pattern="#,###"/>P</span>
-		<br><br><span style="color:#999999;">할인 금액</span>
-					<span style="float:right;"><fmt:formatNumber value="${orderdetail.discount}" pattern="#,###"/>원</span>
-		<br><br><span style="color:#999999;">할인 정보</span>
+		<br><br><span style="color:#999999;">쿠폰 할인</span>
+					<span style="float:right;"><fmt:formatNumber value="${orderdetail.cp_dis}" pattern="#,###"/>원</span>
+		<br><br><span style="color:#999999;">쿠폰 정보</span>
 					<span style="float:right;"> 
 							<c:choose>
 								<c:when test="${orderdetail.coupon == null}"> - </c:when>

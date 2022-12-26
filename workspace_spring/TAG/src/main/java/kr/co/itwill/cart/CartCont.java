@@ -144,11 +144,11 @@ public class CartCont {
 		if( !(m_id == null) ) {
 			
 			String[] arrayParam = req.getParameterValues("cartno");
-	        /* 
+	        /*  
 		    for (int i = 0; i < arrayParam.length; i++) {
 	              System.out.println(arrayParam[i]);
 	          }
-	        */
+	       */
 	        // 배열을 List로 변환
 	        List list = Arrays.asList(arrayParam);
 	        
@@ -176,6 +176,15 @@ public class CartCont {
 		
 	}//end
 	
+	@ResponseBody
+	@RequestMapping(value = "/cart/detailcoupon", method = RequestMethod.POST)
+	public List<Map<String, Object>> detailcoupon (@RequestParam int cp_no){
+		//System.out.println("cp_no" + cp_no);
+		return cartDao.detailcoupon(cp_no);
+	}//end
+	
+	
+	
 	@RequestMapping("/cart/cartOrderProc")
 	public ModelAndView cartorderProc (  HttpServletRequest req
 									 	,HttpSession session
@@ -183,7 +192,7 @@ public class CartCont {
 									 	) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		
-		System.out.println("***");
+		//System.out.println("***");
 		
 		String m_id=(String)session.getAttribute("s_m_id");
 
@@ -212,7 +221,7 @@ public class CartCont {
 	        	
 	        	// 쿠폰 사용여부 업데이트 
 	        	int cpstusup = productDao.cpstusUp(Integer.parseInt(req.getParameter("cp_no")));
-	        	System.out.println("cpstusup"+cpstusup);
+	        	//System.out.println("cpstusup"+cpstusup);
 	        }
 	        
 	        // ProductOrder 인서트 
@@ -229,21 +238,21 @@ public class CartCont {
 	        map.put("rec_zipcode", req.getParameter("rec_zipcode"));
 	        map.put("msg", req.getParameter("msg"));
 	        map.put("pt_plus", req.getParameter("pt_plus"));
-	        
+	  
 			int ProductOrdercnt = productDao.productorderIns(map);
-			System.out.println("ProductOrdercnt "+ProductOrdercnt);
+			//System.out.println("ProductOrdercnt "+ProductOrdercnt);
 			
 			
 			// OrderDetail 인서트 
 			String[] prono = req.getParameterValues("prono");
 			String[] detail_cnt = req.getParameterValues("detail_cnt");
 			String[] org_price = req.getParameterValues("org_price");
-			
-	        /* 
-		    for (int i = 0; i < arrayParam.length; i++) {
-	              System.out.println(arrayParam[i]);
+			//String[] discount = req.getParameterValues("discount");
+	        /*
+		    for (int i = 0; i < discount.length; i++) {
+	              System.out.println(discount[i]);
 	          }
-	        */
+		   */
 	        // 배열을 List로 변환
 	        List<OrderDetailDTO> orderdetail = new ArrayList<>();
 	        
@@ -254,32 +263,22 @@ public class CartCont {
 	        	dto.setDetail_cnt(Integer.parseInt(detail_cnt[i]));
 	        	dto.setOrg_price(Integer.parseInt(org_price[i]));
 	        	dto.setOrder_num(formatedNow);
-	        	dto.setDiscount(9999);
-	        	dto.setPricesum(9999);
+	        	//dto.setDiscount(Integer.parseInt(discount[i]));
+	        	//dto.setPricesum(Integer.parseInt(org_price[i])-Integer.parseInt(discount[i]));
 	        	dto.setStus("상품준비중");
 	        	
 	        	orderdetail.add(dto);
 	        }//for end
 	        
 	        int odtest = cartDao.cart_orderDtail(orderdetail);
-/*
-			// OrderDetail 인서트 
-			dto.setOrder_num(formatedNow);
-			
-			int org_price = Integer.parseInt(req.getParameter("order_price"));
-			int pricesum = org_price - Integer.parseInt(req.getParameter("cp_dis"));
-			dto.setOrg_price(org_price);
-			dto.setPricesum(pricesum);
-			dto.setDiscount(Integer.parseInt(req.getParameter("cp_dis")));
-			int OrderDetailcnt = productDao.orderdetailIns(dto);
-			System.out.println("OrderDetailcnt"+OrderDetailcnt);
-		*/	
+
 			
 			MemberGeneralDTO dtoMG = new MemberGeneralDTO();
 			dtoMG = productDao.holdingpoint(m_id);
 			int holdingpoint = dtoMG.getPoint();							// 보유 포인트 
 			int pt_minus = Integer.parseInt(req.getParameter("pt_minus"));	// 사용 포인트
 			int pt_plus = Integer.parseInt(req.getParameter("pt_plus"));	// 적립금
+			
 			
 			// member - point 업데이트 
 			Map<String, Object> mempointmap = new HashMap<>();
@@ -296,7 +295,7 @@ public class CartCont {
 			mempointmap.put("point", newpoint);
 			
 			int mempointUpdate = productDao.mempointUp(mempointmap);
-			System.out.println("mempointUpdate "+mempointUpdate);
+			//System.out.println("mempointUpdate "+mempointUpdate);
 			
 			// PointDetail
 			if ( pt_minus > 0 ) {	
@@ -310,7 +309,7 @@ public class CartCont {
 				pointminusmap.put("order_num", formatedNow);
 			
 				int PointMinuscnt = productDao.pointminusIns(pointminusmap);
-				System.out.println("PointMinuscnt "+PointMinuscnt);
+				//System.out.println("PointMinuscnt "+PointMinuscnt);
 			}//if end
 			
 			// 포인트 적립 인서트	
@@ -321,9 +320,15 @@ public class CartCont {
 			pointplusmap.put("order_num", formatedNow);
 			
 			int PointPluscnt = productDao.pointplusIns(pointplusmap);
-			System.out.println("PointPluscnt "+PointPluscnt);
+			//System.out.println("PointPluscnt "+PointPluscnt);
 			
 			// 장바구니 비우기
+			String[] cart_no = req.getParameterValues("cart_no");
+			List cartnoDel = Arrays.asList(cart_no);
+			
+			int cartnoDelcnt = cartDao.cartdel(cartnoDel);
+			//System.out.println("cartnoDelcnt"+cartnoDelcnt);
+			
 			
 			mav.setViewName("/product/orderSucc");
 			

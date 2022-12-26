@@ -26,6 +26,7 @@ public class SellerProductDTO {
     private int sales;				// 판매수량
     private List chkList; 			// 선택 삭제 배열 
     private MultipartFile fileimg; 	// 실제 이미지파일 저장용
+    private String title;			
 
     //Default Constructor	
     public SellerProductDTO() {}
@@ -177,15 +178,25 @@ public class SellerProductDTO {
 	}
 
 
-	//toString()
+	public String getTitle() {
+		return title;
+	}
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
 	@Override
 	public String toString() {
 		return "SellerProductDTO [pro_no=" + pro_no + ", category=" + category + ", c_no=" + c_no + ", p_id=" + p_id
 				+ ", pro_name=" + pro_name + ", stock=" + stock + ", color=" + color + ", size=" + size + ", price="
 				+ price + ", regdate=" + regdate + ", edit=" + edit + ", status=" + status + ", postername="
 				+ postername + ", likecnt=" + likecnt + ", afstock=" + afstock + ", sales=" + sales + ", chkList="
-				+ chkList + ", fileimg=" + fileimg + "]";
+				+ chkList + ", fileimg=" + fileimg + ", title=" + title + "]";
 	}
+
 
 
 

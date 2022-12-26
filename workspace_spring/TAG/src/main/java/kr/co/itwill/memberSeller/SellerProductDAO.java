@@ -41,6 +41,15 @@ public class SellerProductDAO {
 		return sqlSession.selectList("sellerProduct.productlist",map); 
 	}
 	
+	public SellerProductDTO productdetail (int pro_no, String p_id) {
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pro_no", pro_no);
+		map.put("p_id", p_id);
+		
+		return sqlSession.selectOne("sellerProduct.productdetail",map);
+	}
+	
 	public int chkdelete(SellerProductDTO dto) throws Exception {
 		return sqlSession.delete("sellerProduct.chkdelete", dto);
 	}

@@ -27,17 +27,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;" >  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;" >  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;" > - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;" > - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;" > - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;" > - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;" > - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;" > - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -73,14 +73,15 @@
 	</div>
 <br><br>
 
-		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;" >
+		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px; margin-top: 20px;" >
 			
-			<tr style=" border-bottom:3px solid black; font-size: 16px;">
-			 	<td style="padding-bottom: 8px; font-weight: 600;"> 최근 주문건 </td>
+			<tr style=" border-bottom:3px solid black; font-size: 16px; text-align: left;">
+			 	<td style="padding-bottom: 8px; font-weight: 600; padding-left: 10px;" colspan="5"> 최근 주문건 
+			 		<span style="font-size:11px; color:gray; font-weight: 300;">(최신 주문 2건만 조회됩니다)</span> </td>
 			</tr>
 				
 			<tr style=" border-bottom:0.1px solid black; font-size: 12px;">	
-				<td style="padding:10px 10px 10px 10px; width: 100px;"> 주문번호</td>
+				<td style="padding:10px 10px 10px 10px; width: 180px;"> 주문 번호</td>
 				<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;"> 수령인 정보</td>
 				<td style="padding:10px 10px 10px 10px;"> 수량</td>
 				<td style="padding:10px 10px 10px 10px;"> 금액</td>
@@ -115,19 +116,21 @@
 				</td> 
 							
 				<td style="border-bottom:1px solid #ededed;"> 
-				   ${row.order_date}
+				   <fmt:parseDate var="dateString" value="${row.order_date}" pattern="yyyyMMdd" />
+				   <fmt:formatDate value="${dateString}" pattern="yyyy.MM.dd" />
 				</td>
 			</tr>	
 		</c:forEach>
 		</table>
 <br><br>
-		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;" >			
-			<tr style=" border-bottom:3px solid black; font-size: 16px;">
-			 	<td style="padding-bottom: 8px; font-weight: 600;"> 최근 문의글 </td>
+		<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px; margin-top: 20px;" >			
+			<tr style=" border-bottom:3px solid black; font-size: 16px; text-align: left;">
+			 	<td style="padding-bottom: 8px; font-weight: 600; padding-left: 10px;" colspan="5"> 최근 문의글 
+			 		<span style="font-size:11px; color:gray; font-weight: 300;">(최신 문의 2건만 조회됩니다)</span> </td>
 			</tr>
 		
 			<tr style=" border-bottom:0.1px solid black; font-size: 12px;">	
-				<td style="padding:10px 10px 10px 10px; width: 100px;"> 상품번호</td>
+				<td style="padding:10px 10px 10px 10px; width: 100px;"> 문의 번호</td>
 				<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;"> 제목</td>
 				<td style="padding:10px 10px 10px 10px;"> 아이디</td>
 				<td style="padding:10px 10px 10px 10px;"> 답변</td>
@@ -144,7 +147,7 @@
 			
 			<c:forEach var="row" items="${recently_qna}" varStatus="vs">
 			<tr>
-				<td style="border-bottom:1px solid #ededed;" > ${row.pro_no} </td>
+				<td style="border-bottom:1px solid #ededed;" > ${row.q_no} </td>
 
 				<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all; ">  
 					<c:choose> 
@@ -165,12 +168,17 @@
 						${row.qname}
 				</td> 
 				
-				<td style="border-bottom:1px solid #ededed;">
-					<div style="background-color: lightgreen; border-radius: 50%; width: 20px; height: 20px; margin: auto;">
-     					<span style="font-size: 11px; font-weight: bold; line-height: 20px;"> 
-							${row.a_stus}
-     					</span> 
-     				</div>
+				<td style="border-bottom:1px solid #ededed; text-align: center;">
+
+					<c:choose>
+						<c:when test="${row.a_stus == 'N'}">
+							<p style="color: lightgreen; font-weight: 500;">대기중</p>
+						</c:when>
+						<c:otherwise>
+							<p>완료</p>
+						</c:otherwise>
+					</c:choose>
+						
 				</td> 
 							
 				<td style="border-bottom:1px solid #ededed; font-size: 12px; padding: 3px 0 3px 0;"> 

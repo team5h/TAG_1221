@@ -28,17 +28,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -70,7 +70,7 @@
 	
 	<table style="width:100%; text-align:center; vertical-align: middle; table-layout: fixed; font-size: 14px;" >
 		<tr style=" border-bottom:1px solid black; font-size: 12px;">	
-			<td style="padding:0 10px 5px 10px; width: 100px;"> 주문번호</td>
+			<td style="padding:0 10px 5px 10px; width: 180px;"> 주문번호</td>
 			<td colspan="5" style="padding:0 10px 5px 10px; width: 550px;"> 수령인 정보</td>
 			<td style="padding:0 10px 5px 10px;"> 수량</td>
 			<td style="padding:0 10px 5px 10px;"> 상품 금액</td>
@@ -89,7 +89,7 @@
 				<tr>
 					<td style="border-bottom:1px solid #ededed;" > ${row.order_num} </td>
  
-					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:5px 0px 5px 30px; word-break:break-all; ">  
+					<td colspan="5" style="border-bottom:1px solid #ededed; text-align: left; padding:15px 0px 15px 30px; word-break:break-all; ">  
 						<a href="/mypageS/orderMdetail/${row.order_num}" style="color:black;">
 							 ${row.m_id} (${row.rec_name})
 							<br> (${row.rec_zipcode}) ${row.rec_addr1} ${row.rec_addr2} ｜ ${row.rec_tel}	

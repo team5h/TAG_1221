@@ -204,8 +204,14 @@ public class ProductDAO {
 		return sqlSession.selectOne("product.qnadetail",map);
 	}
 	
-	public List<QnADTO> qnalist (int pro_no) {
-		return sqlSession.selectList("product.qnalist",pro_no);
+	public List<QnADTO> qnalist (int start, int end, int pro_no) {
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("start", start);
+		map.put("end", end);
+		map.put("pro_no", pro_no);
+		
+		return sqlSession.selectList("product.qnalist",map);
 	}
 	
 	public int addcart (int cnt, int pro_no, String m_id) {
@@ -227,6 +233,10 @@ public class ProductDAO {
 		return sqlSession.insert("product.like",map);
 	}//end
 	
+	public int pro_likecntIns(int pro_no) {
+		return sqlSession.update("product.pro_likecntIns",pro_no);
+	}
+	
 	public int unlike (int pro_no, String m_id) {
 		Map<String, Object> map = new HashMap<>();
 		
@@ -235,6 +245,10 @@ public class ProductDAO {
 		
 		return sqlSession.delete("product.unlike",map);
 	}//end
+	
+	public int pro_likecntDel (int pro_no) {
+		return sqlSession.update("product.pro_likecntDel",pro_no);
+	}
 	
 	public int likechk (String m_id, int pro_no) {
 		Map<String, Object> map = new HashMap<>();
@@ -311,7 +325,9 @@ public class ProductDAO {
 		return sqlSession.selectList("product.mem_like",m_id);
 	}
 	
-	
+	public int qnalistCNT (int pro_no) {
+		return sqlSession.selectOne("product.qnalistCNT",pro_no);
+	}
 	
 	
 	

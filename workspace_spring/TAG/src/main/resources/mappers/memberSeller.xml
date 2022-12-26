@@ -174,7 +174,7 @@
    FROM (
        SELECT @ROWNUM := @ROWNUM + 1 as rnum,  order_num, m_id, rec_addr1, rec_addr2, rec_zipcode, rec_tel, total_price, p_id, total_cnt, order_date
        FROM (
-               select po.order_num as order_num, m_id, rec_addr1, rec_addr2, rec_zipcode, rec_tel, po.total_price as total_price, p.p_id as p_id, sum(detail_cnt) as total_cnt, substr(po.order_num,1,8) as order_date
+               select po.order_num as order_num, m_id, rec_addr1, rec_addr2, rec_zipcode, rec_tel, (org_price - cp_dis - pt_minus + d_fee) as total_price, p.p_id as p_id, sum(detail_cnt) as total_cnt, substr(po.order_num,1,8) as order_date
                from product_order po join order_detail od on po.order_num = od.order_num
                                      join product p on od.pro_no = p.pro_no
                                      join seller s on p.p_id = s.p_id

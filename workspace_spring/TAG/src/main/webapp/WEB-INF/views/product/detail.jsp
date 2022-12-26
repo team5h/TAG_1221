@@ -64,13 +64,13 @@ function topFunction() {
 	<div class="wrapcont">
 	
 		<!-- 상단 상품정보 -->
-		<div id="productinfo" style="height: 547px; padding: 0 40px 0 40px; margin-top: 50px; ">
-			<div style="width:547px; height:547px; overflow: hidden; float: left; margin:0 auto;">
+		<div id="productinfo" style="height: 547px; padding: 0 40px 0 40px; margin-top: 50px; text-align:center;">
+			<div style="width:400px; height:547px; overflow: hidden; float: left; margin:0 auto;">
 				<img src="/storage/${proDetail.postername}" style="width:100%; height:100%; object-fit:cover;">
-				<!-- /storage/johnnystimson9.png -->
+				<!-- /storage/johnnystimson9.png div - text-align:center; / <img> width:400px; -->
 			</div><!-- product image -->
 		
-			<div id="rightside" style=" display: inline-block; text-align: left; padding-left: 70px; width: 600px; height: 100%;">
+			<div id="rightside" style=" display: inline-block; text-align: left; padding-left: 70px; width: 600px; height: 100%; float: right;">
 				<div id="likebtn" style="display: inline-block; float: right;" onclick="like()">
 				<c:choose>
 					<c:when test="${likechk == null}">
@@ -172,7 +172,7 @@ function topFunction() {
 					<c:set var="pro_no" value="${proDetail.pro_no}" />
 					<c:set var="s_m_id" value="${s_m_id}" />
 					<button class="btn btn-outline-bllack btn-sm" style="width: 50%; border-right: none;" onclick="addcart()">장바구니</button>
-					<button class="btn saem_btn btn-sm" style="width: 50.1%; margin-left: -5px;"  onclick="orderpage()">바로 구매</button>
+					<button class="btn saem_btn btn-sm" style="width: 50.34%; margin-left: -6px;"  onclick="orderpage()">바로 구매</button>
 				</div>
 				
 			</div><!-- rightside -->
@@ -187,7 +187,7 @@ function topFunction() {
 		    </ul>
 		    <div class="tabcontent">
 		      <div id="prodetail" style="margin: auto; width: 100%;">
-		      		<div style="overflow: hidden; float: right; margin-right: 80px;"> 
+		      		<div style="overflow: hidden; float: right; margin-right: 120px;"> 
 		      			${proDetail.edit}
 		      		</div>
 		      </div>
@@ -196,8 +196,8 @@ function topFunction() {
 		      	<span style="font-weight: 600; font-size: 20px;"> 문의 (${pro_qnacnt}) </span>
 		      	<button id="qnabtn" style="float: right; padding: 7; font-size: 11;" class="btn btn-outline-black btn-sm">Q＆A쓰기</button>
 		     	
-		     	
-		     	<div id="modal" style="display: none; z-index: 2; position: absolute; border:1px solid; width: 700px; margin-left: 15%; background-color:white; height: 645px; padding: 20px;"> 
+		     <div> 
+		     	<div id="modal" style="display: none; z-index: 2; position: absolute; top: -300px; border:1px solid; width: 700px; margin-left: 15%; background-color:white; height: 645px; padding: 20px;"> 
 		     		<div class="close-area" style="float: right;">
 		     			<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 50 50">
 						<path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 
@@ -206,15 +206,16 @@ function topFunction() {
 						</svg>
 		     		</div><!-- close btn -->
 		     		
+		     	<!-- qna insert modal -->
 		  		    <p style="text-align: center; font-size: 20px; font-weight: 600;">Q & A</p>
 			     	<form id="qnainsert">
 				     	<input type="hidden" id="pro_no" name="pro_no" value="${proDetail.pro_no}">
 				     	<input type="hidden" id="qname" name="qname" value="${s_m_id}">
 			     		<div style="float: left; padding-top: 10px; font-size:14px;"> 
 				     		<p> 아이디 </p> 
-				     		<p style="padding-top: 10px;"> 비밀번호 </p> 
-							<p style="padding-top: 10px;"> 문의제목 </p>
-							<p style="padding-top: 10px;"> 문의내용 </p>
+				     		<p style="padding-top: 15px;"> 비밀번호 </p> 
+							<p style="padding-top: 15px;"> 문의제목 </p>
+							<p style="padding-top: 15px;"> 문의내용 </p>
 						</div>
 						
 						<div style="float: right; padding-top: 10px;"> 
@@ -227,24 +228,38 @@ function topFunction() {
 										<p style="color:red;">일반회원만 가능한 서비스입니다.</p> 	
 									</c:when>
 								</c:choose>
-							<input type="number" name="passwd" inputmode="numeric" style="padding-top: 10px; margin-bottom: 18px;" class="input-number-password" placeholder="숫자만 입력 가능합니다"/>
+							<input type="number" name="passwd" inputmode="numeric" style="padding-top: 10px; margin-bottom: 18px; width: 160px;" class="input-number-password" placeholder="숫자만 입력 가능합니다"/>
+							<span id="pswdwarrning"  style="display:none; color:red; font-size: 10px; padding-left: 15px;">비밀번호를 설정해주세요.</span>
 							
-							<input type="text" name="subject" style="display: block; margin-bottom: 18px; width: 100%;" />
+							
+							<input type="text" name="subject" id="subject" style="display: block; margin-bottom: 18px; width: 100%;" />
 							<textarea id="summernote" name="edit"></textarea>	
 						</div>
 						
 			     		<p style="font-size:12px; color:#bcbcbc; clear: both; padding: 15px 0 15px 0;">- 문의내용에 대한 답변은 ‘마이페이지 > MY 상품 > 나의 문의내역’ 또는 ‘상품 상세페이지’에서 확인 가능합니다.</p>
 			     		
-			     		<button type="button" onclick="qnasubmit()" style="width: 100%;" class="btn btn-outline-black btn-sm">등록</button>
+			     		<c:choose>
+									<c:when test="${s_m_id == null and s_p_id == null}">
+										<button type="button" disabled style="width: 100%;" class="btn btn-outline-black btn-sm">등록</button>
+									</c:when>
+									<c:when test="${mem_grade == 'S' and s_m_id == null}">
+										<button type="button" disabled style="width: 100%;" class="btn btn-outline-black btn-sm">등록</button>
+									</c:when>
+									<c:otherwise>
+										<button type="button" onclick="qnasubmit()" style="width: 100%;" class="btn btn-outline-black btn-sm">등록</button>
+									</c:otherwise>
+						</c:choose>
+			     		
 			     	</form> <!-- QnA insert -->
 		     	</div><!-- modal -->
-		    	
+		    </div>
+		    
 		   <!-- qna list -->
 		     	<table style="width: 100%; margin-top: 20px; text-align: center;">
 		     	
 		     	<c:if test="${empty qnalist}"> 
 					<tr>
-						<td colspan="5" style="padding-top: 20px;">
+						<td colspan="5" style="padding-top: 20px; font-size: 14px;">
 							등록된 문의글이 없습니다.
 						</td>
 					</tr>
@@ -275,8 +290,8 @@ function topFunction() {
 		     		<!-- qna passwdchk -->
 		     		<tr id="passwdchk${row.q_no}" style="display:none;" class="passch">
 						<td style="height: 200px; border: 1px solid;" colspan="4">
-								<c:set var="q_no" value="${row.q_no}"></c:set>
-								<input type="number" name="passwd" id="passwd" inputmode="numeric" class="input-number-password"/>
+								<c:set var="q_no" value="${row.q_no}"></c:set> 
+								<input type="number" name="passwd" id="passwd${row.q_no}" inputmode="numeric" class="input-number-password" />
 								<button type="button" onclick="passwdchkfrm(this)" value="${row.q_no}" class="btn btn-outline-black btn-sm" style="padding: 5px 10px 5px 10px; font-size: 10px;">확인</button>
 						</td>
 						<td style="display: none;"></td>
@@ -327,6 +342,45 @@ function topFunction() {
 		     		</tr>
 		     	 	</c:forEach>
 		     	</table>
+		     	
+		     	
+	<div id="paging" style="text-align: center; margin-top: 20px;">
+		<c:if test="${requestScope.count > 0}">
+			<c:set var="pageCount" value="${requestScope.totalPage}" />
+			<c:set var="startPage" value="${requestScope.startPage}" />
+			<c:set var="endPage" value="${requestScope.endPage}" />
+	
+			<!-- endPage는 10단위이기에 총 페이지가 end 페이지보다 작으면 그 수를 대입한다 -->
+			<!-- 즉, 만약 최종 페이지 수가 22라면 30까지 표시할 필요가 없으니 엔드 페이지 수를 22로 맞춘다 -->
+			<c:if test="${endPage > pageCount}">
+				<c:set var="endPage" value="${pageCount}" />
+			</c:if>
+	
+			<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+			<c:if test="${startPage > 1}">
+				<a href="/product/${proDetail.pro_no}?pageNum=${startPage-1}">[이전]</a>
+			</c:if>
+	
+			<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+			<c:forEach var="i" begin="${startPage}" end="${endPage}">
+				<c:choose>
+					<c:when test="${pageNum == i}">
+						<span style="font-weight: bold">${i}</span>
+					</c:when>
+					<c:when test="${pageNum != i}">
+						<a href="/product/${proDetail.pro_no}?pageNum=${i}">${i}</a>
+					</c:when>
+				</c:choose>
+			</c:forEach>
+	
+			<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+			<c:if test="${endPage < pageCount}">
+				<a href="/product/${proDetail.pro_no}?pageNum=${startPage+10}">[다음]</a>
+			</c:if>
+		
+		</c:if>
+	 </div>	
+					
 		      </div><!-- qna tab -->
 		  </div><!-- tab content -->	
 		</div><!-- tab -->
@@ -410,10 +464,13 @@ function topFunction() {
 	});//end
 	
 	//modal
+	
+	
 	const modal = document.getElementById("modal")
 	const btnModal = document.getElementById("qnabtn")
 	btnModal.addEventListener("click", e => {
 	    modal.style.display = "block"
+	    $('#subject').focus(); 
 	})
 	
 	const closeBtn = modal.querySelector(".close-area")
@@ -436,6 +493,14 @@ function topFunction() {
 	
 	//문의 작성
 	function qnasubmit(){
+		
+		
+		if($('#passwd').val() == null) {
+			//alert('비밀번호를 설정해주세요.');
+			$('#pswdwarrning').css('display','inline-block');
+			$('#subject').focus();
+		}//if end
+		
 		let insertData = $('#qnainsert').serialize();
 		
 		$.ajax({
@@ -467,7 +532,10 @@ function topFunction() {
 	
 	function passwdchkfrm(this1){
 		var q_no = this1.value;
-		var passwd = $('#passwd').val();
+		var passwdid = '#passwd'+q_no; 
+		var passwd = $(passwdid).val();
+
+		//alert($(passwd).val());
 		
 		var passwdchk = '#passwdchk'+q_no;
 		var qnadetail = '#qnadetail'+q_no;
@@ -475,12 +543,14 @@ function topFunction() {
 		var edit = '#edit'+q_no;
 		var content = '#content'+q_no;
 		var regdate = '#regdate'+q_no;
+		
 		/*
-		alert (q_no);
-		alert (passwd);
-		alert (passwdchk);
-		alert (qnadetail);
+		alert ("q_no"+q_no);
+		alert ("passwd"+passwd);
+		alert ("passwdchk"+passwdchk);
+		alert ("qnadetail"+qnadetail);
 		*/
+		
 		$.ajax({
 					url   	 : "/product/qnadetail"
 					,type 	 : "post"

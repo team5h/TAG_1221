@@ -30,17 +30,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT" style="color:lightgreen;"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -143,7 +143,7 @@
 					
 						<div class="productMdetail" >
 							<div style="width:30%; height:285px; overflow: hidden; float: left; margin:0 auto;">
-							<img src="/storage/${row.postername}" style="width:100%; height:100%; object-fit:cover;">
+							<img src="/storage/${row.postername}" style="width:80%; height:100%; object-fit:cover;">
 							</div><!-- main image -->
 							
 							
@@ -263,7 +263,7 @@
 								</div>
 							</div><!-- right content -->
 							
-							<div style="text-align:left; width: 100%; margin-top:32%; height: 300px; padding: 5px 10px 5px 10px; overflow-y:scroll; background-color: white;">
+							<div style="text-align:left; width: 100%; height: 325px; padding: 5px 10px 5px 10px; overflow-y:scroll; background-color: white;">
 								<div id="edit${row.pro_no}">
 									${row.edit}
 								 </div>
@@ -272,30 +272,17 @@
 								</div>
 							</div>
 							
-							
-							
-							
-							<button type="button" class="btn btn-outline-black btn-sm" value="${row.pro_no}" id="updatebtn${row.pro_no}" onclick="updatebtn(this)"
+	
+							<button type="button" class="btn btn-outline-black btn-sm" onclick="location.href='/productdetail/${row.pro_no}'"
 									style=" width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 13px; margin-top: 15px;">
 								수정
 							</button>
-							
-							<button value="${row.pro_no}" type="submit" id="updateSavebtn${row.pro_no}" class="btn btn-outline-black btn-sm" 
-									style=" display:none; width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 13px; margin-top: 15px;">
-								저장
-							</button>
-							
-							
+	
 							<button onclick="productdelete(this)" id="deletebtn${row.pro_no}" value="${row.pro_no}" type="button" class="btn btn-outline-black btn-sm" 
 									style=" width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 13px; margin-top: 15px;">
 								삭제
 							</button>
-							
-							<button id="updateCancelbtn${row.pro_no}" type="button" onclick="updateCancelbtn()" class="btn btn-outline-black btn-sm"
-									style="display:none; width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 13px; margin-top: 15px;">
-								취소
-							</button>
-							
+
 						</div> <!-- productMdetail -->
 					</form> <!-- productdetail -->
 					
@@ -317,28 +304,59 @@
 			<c:if test="${endPage > pageCount}">
 				<c:set var="endPage" value="${pageCount}" />
 			</c:if>
-	
-			<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
-			<c:if test="${startPage > 1}">
-				<a href="/mypageS/productM?pageNum=${startPage-1}">[이전]</a>
+			
+			<c:if test="${order_num == null}">
+				<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+				<c:if test="${startPage > 1}">
+					<a href="/mypageS/productM?pageNum=${startPage-1}">[이전]</a>
+				</c:if>
+		
+				<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+				<c:forEach var="i" begin="${startPage}" end="${endPage}">
+					<c:choose>
+						<c:when test="${pageNum == i}">
+							<span style="font-weight: bold">${i}</span>
+						</c:when>
+						<c:when test="${pageNum != i}">
+							<a href="/mypageS/productM?pageNum=${i}">${i}</a>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+		
+				<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+				<c:if test="${endPage < pageCount}">
+					<a href="/mypageS/productM?pageNum=${startPage+10}">[다음]</a>
+				</c:if>
 			</c:if>
-	
-			<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
-			<c:forEach var="i" begin="${startPage}" end="${endPage}">
-				<c:choose>
-					<c:when test="${pageNum == i}">
-						<span style="font-weight: bold">${i}</span>
-					</c:when>
-					<c:when test="${pageNum != i}">
-						<a href="/mypageS/productM?pageNum=${i}">${i}</a>
-					</c:when>
-				</c:choose>
-			</c:forEach>
-	
-			<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
-			<c:if test="${endPage < pageCount}">
-				<a href="/mypageS/productM?pageNum=${startPage+10}">[다음]</a>
+			
+			
+			
+			<c:if test="${order_num != null}">
+			<c:if test="${page == 'page'}">
+				<!-- startPage는 1, 11, 21 .. 이기에 1보다 크다면 이전 페이지 이동 가능-->
+				<c:if test="${startPage > 1}">
+					<a href="/mypageS/productsearch?pageNum=${startPage-1}">[이전]</a>
+				</c:if>
+		
+				<!-- 현재 페이지 볼드체, 현재 페이지 외의 보이는 페이지 전부 이동 링크 걸기 -->
+				<c:forEach var="i" begin="${startPage}" end="${endPage}">
+					<c:choose>
+						<c:when test="${pageNum == i}">
+							<span style="font-weight: bold">${i}</span>
+						</c:when>
+						<c:when test="${pageNum != i}">
+							<a href="/mypageS/productsearch?pageNum=${i}">${i}</a>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+		
+				<!-- endPage보다 총 페이지 수가 크다면 다음 pages로 이동 가능하다 -->
+				<c:if test="${endPage < pageCount}">
+					<a href="/mypageS/productsearch?pageNum=${startPage+10}">[다음]</a>
+				</c:if>
 			</c:if>
+			</c:if>
+			
 		
 		</c:if>
 	 </div>	
@@ -438,151 +456,6 @@
     }//end
     	
     
-    function updatebtn(this1){
-    	//alert(this1.value);
-    	var prono = this1.value;
-    	//alert(prono);
-    	
-    	var updatebtn = "#updatebtn"+prono;  	        	//수정
-    	var deletebtn = "#deletebtn"+prono; 		    	//삭제
-    	var updateSavebtn = "#updateSavebtn"+prono;     	//저장
-    	var updateCancelbtn = "#updateCancelbtn"+prono; 	//취소
-    	$(updatebtn).css("display","none");
-    	$(deletebtn).css("display","none");
-    	$(updateSavebtn).css("display","inline");
-    	$(updateCancelbtn).css("display","inline");
-    	
-    	var pro_name = "#pro_name"+prono;
-    	$(pro_name).attr("readonly", false); 
-    	$(pro_name).css("border-bottom","1px solid black");
-    	$(pro_name).focus();
-    	
-    	var categoryhide = "#categoryhide"+prono; 
-    	var categorybox = "#categorybox"+prono;
-    	var cate = "#cate"+prono;
-    	$(categoryhide).css('display','none');
-		$(categorybox).css('display','inline');
-		//alert($(cate).val());
-		var checkercategory_c = "#checkercategory" + prono + "c";
-		var checkercategory_m = "#checkercategory" + prono + "m";
-		var checkercategory_p = "#checkercategory" + prono + "p";
-		var checkercategory_a = "#checkercategory" + prono + "a";
-		
-		if( $(cate).val() == 'C' ) {
-			$(checkercategory_c).attr("checked",true);
-		} else if ( $(cate).val() == 'M' ) {
-			$(checkercategory_m).attr("checked",true);
-		} else if ( $(cate).val() == 'P' ) {
-			$(checkercategory_p).attr("checked",true);
-		} else {
-			$(checkercategory_a).attr("checked",true);
-		}
-		
-		var sizehide = "#sizehide"+prono;
-		var sizebox = "#sizebox"+prono; 
-		var si = "#si" + prono; 
-		$(sizehide).css('display','none');
-		$(sizebox).css('display','inline');
-		
-		var checkersize_s = "#checkersize" + prono + "s";
-		var checkersize_m = "#checkersize" + prono + "m";
-		var checkersize_l = "#checkersize" + prono + "l";
-		var checkersize_f = "#checkersize" + prono + "f";
-		
-		if( $(si).val() == 'S' ) {
-			$(checkersize_s).attr("checked",true);
-		} else if ( $(si).val() == 'M' ) {
-			$(checkersize_m).attr("checked",true);
-		} else if ( $(si).val() == 'L' ) {
-			$(checkersize_l).attr("checked",true);
-		} else {
-			$(checkersize_f).attr("checked",true);
-		}
-		
-		var color = "#color"+prono;
-		$(color).attr("readonly", false); 
-    	$(color).css("border-bottom","1px solid black");
-    	
-    	var price = "#price"+prono;
-		$(price).attr("readonly", false); 
-    	$(price).css("border-bottom","1px solid black");
-    	
-    	var fileimg = "#fileimg"+prono;
-    	$(fileimg).css('display','inline');
-    	
-		var afstock = "#afstock"+prono;
-		var stock = "#stock"+prono;
-		var stockinput = "#stockinput"+prono;
-		$(afstock).css('display','none');
-    	$(stock).css('display','inline');
-    	$(stockinput).attr("readonly", false); 
-    	$(stockinput).css("border-bottom","1px solid black");
-    	
-    	var editupdate = "#editupdate"+prono;
-    	var edit = "#edit"+prono;
-    	var summernote = "#summernote"+prono;
-    	
-    	$(edit).css("display","none");
-    	$(editupdate).css("display","inline");
-    
-	  	  	//---------------------------------------------------------- summernote
-	        $(summernote).summernote({
-	          //placeholder: 'Hello Bootstrap 4',
-	          tabsize: 2,
-	          height: 400,
-	          focus: true,
-	          toolbar: [
-	  		    // [groupName, [list of button]]
-	  		    ['fontname', ['fontname']],
-	  		    ['fontsize', ['fontsize']],
-	  		    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-	  		    ['color', ['forecolor','color']],
-	  		    ['table', ['table']],
-	  		    ['para', ['ul', 'ol', 'paragraph']],
-	  		    ['height', ['height']],
-	  		    ['insert',['picture','link','video']],
-	  		    ['view',['codeview']]
-	  		  ],
-	  		fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
-	  		fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-	          lang: "ko-KR",	
-	        	//여기 부분이 이미지를 첨부하는 부분 
-	  		callbacks: {	
-	  			onImageUpload : function(files) {
-	  				uploadSummernoteImageFile(files[0],this);
-	  			},
-	  			onPaste: function (e) {
-	  				var clipboardData = e.originalEvent.clipboardData;
-	  				if (clipboardData && clipboardData.items && clipboardData.items.length) {
-	  					var item = clipboardData.items[0];
-	  					if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-	  						e.preventDefault();
-		  					}
-		  				}
-		  			}
-		  		}//callback end 
-		  	});//end
-		  	
-		  	// 이미지업로드로직
-		  	function uploadSummernoteImageFile(file, editor) {
-		  		var data = new FormData();
-		  		data.append("file", file);
-		  		$.ajax({
-		  			data : data,
-		  			type : "POST",
-		  			url : "/uploadSummernoteImageFile",
-		  			contentType : false,
-		  			processData : false,
-		  			success : function(data) {
-		              	$(summernote).summernote('insertImage', data.url);
-		  			 }
-		  			,error:function(request,status,error, data){
-		              	            alert("Error");
-		           	        }
-		  		});
-		  	}//end
-		  //---------------------------------------------------------- summernote
-    }//end
     
     function updateCancelbtn() {
     	location.reload();

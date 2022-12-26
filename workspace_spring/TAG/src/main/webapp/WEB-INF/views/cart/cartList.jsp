@@ -287,7 +287,6 @@ input[type="checkbox"]:checked + label:before {
 	
 	.li_title{
 	padding: 35px;
-	font-size: 17px;
 	}
 	
 	.summary{
@@ -406,7 +405,7 @@ function topFunction() {
 			<!-- list_aside 시작 -->
 			<div class="list_aside">
 			
-				<div class="li_title">
+				<div class="li_title" id="li_title">
 					<div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;">주문 요약</div>
 					
 					<div class="summary catefory" style="float: left;">
@@ -425,14 +424,12 @@ function topFunction() {
 					</div>   
 				
 					<div>
-
 						 <form name="frm" method="post" action="/cart/cartOrder" >   
 						 <div id="hiddenplace">
 						
 						 </div>
 							<button type="submit" class="checkoutBtn" onclick="return checkoutBtn()">Checkout</button>
 						 </form>
-
 					</div>
 				
 				</div><!-- li_title 끝 -->
@@ -451,7 +448,7 @@ function topFunction() {
 					  <tr>
 					  	<th style="width: 40px; padding-left: 0;"><!-- 선택박스 -->
 							<div class="agreeAll">
-							<input type="checkbox" id="check_all" value="${mycart}" checked="checked">
+							<input type="checkbox" id="check_all" value="${mycart}">
 							<label for="check_all"></label>
 							</div>
 					  	</th>
@@ -484,7 +481,7 @@ function topFunction() {
 				       	
 				       	<td style="width: 30px; padding-left: 0;">
 				       	
-							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)" checked="checked">
+							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="check" class="normal" onchange="chkbox(this)">
 							<label for="check${row.cart_no}"></label>
 			       		
 						</td>
@@ -556,11 +553,15 @@ function topFunction() {
 
 <script>
 
+// 장바구니 비어있으면 주문요약 숨기기
+<c:if test="${empty mycart}"> 
+	//alert('--');
+	$('#li_title').css('display','none');
+</c:if>
+
 // 체크박스 전체선택 시 담아줄 변수
 let cartnoList = [];
 //alert(cartnoList);
-
-$("#check_all").prop("checked", true);
 
 //----------------------------------------------------------- 체크박스 선택
 // 체크박스 전체 선택
@@ -832,6 +833,9 @@ function setRegexp(price) {
 	} //cartdelete(this) end
 	
 	
+	
+	
+	
 //----------------------------------------------------------- 장바구니 선택 삭제 값 가져오기
 	var chkArray = new Array();
 	
@@ -925,10 +929,6 @@ function setRegexp(price) {
 	
 	
 	
-	
-	function checkoutBtn() {
-		
-	}
 	
 	
 	
