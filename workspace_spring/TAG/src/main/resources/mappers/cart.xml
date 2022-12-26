@@ -63,7 +63,7 @@
 	
 	<!-- 장바구니 선택 결제  -->
 	<select id="cartorder" parameterType="kr.co.itwill.cart.CartDTO" resultType="java.util.Map">
-		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, (P.price*cnt) as org_price,  P.postername, p_id, p.c_no
+		SELECT cart_no, m_id, PC.pro_no, C.title, pro_name, category, color, size, cnt, P.price, (P.price*cnt) as org_price,  P.postername, p_id, P.c_no
 		FROM product_cart PC JOIN product P ON PC.pro_no = P.pro_no
 		                     JOIN concert C ON P.c_no = C.c_no
 		WHERE m_id = #{m_id}   AND cart_no IN ( 
@@ -93,7 +93,7 @@
  	<select id="mem_cou"  parameterType="kr.co.itwill.cart.CartDTO" resultType="java.util.Map">
 		SELECT cart_no, pc.m_id as m_id, pc.pro_no as pro_no, p.c_no as c_no, cp_no, coupon
 		FROM product_cart pc join product p on pc.pro_no = p.pro_no
-		                            left outer join coupon_detail cd on cd.c_no = p.c_no
+		                     left outer join coupon_detail cd on cd.c_no = p.c_no
 		WHERE pc.m_id = #{m_id} 
 		      AND cart_no IN ( 
 								<foreach collection="chkList" item="value" separator=",">
@@ -111,7 +111,7 @@
 		FROM (
 				SELECT cart_no, pc.m_id, pc.pro_no, p.c_no, cp_no, coupon
 				FROM product_cart pc join product p on pc.pro_no = p.pro_no
-				                            left outer join coupon_detail cd on cd.c_no = p.c_no
+				                     left outer join coupon_detail cd on cd.c_no = p.c_no
 				WHERE pc.m_id = #{m_id} 
 				      AND cart_no IN ( 
 										<foreach collection="chkList" item="value" separator=",">
@@ -127,22 +127,38 @@
  	
  	<!-- 주문상세 -->
  	<insert id="cart_orderDtail" parameterType="java.util.List">
-	INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum, stus)
-	VALUES 
-			<foreach collection="list" item="item" separator=",">
-			(
-			
-			  #{item.order_num}
-			 ,#{item.pro_no}
-			 ,#{item.detail_cnt}
-			 ,#{item.org_price}
-			 ,#{item.discount}
-			 ,#{item.pricesum}
-			 ,#{item.stus}
-			
-			)
-			</foreach>			 
+		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, stus)
+		VALUES 
+				<foreach collection="list" item="item" separator=",">
+				(
+				
+				  #{item.order_num}
+				 ,#{item.pro_no}
+				 ,#{item.detail_cnt}
+				 ,#{item.org_price}
+				 ,#{item.stus}
+				
+				)
+				</foreach>			 
 	</insert>
+	
+	<!-- 쿠폰-공연 비교용 리스트 -->
+	<select id="detailcoupon" resultType="java.util.Map" parameterType="int">
+		 SELECT cd.c_no , cp_no, pro_no, coupon
+         FROM coupon_detail cd JOIN product p on cd.c_no = p.c_no
+         WHERE cp_no = #{cp_no}
+         ORDER BY pro_no 
+	</select>
+	
+	<delete id="cartdel" parameterType="java.util.List">
+		DELETE FROM product_cart
+		WHERE cart_no IN ( 
+							<foreach collection="list" item="value" separator=",">
+								#{value}
+							</foreach>
+						  ) 
+	</delete>
+
  	
  	<!-- 장바구니 수량체크 -->
  	<select id="mycartCnt" parameterType="kr.co.itwill.cart.CartDTO" resultType="int">

@@ -94,4 +94,15 @@ public class CartDAO {
 	public int cart_orderDtail (List<OrderDetailDTO> list) {
 		return sqlSession.insert("cart.cart_orderDtail",list);
 	}
+	
+	public List<Map<String, Object>> detailcoupon (int cp_no){
+		return sqlSession.selectList("cart.detailcoupon",cp_no);
+	}
+	
+	public int cartdel (List cartnodel) {
+		return sqlSession.delete("cart.cartdel",cartnodel);
+	}
+	
+	
+	
 }//class end

@@ -479,11 +479,27 @@ input[type="checkbox"] + label:before {
 	  var org_point = parseInt(${point});   	// 보유 포인트
 	  var use_point = parseInt($('#pt_minus').val() || 0);
 	
-      if($('#pt_minus').val() == '') {
+      if($('#pt_minus').val() == '') {			// 포인트 사용을 value값을 지우면
      	  //alert("**");
-     	  total_price = dis_price;
-     	 flag = false;
-       } 
+     	  if($('#couponselect option:selected') == true){
+     		 total_price = dis_price;
+        	  
+     	  }else {
+     		 var d_fee = document.getElementById("d_fee").innerText
+     		 
+     		  if(d_fee == '0 ') { 	// 배송비 무 
+     		  	 total_price = order_price;
+     		  } else {				// 배송비 유 
+     			 total_price = order_price + 3000;
+     		  }
+     	  }//if end
+     	  
+     	  comma = total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+       	  $('#total_price').text(comma);
+     	  
+       	  flag = false;
+     	  //alert(comma);
+       }//if end
 	    
 	    
   		//console.log("total_price" + total_price);

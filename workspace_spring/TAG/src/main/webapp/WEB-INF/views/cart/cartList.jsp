@@ -287,7 +287,6 @@ input[type="checkbox"]:checked + label:before {
 	
 	.li_title{
 	padding: 35px;
-	font-size: 17px;
 	}
 	
 	.summary{
@@ -405,7 +404,7 @@ function topFunction() {
 			<!-- list_aside 시작 -->
 			<div class="list_aside">
 			
-				<div class="li_title">
+				<div class="li_title" id="li_title">
 					<div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;">주문 요약</div>
 					
 					<div class="summary catefory" style="float: left;">
@@ -424,14 +423,12 @@ function topFunction() {
 					</div>   
 				
 					<div>
-
 						 <form name="frm" method="post" action="/cart/cartOrder" >   
 						 <div id="hiddenplace">
 						
 						 </div>
 							<button type="submit" class="checkoutBtn" onclick="return checkoutBtn()">Checkout</button>
 						 </form>
-
 					</div>
 				
 				</div><!-- li_title 끝 -->
@@ -450,7 +447,7 @@ function topFunction() {
 					  <tr>
 					  	<th style="width: 40px; padding-left: 0;"><!-- 선택박스 -->
 							<div class="agreeAll">
-							<input type="checkbox" id="check_all" value="${mycart}" checked="checked">
+							<input type="checkbox" id="check_all" value="${mycart}">
 							<label for="check_all"></label>
 							</div>
 					  	</th>
@@ -475,7 +472,9 @@ function topFunction() {
 				       	
 				       	<td style="width: 30px; padding-left: 0;">
 				       	
+
 							<input type="checkbox" id="check${row.cart_no}" value="${row.cart_no}" name="selectcheck" class="normal" onchange="chkbox(this)" checked="checked">
+
 							<label for="check${row.cart_no}"></label>
 			       		
 						</td>
@@ -545,6 +544,42 @@ function topFunction() {
 
 
 <script>
+
+
+// 장바구니 비어있으면 주문요약 숨기기
+<c:if test="${empty mycart}"> 
+	//alert('--');
+	$('#li_title').css('display','none');
+</c:if>
+
+// 체크박스 전체선택 시 담아줄 변수
+let cartnoList = [];
+//alert(cartnoList);
+
+//----------------------------------------------------------- 체크박스 선택
+// 체크박스 전체 선택
+$(".checkbox_group").on("click", "#check_all", function () {
+    $(this).parents(".checkbox_group").find('input').prop("checked", $(this).is(":checked"));
+    
+    // jstl에 있는 ${row.cart_no} 변수를 모두 담는다.
+    <c:forEach var="row" items="${mycart}" varStatus="status">
+		cartnoList.push("${row.cart_no}");
+	</c:forEach>
+	
+	//alert(cartnoList);	
+});
+
+// 체크박스 개별 선택
+$(".checkbox_group").on("click", ".normal", function() {
+    var is_checked = true;
+
+    $(".checkbox_group .normal").each(function(){
+        is_checked = is_checked && $(this).is(":checked");
+    });
+
+    $("#check_all").prop("checked", is_checked);
+});
+
 
 // ----------------------------------------------------------- 수량옵션
 $('._count :button').on({
@@ -893,6 +928,9 @@ function setRegexp(price) {
 
 	
 	
+	
+	
+	
 //----------------------------------------------------------- 장바구니 선택 삭제 값 가져오기
 	var chkArray = new Array();
 	
@@ -1044,16 +1082,6 @@ function setRegexp(price) {
 		}//if end
 		
 	}//delbtn() end
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

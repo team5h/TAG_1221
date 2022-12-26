@@ -299,7 +299,7 @@
 							<div class="mb-5 text-white desc mx-auto" data-aos="fade-up" data-aos-delay="200">
 							</div>
 
-							<p class="mb-0" data-aos="fade-up" data-aos-delay="300"><a href="#" class="btn btn-outline-black">Ticketing now</a></p>
+							<p class="mb-0" data-aos="fade-up" data-aos-delay="300"><a href="/concert/3" class="btn btn-outline-black">Ticketing now</a></p>
 
 						</div>
 					</div>
@@ -309,16 +309,16 @@
 
 
 		<div class="item">
-			<div class="untree_co-hero" style="background-image: url('images/헤더2.jpg');">
+			<div class="untree_co-hero" style="background-image: url('images/헤더6.jpg');">
 				<div class="container">
 					<div class="row align-items-center">
 						<div class="col-lg-6">
 
-							<h1 class="mb-4 heading" data-aos="fade-up" data-aos-delay="100">Conan Gray Live in Seoul</h1>
+							<h1 class="mb-4 heading" data-aos="fade-up" data-aos-delay="100">Kehlani: Blue Water Road Trip In Korea</h1>
 							<div class="mb-5 text-white desc mx-auto" data-aos="fade-up" data-aos-delay="200">
 							</div>
 
-							<p class="mb-0" data-aos="fade-up" data-aos-delay="300"><a href="#" class="btn btn-outline-black">Ticketing now</a></p>
+							<p class="mb-0" data-aos="fade-up" data-aos-delay="300"><a href="/concert/2" class="btn btn-outline-black">Ticketing now</a></p>
 
 						</div>
 					</div>
@@ -494,11 +494,26 @@
 			<div class="owl-3-slider owl-carousel">
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
+						<a href="/concert/3" class="product-img">
 
-							<img src="images/페더엘리에스.jpg" alt="Image" class="img-fluid">
+							<img src="/images/poster/harrystyles_poster.jpg" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Love in Seoul 2022 : Peder Elias</a></h3>
+						<h3 class="title"><a href="/concert/3">HARRY STYLES LOVE ON TOUR 2023</a></h3>
+						<div class="price">
+							<span>￦165,000</span>
+						</div>
+					</div>
+				</div> <!-- /.item -->
+
+
+				<div class="item">
+					<div class="product-item">
+						<a href="/concert/5" class="product-img">
+
+							
+							<img src="/images/poster/johnnystimson_poster.jpg" alt="Image" class="img-fluid">
+						</a>
+						<h3 class="title"><a href="/concert/5">Johnny Stimson Live in Seoul</a></h3>
 						<div class="price">
 							<span>￦99,000</span>
 						</div>
@@ -508,26 +523,11 @@
 
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
+						<a href="/concert/1" class="product-img">
 
-							
-							<img src="images/크리스토퍼.jpg" alt="Image" class="img-fluid">
+							<img src="/images/poster/johnk_poster.jpeg" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Love in Seoul 2022 : Christoper </a></h3>
-						<div class="price">
-							<span>￦110,000</span>
-						</div>
-					</div>
-				</div> <!-- /.item -->
-
-
-				<div class="item">
-					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-
-							<img src="images/존케이.jpg" alt="Image" class="img-fluid">
-						</a>
-						<h3 class="title"><a href="#">Love in Seoul 2022 : John K</a></h3>
+						<h3 class="title"><a href="/concert/1">LIVE IN SEOUL JOHN K</a></h3>
 						<div class="price">
 							<span>￦88,000</span>
 						</div>
@@ -536,12 +536,24 @@
 
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-							<img src="images/콜바넴.jpg" alt="Image" class="img-fluid">
+						<a href="/concert/2" class="product-img">
+							<img src="images/poster/kehlani_poster.jpg" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Love in Seoul 2022 : Call me by your name</a></h3>
+						<h3 class="title"><a href="/concert/2">Kehlani: Blue Water Road Trip In Korea</a></h3>
 						<div class="price">
-							<span>￦132,000</span>
+							<span>￦110,000</span>
+						</div>
+					</div>
+				</div> <!-- /.item -->
+				
+				<div class="item">
+					<div class="product-item">
+						<a href="/concert/4" class="product-img">
+							<img src="images/poster/prep_poster.jpg" alt="Image" class="img-fluid">
+						</a>
+						<h3 class="title"><a href="/concert/4">PREP LIVE IN SEOUL</a></h3>
+						<div class="price">
+							<span>￦88,000</span>
 						</div>
 					</div>
 				</div> <!-- /.item -->
@@ -577,13 +589,12 @@
 			<div class="owl-3-slider owl-carousel">
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-
-							<img src="images/카세트.png" alt="Image" class="img-fluid">
+						<a href="/product/32" class="product-img">
+							<img src="/images/products/harrystyles09.png" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Harry's house</a></h3>
+						<h3 class="title"><a href="/product/32">Harry's House Hat Blue</a></h3>
 						<div class="price">
-							<span>￦46,000</span>
+							<span>￦25,000</span>
 						</div>
 					</div>
 				</div> <!-- /.item -->
@@ -591,14 +602,12 @@
 
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-
-							
-							<img src="images/티셔츠.png" alt="Image" class="img-fluid">
+						<a href="/product/28" class="product-img">
+							<img src="/images/products/harrystyles05.png" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Harry Styles FINE LINE : T-shirt</a></h3>
+						<h3 class="title"><a href="/product/28">Love On Tour Poster - New York City Mint</a></h3>
 						<div class="price">
-							<span>￦35,000</span>
+							<span>￦10,000</span>
 						</div>
 					</div>
 				</div> <!-- /.item -->
@@ -606,29 +615,63 @@
 
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-
-							<img src="images/티셔츠2.png" alt="Image" class="img-fluid">
+						<a href="/product/20" class="product-img">
+							<img src="/images/products/kehlani09.png" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Harry Styles LOVE ON TOUR 2020 : T-shirt</a></h3>
+						<h3 class="title"><a href="/product/20">Kehlani While We Wait Tote Bag</a></h3>
 						<div class="price">
-							<span>￦34,000</span>
+							<span>￦15,000</span>
 						</div>
 					</div>
 				</div> <!-- /.item -->
 
 				<div class="item">
 					<div class="product-item">
-						<a href="shop-single.html" class="product-img">
-							<img src="images/음반.png" alt="Image" class="img-fluid">
+						<a href="/product/18" class="product-img">
+							<img src="/images/products/kehlani07.png" alt="Image" class="img-fluid">
 						</a>
-						<h3 class="title"><a href="#">Watermelon sugar - LP</a></h3>
+						<h3 class="title"><a href="/product/18">Kehlani blue water road translucent blue vinyl</a></h3>
 						<div class="price">
-							<span>￦58,000</span>
+							<span>￦50,000</span>
 						</div>
 					</div>
 				</div> <!-- /.item -->
 				
+				<div class="item">
+					<div class="product-item">
+						<a href="/product/5" class="product-img">
+							<img src="/images/products/johnk5.png" alt="Image" class="img-fluid">
+						</a>
+						<h3 class="title"><a href="/product/5">JOHN K POSTER #2</a></h3>
+						<div class="price">
+							<span>￦8,000</span>
+						</div>
+					</div>
+				</div> <!-- /.item -->
+				
+				<div class="item">
+					<div class="product-item">
+						<a href="/product/51" class="product-img">
+							<img src="/images/products/johnnystimson7.png" alt="Image" class="img-fluid">
+						</a>
+						<h3 class="title"><a href="/product/51">Johnny Stimson - Hard to Say Goodbye [Single]</a></h3>
+						<div class="price">
+							<span>￦48,000</span>
+						</div>
+					</div>
+				</div> <!-- /.item -->
+				
+				<div class="item">
+					<div class="product-item">
+						<a href="/product/42" class="product-img">
+							<img src="/images/products/prep7.png" alt="Image" class="img-fluid">
+						</a>
+						<h3 class="title"><a href="/product/42">PREP - On and On [Single]</a></h3>
+						<div class="price">
+							<span>￦48,000</span>
+						</div>
+					</div>
+				</div> <!-- /.item -->
 			</div>
 		</div> <!-- /.container -->
 	</div> <!-- /.untree_co-section -->  

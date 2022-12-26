@@ -115,6 +115,7 @@
 				FROM product LEFT OUTER JOIN order_detail ON product.pro_no = order_detail.pro_no
 							 JOIN concert ON product.c_no = concert.c_no
 				WHERE  status = 'Y' AND category = #{category} 
+
 				GROUP BY pro_no
 				ORDER BY procnt DESC LIMIT 1000000
 			) CC , (SELECT @RNO := 0) BB 
@@ -254,8 +255,7 @@
 		WHERE upper(pro_name) LIKE #{pro_name}
 		ORDER BY pro_name;
 	</select> 
-	
-	
+
 	<!-- [ 상품검색 원본] -->	
 	<select id="search" resultType="java.util.Map" parameterType="String">
 		SELECT category, c_no, p_id, pro_name, stock, color, size, price, postername, status, regdate
@@ -264,6 +264,7 @@
 		ORDER BY pro_name
 	</select> 
 	
+
 	
 	<!-- [ 상품검색 ] 페이징 -->	
 	<!-- <select id="search" resultType="java.util.Map" parameterType="java.util.Map">
@@ -322,12 +323,31 @@
 		INSERT INTO qna (qname, subject, pro_no, edit, passwd, regdate, a_stus)
 		VALUES (#{qname},#{subject},#{pro_no},#{edit},#{passwd}, (current_timestamp), 'N')
 	</insert>
-	
-	<select id="qnalist" resultType="kr.co.itwill.QnA.QnADTO" parameterType="int">
-		SELECT *
-		FROM qna
-		WHERE pro_no = #{pro_no}
+
+	<select id="qnalist" resultType="kr.co.itwill.QnA.QnADTO" parameterType="java.util.Map">
+		
+		<![CDATA[
+			SELECT AA.*
+			FROM(
+				SELECT @RNO := @RNO + 1 as r, CC.*
+				FROM (
+					SELECT *
+					FROM qna
+					WHERE pro_no = #{pro_no}
+					ORDER BY regdate DESC
+				) CC , (SELECT @RNO := 0) BB 
+			) AA 
+			WHERE r >= #{start} AND r <= #{end}
+		]]>
+		
 	</select>
+	
+	 
+	 <select id="qnalistCNT" parameterType="int" resultType="int">
+	 	 SELECT count(q_no) 
+	 	 FROM qna 
+	 	 WHERE pro_no = #{pro_no}
+	 </select>
 	
 	<select id="qnadetail" parameterType="java.util.Map" resultType="kr.co.itwill.QnA.QnADTO">
 		SELECT q.q_no as q_no, subject, edit, passwd, content, a.regdate as regdate 
@@ -345,6 +365,19 @@
 		VALUES (#{m_id},'P',#{pro_no})
 	</insert>
 
+	<update id="pro_likecntIns" parameterType="int">
+		UPDATE product
+        SET likecnt = likecnt + 1
+        WHERE pro_no = #{pro_no}
+	</update>
+	
+	<update id="pro_likecntDel" parameterType="int">
+		UPDATE product
+        SET likecnt = likecnt - 1
+        WHERE pro_no = #{pro_no}
+	</update>
+	
+	
 	<delete id="unlike" parameterType="java.util.Map">
 		DELETE FROM member_like
 		WHERE m_id = #{m_id} AND like_li = #{pro_no}
@@ -406,8 +439,8 @@
 	</insert>
 	
 	<insert id="orderdetailIns" parameterType="kr.co.itwill.orderDetail.OrderDetailDTO">
-		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, discount, pricesum ,stus)
-		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, #{discount}, #{pricesum}, '상품준비중' )
+		INSERT INTO order_detail (order_num, pro_no, detail_cnt, org_price, stus)
+		VALUES (#{order_num}, #{pro_no}, #{detail_cnt}, #{org_price}, '상품준비중' )
 	</insert>
 	
 
@@ -440,7 +473,7 @@
 	</update>
 
 
-	<!-- 회원이 좋아요 한 목록 -->	
+	<!--  회원이 좋아요 한 목록 —>	 -->
 	<select id="mem_like" parameterType="java.util.Map" resultType="String">
 		SELECT like_li
 		FROM member_like
@@ -448,7 +481,7 @@
 	</select>
 	
 	
-	<!-- 상품에 좋아요 +1 -->
+	<!--<!— 상품에 좋아요 +1 —>  -->
 	<update id="likecntInc" parameterType="kr.co.itwill.product.ProductDTO">
 		UPDATE product 
 		SET likecnt = likecnt + 1 
@@ -456,7 +489,7 @@
 	</update>
 		
 		
-	<!-- 상품 좋아요 conut -1 -->
+	<!--  <!— 상품 좋아요 conut -1 —>-->
 	<update id="likecntDec" parameterType="kr.co.itwill.product.ProductDTO">
 		UPDATE product 
 		SET likecnt = likecnt -1 

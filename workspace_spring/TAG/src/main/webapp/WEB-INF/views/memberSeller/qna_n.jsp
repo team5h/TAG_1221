@@ -29,17 +29,17 @@
 		<div class="stickyC" style="position: sticky; top: 100px; padding-bottom: 100px;">	
 			<ul style="font-size:13px; list-style-type: none; padding-left:0px;">
 				<li class="side_liT"> PRODUCT </li>
-					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 12px;">  - 상품등록 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 12px;">  - 상품관리 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/create" style="color:black; font-size: 13px;">  - 상품등록 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/productM" style="color:black; font-size: 13px;">  - 상품관리 &nbsp;</a></li>
 		<br>	
 				<li class="side_liT"> ORDER </li>
-					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 12px;"> - 주문관리 &nbsp;</a></li>	
+					<li>&nbsp;<a href="/mypageS/orderM" style="color:black; font-size: 13px;"> - 주문관리 &nbsp;</a></li>	
 		<br>	
 				<li class="side_liT" style="color:lightgreen;"> QnA </li>
-					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 12px;"> - 답변대기 &nbsp;</a></li>
-					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 12px;"> - 답변완료 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/qna" style="color:black; font-size: 13px;"> - 답변대기 &nbsp;</a></li>
+					<li>&nbsp;<a href="/mypageS/answer" style="color:black; font-size: 13px;"> - 답변완료 &nbsp;</a></li>
 		<br>			
-				<li style="font-size: 12px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
+				<li style="font-size: 13px; font-weight: 400;"> <a href="/mypageS/update" style="color: #bcbcbc;"> 회원정보수정 </a> </li>
 			</ul>
 		</div><!-- stickyC -->
 	 </div><!-- stickyP -->
@@ -66,10 +66,12 @@
 					
 					<div style="display: inline-block; width: 80%; float: left; text-align: left; padding-top: 9px; margin-left: 10px;">
 						<p style="margin-bottom: 0; font-size: 10px; font-weight: 500; color: lightgreen;">${row.pro_name}</p>
-						<p style="font-size: 22px; font-weight: 600;">${row.subject}</p>
-						<p style="margin: 5px 0 5px 0; font-size: 12px; color: #b0b0b0;">${row.nickname} ｜ 
+						<p style="font-size: 22px; font-weight: 600; margin-bottom: 10px;">${row.subject}</p>
+						<p style="margin: 5px 0 5px 0; font-size: 12px; color: #b0b0b0;">
+									${row.q_no} ｜ ${row.nickname} ｜ 
 																	<fmt:parseDate var="dateString" value="${row.regdate}" pattern="yyyy-MM-dd HH:mm:ss" />
-					   												<fmt:formatDate value="${dateString}" pattern="yyyy.MM.dd HH시 mm분" /></p>
+					   												<fmt:formatDate value="${dateString}" pattern="yyyy.MM.dd HH시 mm분" />
+					   	</p>
 					</div>
 					
 					<div style="display: inline-block; margin-top: 37px; ">
@@ -100,9 +102,10 @@
 					<input type="hidden" name="q_no" value="${row.q_no}" >
 					<input type="hidden" name="a_no" id="a_no${row.q_no}" value="${row.a_no}" >
 						<div style="width:95%; text-align: center; float: right; display: inline-block; margin-top: -20px;">
-							<textarea name="content" style="width:100%; border:none; height:100px; background-color: transparent; font-size:14px; resize: none;" placeholder="내용을 입력해주세요."></textarea>
+							<textarea name="content" style="width:100%; height:140px; background-color: transparent; font-size:14px; resize: none;" placeholder="내용을 입력해주세요."></textarea>
+							
 							<button type="button" class="btn btn-outline-black btn-sm" value="${row.q_no}" onclick="answerbtn(this)"
-									style="margin-top: 15px; width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 10px;">
+									style="margin-right: 50px; margin-top: 15px; width: 50px; padding: 2px 2px 2px 2px; font-weight: 400; font-size: 10px;">
 								등록
 							</button>
 						</div>
@@ -214,6 +217,7 @@
 						alert('답변이 등록되었습니다.');
 						$('textarea [name="content"]').val(value);
 						$('textarea[name="content"]').prop("disabled", true);
+						location.reload();
 					}//end
 		})
 	}//end

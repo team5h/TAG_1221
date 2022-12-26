@@ -67,13 +67,9 @@ public class MemberSellerDAO {
 	public void a_stusUpdate(int q_no) {
 		sqlSession.update("memberSeller.a_stusUpdate",q_no);
 	}
-	/*
-	public List<QnADTO> answerlist (String p_id) {
-		return sqlSession.selectList("memberSeller.answerlist",p_id);
-	}
-	*/
+
 	public List<QnADTO> answerlist (int start, int end, String p_id) {
-HashMap<String, Object> map  = new HashMap<>();
+		HashMap<String, Object> map  = new HashMap<>();
 		
 		map.put("start", start);
 		map.put("end", end);

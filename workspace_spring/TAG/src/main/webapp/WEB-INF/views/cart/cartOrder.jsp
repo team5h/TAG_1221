@@ -9,6 +9,7 @@
   color: #000000; 
 }
 
+
 .btn.naverbtn:hover {
   color: white;
   background: #19ce60;
@@ -65,18 +66,16 @@ input[type="checkbox"] + label:before {
 		<span style="color:#b8b8b8" class="fontG"> 03 ORDER CONFIRM </span> 
 	</div>
 	
-<!-- action="/cart/cartOrderProc" method="post" onclick="return cartorderCheck()" -->  
 <form name="frm" id="frm"> 
-	
-	<!-- <input type="hidden" value="${order_proinfo.pro_no}" name="pro_no"> -->
-	<!-- <input type="hidden" value="${buystock}" name="detail_cnt"> -->
 
 	<input type="hidden" value="" id="Fcp_dis" name="cp_dis">
 	<input type="hidden" value="" id="Fd_fee" name="d_fee">
 	<input type="hidden" value="" id="Ftotal_price" name="total_price">
 	<input type="hidden" value="${cart_orderPrice.order_price}" name="order_price">
-	<input type="hidden" value="<fmt:formatNumber type="number" maxFractionDigits="0"  value="${cart_orderPrice.order_price*0.01}"/>" name="pt_plus">
+	<input type="hidden" value="<fmt:formatNumber type="number" maxFractionDigits="0" value="${cart_orderPrice.order_price*0.01}"/>" id="Fpt_plus" name="pt_plus">
 	<input type="hidden" value="" id="Fpt_minus" name="pt_minus">
+
+
 
 	<div style="padding:0 10px; width: 60%; display: inline-block;"> 
 		<div style="margin-top: 50px; margin-bottom: 30px;"> 
@@ -169,45 +168,6 @@ input[type="checkbox"] + label:before {
 			</table>
 		</div><!-- coupon/point info -->
 		
-			<!-- modal - coupon
-		     	<div id="modal" style="display: none; z-index: 2; position: absolute; border: 2px solid; width: 700px; background-color:white; height: 400px; padding: 20px;"> 
-		     		<div class="close-area" style="float: right;">
-		     			<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 50 50">
-						<path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 
-								L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 
-								42.28125 6.28125 L 25 23.5625 Z"></path>
-						</svg>
-		     		</div> close btn 
-		     		
-		  		    <p style="text-align: center; margin-bottom: 2px;font-size: 20px; font-weight: 600; border-bottom: 1px solid; line-height: 0.5; padding-bottom: 20px;">COUPON</p>
-					
-					<div style="width: 100%; overflow: auto; height: 215px;">
-					  <table style="width: 100%;">
-						<c:forEach var="row" items="${cartorder}" varStatus="vs">
-							<tr>
-								<td style="border-bottom:1px solid #f0f0f0; padding: 10px 0;">
-										<div style="width: 50px; height: 50px; overflow: hidden; float: left; display: inline-block; position: relative;">
-											<img src="/storage/${row.postername}" style="width:100%; height:100%; object-fit:cover;" >
-										</div>  product image  
-										<p style="font-size: 15px; line-height: 3.5; margin-bottom: 0; text-align: justify; margin-left: 70px;">
-											${row.title}
-										</p>
-								</td>
-							</tr>		
-						</c:forEach>
-			     	  </table>
-			     	</div>
-			     	  
-			     	<p style="font-size: 10px; color: gray; font-weight: 500; margin-top: 20px;"> 
-			     		- 쿠폰 적용 시 한 주문, 한 상품에 한해서만 적용됩니다. 
-			     	<br>- 각 쿠폰은 사용기한이 정해져 있습니다.
-			     	<br>-할인/적립(%) 쿠폰은 적립금할인 등을 제외한 실제 결제금액에 적용됩니다.
-			     	</p>
-			     	  
-			     	<button type="button" onclick="qnasubmit()" style="width: 100%;" class="btn btn-ooutline-black btn-sm">등록</button>
-
-		     	</div> modal -->
-		
 		
 		<div style="margin:30px 0;"><!-- color:#3f3f3f; -->
 			<p style="font-weight: 600; padding-bottom: 5px; margin-bottom: 30px; border-bottom: 2px solid;">결제 방법</p>
@@ -273,6 +233,7 @@ input[type="checkbox"] + label:before {
 							<input type="hidden" value="${row.pro_no}" name="pro_no"/>
 							<input type="hidden" value="${row.cnt}" name="detail_cnt"/>
 							<input type="hidden" value="${row.org_price}" name="org_price"/>
+							<input type="hidden" value="${row.cart_no}" name="cart_no"/>
 							
 							<div style="width: 80px; height: 80px; overflow: hidden; float: left; display: inline-block; position: relative;">
 								<img src="/storage/${row.postername}" style="width:100%; height:100%; object-fit:cover;" >
@@ -486,22 +447,7 @@ input[type="checkbox"] + label:before {
 		   
 		   	// 할인 적용된 금액으로 총 금액 변경 → 포인트에서 사용할 수 있도록
 		    total_price = dis_price;
-	    	
-		    
-		    // 상품별 c_no 뽑기 
-			$.ajax({
-				
-				
-				
-					url   	 : ""
-					,type 	 : "post"
-					,data 	 : insertData
-					,success : function(data){
-						alert('문의가 등록되었습니다.');
-						location.reload();
-				}
-			})//ajax end
-		    
+   
 	  }); //end
 
 		
@@ -555,11 +501,27 @@ input[type="checkbox"] + label:before {
 	  var org_point = parseInt(${point});   	// 보유 포인트
 	  var use_point = parseInt($('#pt_minus').val() || 0);
 	
-      if($('#pt_minus').val() == '') {
+      if($('#pt_minus').val() == '') {			// 포인트 사용을 value값을 지우면
      	  //alert("**");
-     	  total_price = dis_price;
-     	 flag = false;
-       } 
+     	  if($('#couponselect option:selected') == true){
+     		 total_price = dis_price;
+        	  
+     	  }else {
+     		 var d_fee = document.getElementById("d_fee").innerText
+     		 
+     		  if(d_fee == '0 ') { 	// 배송비 무 
+     		  	 total_price = order_price;
+     		  } else {				// 배송비 유 
+     			 total_price = order_price + 3000;
+     		  }
+     	  }//if end
+     	  
+     	  comma = total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+       	  $('#total_price').text(comma);
+     	  
+       	  flag = false;
+     	  //alert(comma);
+       }//if end
 	    
 	    
   		//console.log("total_price" + total_price);
@@ -649,43 +611,22 @@ input[type="checkbox"] + label:before {
     	//alert("cp_dis"+$('#Fcp_dis').val());
     	//alert("total_price"+$('#Ftotal_price').val());
 
+    		
+		//alert($('input[name="pt_plus"]').val());
+	    pt_plus = $('input[name="pt_plus"]').val();
+	    //alert(pt_plus);
+	    
+	    pt_plus = pt_plus.replace(',','');
+	    pt_plus = parseInt(pt_plus);
+	    
+	    $('#Fpt_plus').val(pt_plus);
+	    //alert($('#Fpt_plus').val());
+	   
     	var form = document.getElementById("frm");
    	    form.action = "/cart/cartOrderProc";
    	    form.submit();
   	}//end
- /*
-    //modal - coupon
-	const modal = document.getElementById("modal")
-	const btnModal = document.getElementById("couponbtn")
-	btnModal.addEventListener("click", e => {
-	    //modal.style.display = "block"
-	    var div = $('#modal');
-		div.css("position", "absolute");
-		div.css("top", Math.max(0, (($(window).height() - div.outerHeight()) / 2) + $(window).scrollTop()) + "px");
-		div.css("left", Math.max(0, (($(window).width() - div.outerWidth()) / 2) + $(window).scrollLeft()) + "px");
-		$('#modal').fadeIn(500);
-
-	})
-	
-	const closeBtn = modal.querySelector(".close-area")
-	closeBtn.addEventListener("click", e => {
-	    modal.style.display = "none"
-	})
-	
-	modal.addEventListener("click", e => {
-    const evTarget = e.target
-	    if(evTarget.classList.contains("modal-overlay")) {
-	        modal.style.display = "none"
-	    }
-	})
-	
-	window.addEventListener("keyup", e => {
-	    if(modal.style.display === "flex" && e.key === "Escape") {
-	        modal.style.display = "none"
-	    }
-	})
-	
-*/
+  	
 
 
 /*---------------  DAUM API  ---------------*/
